@@ -40,7 +40,9 @@ function addFence(){
 
     var xPositionsColumnsFrontFence = new Array(170, 380);
     var multiMaterial = getMultimaterial("ffaacc");
+    var fenceLength = 190;
 
+    // The front fences
     for(var i = 0 ; i < xPositionsColumnsFrontFence.length; i++){
         var fence = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 210, 5, 2, 1, 1, 1 ), multiMaterial);
         fence.position.set(xPositionsColumnsFrontFence[i], 8, 10);
@@ -52,54 +54,21 @@ function addFence(){
     }
 
     var xPositionsColumnsSideFence = new Array(480, 170, 370);
-    var uPositionsColumnsSideFence = new Array(10, 100, 300, 500);
+    var zPositionsColumnsSideFence = new Array(100, 300, 500);
 
-    var multiMaterial = getMultimaterial("ffaacc");
+    // The fences on the site
+    for(var i = 0; i < zPositionsColumnsSideFence.length; i++){
+        var fence = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( fenceLength, 5, 2, 1, 1, 1 ), multiMaterial);
+        fence.position.set(-xPositionsColumnsSideFence[0], 8, zPositionsColumnsSideFence[i]);
+        fence.rotation.set(0, Math.PI / 2, Math.PI);
+        scene.add(fence);
 
-
-    var fence = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 190, 5, 2, 1, 1, 1 ), multiMaterial);
-    fence.position.set(-480, 8, 100);
-    fence.rotation.set(0, Math.PI / 2, Math.PI);
-    scene.add(fence);
-
-    var fence = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 190, 5, 2, 1, 1, 1 ), multiMaterial);
-    fence.position.set(-480, 8, 300);
-    fence.rotation.set(0, Math.PI / 2, Math.PI);
-    scene.add(fence);
-
-    var fence = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 190, 5, 2, 1, 1, 1 ), multiMaterial);
-    fence.position.set(-480, 8, 500);
-    fence.rotation.set(0, Math.PI / 2, Math.PI);
-    scene.add(fence);
-
-    /*var fence = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 190, 5, 2, 1, 1, 1 ), multiMaterial);
-    fence.position.set(170, 8, 10);
-    scene.add(fence);
-
-    var fence = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 210, 5, 2, 1, 1, 1 ), multiMaterial);
-    fence.position.set(370, 8, 10);
-    scene.add(fence);
-
-    var fence = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 190, 5, 2, 1, 1, 1 ), multiMaterial);
-    fence.position.set(480, 8, 100);
-    fence.rotation.set(0, Math.PI / 2, Math.PI);
-    scene.add(fence);
-
-    var fence = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 190, 5, 2, 1, 1, 1 ), multiMaterial);
-    fence.position.set(480, 8, 300);
-    fence.rotation.set(0, Math.PI / 2, Math.PI);
-    scene.add(fence);
-
-    var fence = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 190, 5, 2, 1, 1, 1 ), multiMaterial);
-    fence.position.set(480, 8, 500);
-    fence.rotation.set(0, Math.PI / 2, Math.PI);
-    scene.add(fence);*/
-
-
+        var fence = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( fenceLength, 5, 2, 1, 1, 1 ), multiMaterial);
+        fence.position.set(xPositionsColumnsSideFence[0], 8, zPositionsColumnsSideFence[i]);
+        fence.rotation.set(0, Math.PI / 2, Math.PI);
+        scene.add(fence);
+    }
 }
-
-
-
 
 /**
     This function adds the columns to the scene which are holding the roof
