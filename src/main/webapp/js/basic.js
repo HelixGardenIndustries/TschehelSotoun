@@ -13,9 +13,9 @@ window.onload = function(){
     initArray.planeHeight = 2000;
 
     var cameraPos = {};
-    cameraPos.X = -1200;
-    cameraPos.Y = 500;
-    cameraPos.Z = -600;
+    cameraPos.X = 1285;
+    cameraPos.Y = 854;
+    cameraPos.Z = -261;
 
     initArray.cameraPos = cameraPos;
 
@@ -32,10 +32,120 @@ window.onload = function(){
     addStairsFundament(fundamentHeight);
     // The wooden columns holding the roof
     addRoofColumns();
-
     // the fence between the columns
     addFence();
+
+    // The outer walls
+    addOuterWall();
+
+    // The dachfirst
+    addDachFirst();
+
+    addInnerWall();
 }
+
+function addInnerWall(){
+    var wallHeight = 235;
+    var yPosition = 120;
+
+    /*// frontwand
+    var multiMaterial = getMultimaterial("ff0000");
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(310, yPosition, 595);
+    scene.add(wall);
+
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(-310, yPosition, 595);
+    scene.add(wall);*/
+
+        // frontwand
+        var multiMaterial = getMultimaterial("00ffff");
+        var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+        wall.position.set(310, yPosition, 732);
+        scene.add(wall);
+
+        var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+        wall.position.set(-310, yPosition, 732);
+        scene.add(wall);
+
+    var zIndex = 665;
+    var xIndex = 142;
+    // Seitenwände
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 120, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(-xIndex, yPosition, zIndex);
+    wall.rotation.set(0, Math.PI / 2, 0);
+    scene.add(wall);
+
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 120, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(xIndex, yPosition, zIndex);
+    wall.rotation.set(0, Math.PI / 2, 0);
+    scene.add(wall);
+
+/*    // Rueckwand
+    var multiMaterial = getMultimaterial("00ff00");
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 980, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(0, yPosition, 990);
+    scene.add(wall);*/
+}
+
+function addDachFirst(){
+    var multiMaterial = getMultimaterial("ffff00");
+
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 980, 10, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(0, 243, 595);
+    scene.add(wall);
+
+    // Seitenwände
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 385, 10, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(-480, 243, 795);
+    wall.rotation.set(0, Math.PI / 2, 0);
+    scene.add(wall);
+
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 385, 10, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(480, 243, 795);
+    wall.rotation.set(0, Math.PI / 2, 0);
+    scene.add(wall);
+
+    // Dachfirst
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 980, 10, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(0, 243, 990);
+    scene.add(wall);
+}
+
+function addOuterWall(){
+
+    var wallHeight = 235;
+    var yPosition = 120;
+
+    // frontwand
+    var multiMaterial = getMultimaterial("ff0000");
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(310, yPosition, 595);
+    scene.add(wall);
+
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(-310, yPosition, 595);
+    scene.add(wall);
+
+    // Seitenwände
+    var multiMaterial = getMultimaterial("0000ff");
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 385, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(-480, yPosition, 795);
+    wall.rotation.set(0, Math.PI / 2, 0);
+    scene.add(wall);
+
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 385, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(480, yPosition, 795);
+    wall.rotation.set(0, Math.PI / 2, 0);
+    scene.add(wall);
+
+    // Rueckwand
+    var multiMaterial = getMultimaterial("00ff00");
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 980, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(0, yPosition, 990);
+    scene.add(wall);
+}
+
 function addFence(){
 
     var xPositionsColumnsFrontFence = new Array(170, 380);

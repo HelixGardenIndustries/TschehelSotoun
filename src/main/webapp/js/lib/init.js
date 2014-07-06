@@ -87,13 +87,18 @@ function animate()
     requestAnimationFrame( animate );
 	render();
 	update();
-}
+
+	/*console.log("x", camera.position.x);
+	console.log("y", camera.position.y);
+	console.log("z", camera.position.z);*/
+
+	}
 
 function update()
 {
 	if ( keyboard.pressed("z") )
 	{
-	console.olog("sdfsf")
+	    console.olog("sdfsf")
 		// do something
 	}
 
