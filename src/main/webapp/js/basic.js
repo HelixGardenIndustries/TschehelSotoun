@@ -2,6 +2,8 @@ var initArray = {};
 
 window.onload = function(){
 
+
+
     // Holds information about skybox color and ground textere
 
     initArray.groundTexture = 'img/gras.png';
@@ -42,7 +44,67 @@ window.onload = function(){
     addDachFirst();
 
     addInnerWall();
+
+    addFish2();
 }
+
+function addFish2() {
+
+
+
+
+// Fish
+x = y = 0;
+var fishShape = new THREE.Shape();
+fishShape.moveTo(x,y);
+/*fishShape.quadraticCurveTo(x + 50, y - 80, x + 90, y - 80);
+fishShape.quadraticCurveTo(x + 100, y - 80, x + 115, y - 80);
+fishShape.quadraticCurveTo(x + 115, y, x + 115, y + 80);
+fishShape.quadraticCurveTo(x + 100, y + 80, x + 90, y + 80);
+fishShape.quadraticCurveTo(x + 50, y + 80, x, y);*/
+
+fishShape.quadraticCurveTo(x + 50, y - 80, x + 90, y - 80);
+fishShape.quadraticCurveTo(x + 100, y - 80, x + 115, y - 80);
+fishShape.quadraticCurveTo(x + 115, y, x + 115, y + 80);
+fishShape.quadraticCurveTo(x + 100, y + 80, x + 90, y + 80);
+fishShape.quadraticCurveTo(x + 50, y + 80, x, y);
+
+var extrudeSettings = { amount: 20 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5
+extrudeSettings.bevelEnabled = true;
+extrudeSettings.bevelSegments = 1;
+extrudeSettings.steps = 2;
+
+var points = fishShape.createPointsGeometry();
+var spacedPoints = fishShape.createSpacedPointsGeometry( 2 );
+
+// flat shape
+var multiMaterial = getMultimaterial("00ffff");
+var geometry = new THREE.ShapeGeometry( fishShape );
+
+//var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [ new THREE.MeshLambertMaterial( { color: 0xff0000 } ), new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } ) ] );
+/*var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
+mesh.position.set( 0, 0, 0 );
+mesh.rotation.set( 0, 0, 0 );
+mesh.scale.set( 1, 1, 1 );
+scene.add( mesh );*/
+
+var geometry = new THREE.ExtrudeGeometry( fishShape, extrudeSettings );
+
+
+//THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
+//var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [ new THREE.MeshLambertMaterial( { color: 0xff0000 } ), new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false, transparent: false } ) ] );
+var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
+mesh.position.set( 0, 300, 600 );
+console.log(Math.PI);
+mesh.rotation.set(0, 0, Math.PI / -2);
+//mesh.rotation.set(Math.PI / -2, 0, 0);
+mesh.scale.set( 1, 1, 1);
+scene.add( mesh );
+
+//addShape( fishShape, extrudeSettings, 0xff0000, -60, 200, 0, 0, 0, 0, 1 );
+
+}
+
 
 function addInnerWall(){
     var wallHeight = 235;
