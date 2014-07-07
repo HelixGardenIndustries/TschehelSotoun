@@ -88,9 +88,11 @@ function animate()
 	render();
 	update();
 
-	/*console.log("x", camera.position.x);
+/*
+	console.log("x", camera.position.x);
 	console.log("y", camera.position.y);
-	console.log("z", camera.position.z);*/
+	console.log("z", camera.position.z);
+*/
 
 	}
 

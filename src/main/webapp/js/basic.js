@@ -3,6 +3,7 @@ var initArray = {};
 window.onload = function(){
 
 
+    pi = Math.PI;
 
     // Holds information about skybox color and ground textere
 
@@ -15,9 +16,9 @@ window.onload = function(){
     initArray.planeHeight = 2000;
 
     var cameraPos = {};
-    cameraPos.X = 1285;
-    cameraPos.Y = 854;
-    cameraPos.Z = -261;
+    cameraPos.X = 9;
+    cameraPos.Y = 3;
+    cameraPos.Z = -228;
 
     initArray.cameraPos = cameraPos;
 
@@ -45,7 +46,78 @@ window.onload = function(){
 
     addInnerWall();
 
+    addDome();
+
+    addEntranceWall();
+
     addFish2();
+
+
+
+
+}
+
+function showAxes(){
+var geometry = new THREE.SphereGeometry( 30, 32, 16 );
+	var material = new THREE.MeshLambertMaterial( { color: 0x000088 } );
+	mesh = new THREE.Mesh( geometry, material );
+	mesh.position.set(40,40,40);
+	//scene.add(mesh);
+
+	var axes = new THREE.AxisHelper(50);
+	axes.position = mesh.position;
+	scene.add(axes);
+
+	var gridXZ = new THREE.GridHelper(100, 10);
+	gridXZ.setColors( new THREE.Color(0x006600), new THREE.Color(0x006600) );
+	gridXZ.position.set( 100,0,100 );
+	scene.add(gridXZ);
+
+	var gridXY = new THREE.GridHelper(100, 10);
+	gridXY.position.set( 100,100,0 );
+	gridXY.rotation.x = Math.PI/2;
+	gridXY.setColors( new THREE.Color(0x000066), new THREE.Color(0x000066) );
+	scene.add(gridXY);
+
+	var gridYZ = new THREE.GridHelper(100, 10);
+	gridYZ.position.set( 0,100,100 );
+	gridYZ.rotation.z = Math.PI/2;
+	gridYZ.setColors( new THREE.Color(0x660000), new THREE.Color(0x660000) );
+	scene.add(gridYZ);
+
+	// direction (normalized), origin, length, color(hex)
+	var origin = new THREE.Vector3(50,100,50);
+	var terminus  = new THREE.Vector3(75,75,75);
+	var direction = new THREE.Vector3().subVectors(terminus, origin).normalize();
+	var arrow = new THREE.ArrowHelper(direction, origin, 50, 0x884400);
+	scene.add(arrow);
+}
+
+function addDome(){
+
+
+/*
+    var geometry = new THREE.ExtrudeGeometry( squareShape,  {amount:0.1} );
+    var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [ new THREE.MeshLambertMaterial( { color: 0xff0000 ,opacity: 1.0} ), new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true, transparent: true ,opacity: 1.0} ) ] );
+*/
+
+
+    var multiMaterial = getMultimaterial("afaefa");
+//    var multiMaterial = new THREE.MeshBasicMaterial( { color: 0xF0C400, side: THREE.DoubleSide } );
+    multiMaterial.side = THREE.FrontSide;
+    multiMaterial.doubleSided = THREE.FrontSide;
+	// dome
+	var shape = THREE.SceneUtils.createMultiMaterialObject(new THREE.SphereGeometry( 130, 32, 10, 0, Math.PI, 0, Math.PI / 2 ),multiMaterial );
+    shape.doubleSided = false;
+
+    //shape.material.side = THREE.DoubleSide;
+	// should set material to doubleSided = true so that the
+	//   interior view does not appear transparent.
+	shape.position.set(0, 110, 650);
+	shape.doubleSided = true;
+	scene.add( shape );
+
+
 }
 
 function addFish2() {
@@ -57,22 +129,26 @@ function addFish2() {
 x = y = 0;
 var fishShape = new THREE.Shape();
 fishShape.moveTo(x,y);
-/*fishShape.quadraticCurveTo(x + 50, y - 80, x + 90, y - 80);
-fishShape.quadraticCurveTo(x + 100, y - 80, x + 115, y - 80);
-fishShape.quadraticCurveTo(x + 115, y, x + 115, y + 80);
-fishShape.quadraticCurveTo(x + 100, y + 80, x + 90, y + 80);
-fishShape.quadraticCurveTo(x + 50, y + 80, x, y);*/
 
-fishShape.quadraticCurveTo(x + 50, y - 80, x + 90, y - 80);
-fishShape.quadraticCurveTo(x + 100, y - 80, x + 115, y - 80);
-fishShape.quadraticCurveTo(x + 115, y, x + 115, y + 80);
-fishShape.quadraticCurveTo(x + 100, y + 80, x + 90, y + 80);
-fishShape.quadraticCurveTo(x + 50, y + 80, x, y);
+var a = 45;
+var b = 50;
+var scaleX = 1;
+var scaleY = 1;
+var scaleZ = 1;
+
+
+
+
+
+fishShape.quadraticCurveTo(a, 0, b, -a);
+fishShape.quadraticCurveTo(b, -a, b, 0);
+fishShape.quadraticCurveTo(b, 0, 0, 0);
+
 
 var extrudeSettings = { amount: 20 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5
 extrudeSettings.bevelEnabled = true;
 extrudeSettings.bevelSegments = 1;
-extrudeSettings.steps = 2;
+extrudeSettings.steps = 4;
 
 var points = fishShape.createPointsGeometry();
 var spacedPoints = fishShape.createSpacedPointsGeometry( 2 );
@@ -81,28 +157,62 @@ var spacedPoints = fishShape.createSpacedPointsGeometry( 2 );
 var multiMaterial = getMultimaterial("00ffff");
 var geometry = new THREE.ShapeGeometry( fishShape );
 
-//var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [ new THREE.MeshLambertMaterial( { color: 0xff0000 } ), new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } ) ] );
-/*var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
-mesh.position.set( 0, 0, 0 );
-mesh.rotation.set( 0, 0, 0 );
-mesh.scale.set( 1, 1, 1 );
-scene.add( mesh );*/
-
-var geometry = new THREE.ExtrudeGeometry( fishShape, extrudeSettings );
-
-
-//THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
-//var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [ new THREE.MeshLambertMaterial( { color: 0xff0000 } ), new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false, transparent: false } ) ] );
 var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, multiMaterial);
-mesh.position.set( 0, 300, 600 );
-console.log(Math.PI);
-mesh.rotation.set(0, 0, Math.PI / -2);
-//mesh.rotation.set(Math.PI / -2, 0, 0);
-mesh.scale.set( 1, 1, 1);
+var fishShape2 = new THREE.Shape();
+fishShape2.moveTo(x,y);
+
+var width = 128;
+var height = 0;
+
+fishShape2.quadraticCurveTo(a, 0, b, -a);
+fishShape2.quadraticCurveTo(b, -a, b, 0);
+fishShape2.quadraticCurveTo(b, 0, 0, 0);
+var geometry2 = new THREE.ShapeGeometry( fishShape2 );
+
+
+var mesh2 = THREE.SceneUtils.createMultiMaterialObject(geometry2, multiMaterial);
+var zside = 650;
+var yside = 220;
+var xside = 129;
+mesh.position.set(xside, yside + 20, zside );
+mesh.rotation.set(0, pi, 0);
+mesh.scale.set( 5.5, 4, 1);
+
+mesh2.position.set( xside, yside - 180, zside );
+mesh2.rotation.set(0, pi ,pi / 2);
+mesh2.scale.set( 4, 5.5, 1);
+
+
 scene.add( mesh );
+scene.add( mesh2 );
 
-//addShape( fishShape, extrudeSettings, 0xff0000, -60, 200, 0, 0, 0, 0, 1 );
 
+}
+
+function addEntranceWall(){
+    var wallHeight = 120;
+        var yPosition = 60;
+        var a = 140;
+        var wallWidth = 150;
+        var z  = 725;
+
+        // Seitenwände
+        var multiMaterial = getMultimaterial("aaccaa");
+        var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( wallWidth, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+        wall.position.set(-a, yPosition, z);
+        wall.rotation.set(0, Math.PI / 2, 0);
+        scene.add(wall);
+
+        var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( wallWidth, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+        wall.position.set(a, yPosition, z);
+        wall.rotation.set(0, Math.PI / 2, 0);
+        scene.add(wall);
+
+        // Rueckwand
+        var multiMaterial = getMultimaterial("aaccaa");
+        var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 280, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+        wall.position.set(0, yPosition, 790);
+        scene.add(wall);
 }
 
 
@@ -120,15 +230,15 @@ function addInnerWall(){
     wall.position.set(-310, yPosition, 595);
     scene.add(wall);*/
 
-        // frontwand
-        var multiMaterial = getMultimaterial("00ffff");
-        var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
-        wall.position.set(310, yPosition, 732);
-        scene.add(wall);
+    // frontwand
+    var multiMaterial = getMultimaterial("00ffff");
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(310, yPosition, 732);
+    scene.add(wall);
 
-        var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
-        wall.position.set(-310, yPosition, 732);
-        scene.add(wall);
+    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
+    wall.position.set(-310, yPosition, 732);
+    scene.add(wall);
 
     var zIndex = 665;
     var xIndex = 142;
@@ -357,8 +467,8 @@ function addFundamentPalace(fundamentHeight){
 }
 
 function getMultimaterial(meshColor, wireframeColor){
-    var wireframeMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true, transparent: true } );
-    var meshMaterial= new THREE.MeshBasicMaterial( { color: parseInt(meshColor, 16)} );
+    var wireframeMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true, transparent: false, side: THREE.DoubleSide } );
+    var meshMaterial= new THREE.MeshBasicMaterial( { color: parseInt(meshColor, 16), side: THREE.DoubleSide} );
     var multiMaterial = [ wireframeMaterial, meshMaterial ];
     return multiMaterial;
 }
