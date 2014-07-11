@@ -36,6 +36,7 @@ function init(cfgArray)
 		renderer = new THREE.WebGLRenderer( {antialias:true} );
 	else
 		renderer = new THREE.CanvasRenderer();
+
 	renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 	container = document.getElementById( 'canvas' );
 	container.appendChild( renderer.domElement );
@@ -100,7 +101,7 @@ function update()
 {
 	if ( keyboard.pressed("z") )
 	{
-	    console.olog("sdfsf")
+	    console.log("sdfsf")
 		// do something
 	}
 
