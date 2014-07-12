@@ -27,11 +27,8 @@ window.onload = function(){
 
     initArray.cameraPos = cameraPos;
 
-    console.log(initArray);
     init(initArray);
     animate();
-
-
 
     addFundamentPalace();
     addStairsFundament();
@@ -43,30 +40,20 @@ window.onload = function(){
     addDome();
     addEntranceWall();
     addRoof();
-
-}
-
-function addRoof(){
-        var pos = new Array(1, 250, 475);
-        var dim = new Array(1080, 20, 1080);
-        var rot = new Array(0, 0, 0);
-        var scl = new Array(1, 1, 1);
-        addCubeShape(pos, dim, rot, scl, "cf00f1");
 }
 
 function addFundamentPalace(){
-     var pos = new Array(0, 0,  initArray.planeHeight / 4);
-     var dim = new Array(initArray.planeWidth / 2, initArray.fundamentHeight, initArray.planeHeight / 2);
-     var rot = new Array(0, 0, 0);
-     var scl = new Array(1, 1, 1);
-     addCubeShape(pos, dim, rot, scl, "ffffcc");
+    var pos = new Array(0, 1,  initArray.planeHeight / 4);
+    var dim = new Array(initArray.planeWidth / 2, initArray.fundamentHeight, initArray.planeHeight / 2);
+    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ffffcc");
+}
+function addRoof(){
+    var pos = new Array(1, 250, 475);
+    var dim = new Array(1080, 20, 1080);
+    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "cf00f1");
 }
 
-
-
-
 function addEntranceWall(){
-
         var sideWallWidth = 150;
         var wallHeight = 100;
         var wallWidth = 150;
@@ -77,66 +64,54 @@ function addEntranceWall(){
         var zBackWall = 790;
         var innerWallColor = "aaccaa";
 
-        // innere Seitenwände
-        var pos = new Array(-xSideWall, yInnerWall, zSideWall);
-        var dim = new Array(wallWidth, wallHeight, wallDepth);
-        var rot = new Array(0, pi / 2, 0);
-        var scl = new Array(1, 1, 1);
-        addCubeShape(pos, dim, rot, scl, innerWallColor);
-
-        var pos = new Array(xSideWall, yInnerWall, zSideWall);
-        var dim = new Array(wallWidth, wallHeight, wallDepth);
-        var rot = new Array(0, pi / 2, 0);
-        var scl = new Array(1, 1, 1);
-        addCubeShape(pos, dim, rot, scl, innerWallColor);
-
         // innere Rückwand
         var pos = new Array(0, yInnerWall, zBackWall);
         var dim = new Array(wallWidth + 130, wallHeight, wallDepth);
-        var rot = new Array(0, 0, 0);
-        var scl = new Array(1, 1, 1);
-        addCubeShape(pos, dim, rot, scl, innerWallColor);
+        var rot = new Array(0, pi, 0);
+        addCubeShape(pos, dim, rot, getDefaultScaling(), innerWallColor);
 
+        // innere Seitenwände
+        var pos = new Array(-xSideWall, yInnerWall, zSideWall);
+        var dim = new Array(wallWidth, wallHeight, wallDepth);
+        rot = new Array(0, pi / 2, 0);
+        addCubeShape(pos, dim, rot, getDefaultScaling(), innerWallColor);
+
+        var pos = new Array(xSideWall, yInnerWall, zSideWall);
+        var dim = new Array(wallWidth, wallHeight, wallDepth);
+        rot = new Array(0, pi / 2, 0);
+        addCubeShape(pos, dim, rot, getDefaultScaling(), innerWallColor);
+
+        addInnerWallTriangles();
+}
+
+function addInnerWallTriangles(){
 
         var ceilingTriangleLeftGeometry = getTriangleFromCoordinates();
         var triangleMaterialColor = "ff0000";
-
-        var posX, posY,posZ, sclX, sclY, sclZ;
-        posX = 70;
-        posY = 240;
-        posZ = 650;
-        sclX = 4;
-        sclY = 4;
-        sclZ = 1;
-
-
-        pos = new Array(posX, posY, posZ);
-        var rot = new Array(0, pi, 0);
-        var scl = new Array(sclX, sclY, sclZ);
-        addTriangle(ceilingTriangleLeftGeometry, pos, rot, scl, triangleMaterialColor);
-
-        var pos = new Array(-posX, posY, posZ);
-        var rot = new Array(0, 0, 0);
-        var scl = new Array(sclX, sclY, sclZ);
-        addTriangle(ceilingTriangleLeftGeometry, pos, rot, scl, triangleMaterialColor);
-
-        posX = 20;
-        posY = 100;
-        posZ = 790;
-        sclX = 3;
-        sclY = 3;
-        sclZ = 1;
+        var posX = 70, posY = 240, posZ = 650, sclX = 4, sclY = 4, sclZ = 1;
 
         var pos = new Array(posX, posY, posZ);
-        var rot = new Array(-pi/2, -pi*2, pi);
-        var scl = new Array(sclX, sclY, sclZ);
+        rot = new Array(0, pi, 0);
+        scl = new Array(sclX, sclY, sclZ);
         addTriangle(ceilingTriangleLeftGeometry, pos, rot, scl, triangleMaterialColor);
 
-        var pos = new Array(-posX, posY, posZ);
-        var rot = new Array(-pi/2, pi, -pi);
-        var scl = new Array(sclX, sclY, sclZ);
+        pos = new Array(-posX, posY, posZ);
+        scl = new Array(sclX, sclY, sclZ);
+        rot = new Array(0, pi * 2, 0);
         addTriangle(ceilingTriangleLeftGeometry, pos, rot, scl, triangleMaterialColor);
 
+        // the two triangles in the back
+        var posX = 20, posY = 100, posZ = 790, sclX = 3; sclY = 3; sclZ = 1;
+
+        pos = new Array(posX, posY, posZ);
+        rot = new Array(-pi/2, -pi*2, pi);
+        scl = new Array(sclX, sclY, sclZ);
+        addTriangle(ceilingTriangleLeftGeometry, pos, rot, scl, triangleMaterialColor);
+
+        pos = new Array(-posX, posY, posZ);
+        rot = new Array(-pi/2, pi, -pi);
+        scl = new Array(sclX, sclY, sclZ);
+        addTriangle(ceilingTriangleLeftGeometry, pos, rot, scl, triangleMaterialColor);
 }
 
 function getTriangleFromCoordinates(){
@@ -152,11 +127,11 @@ function getTriangleFromCoordinates(){
     return ceilingTriangleLeftGeometry;
 }
 
-function addCubeShape(pos, dim, rot, scl, materialColor){
-    var mesh = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( dim[0], dim[1], dim[2], 1, 1, 1 ), getMultimaterial(materialColor));
-    mesh.position.set(pos[0], pos[1], pos[2]);
-    mesh.rotation.set(rot[0], rot[1], rot[2]);
-    mesh.scale.set( scl[0], scl[1], scl[2]);
+function addCubeShape(position, dimension, rotation, scaling, materialColor){
+    var mesh = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( dimension[0], dimension[1], dimension[2], 1, 1, 1 ), getMultimaterial(materialColor));
+    mesh.position.set(position[0], position[1], position[2]);
+    mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
+    mesh.scale.set( scaling[0], scaling[1], scaling[2]);
     scene.add(mesh);
  }
 
@@ -169,6 +144,7 @@ function addTriangle(geometry, pos, rot, scl, materialColor){
 }
 
 function addDome(){
+
 	var radius = 140;
 	var widthSegments = 32;
 	var heightSegments = 10;
@@ -186,91 +162,87 @@ function addSphereShape(x,y,z, radius, widthSegments, heightSegments, phiStart, 
 }
 
 function addInnerWall(){
-    var wallHeight = 235;
-    var yPosition = 120;
-    // frontwand
-    var multiMaterial = getMultimaterial("00ffff");
-    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
-    wall.position.set(310, yPosition, 732);
-    scene.add(wall);
 
-    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
-    wall.position.set(-310, yPosition, 732);
-    scene.add(wall);
+    var px = 310;
+    var py = 120;
+    var pz = 732;
+    var dx = 350;
+    var dy = 235;
+    var dz = 15;
 
-    var zIndex = 665;
-    var xIndex = 142;
-    // Seitenwände
-    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 120, wallHeight, 15, 1, 1, 1 ), multiMaterial);
-    wall.position.set(-xIndex, yPosition, zIndex);
-    wall.rotation.set(0, pi / 2, 0);
-    scene.add(wall);
+    var pos = new Array(px, py, pz);
+    var dim = new Array(dx, dy, dz);
+    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "00ffff");
 
-    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 120, wallHeight, 15, 1, 1, 1 ), multiMaterial);
-    wall.position.set(xIndex, yPosition, zIndex);
-    wall.rotation.set(0, pi / 2, 0);
-    scene.add(wall);
+    var pos = new Array(-px, py, pz);
+    var dim = new Array(dx, dy, dz);
+    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "00ffff");
+
+    px = 142;
+    pz = 665;
+    dx = 120;
+    ry = pi /2;
+
+    var pos = new Array(-px, py, pz);
+    var dim = new Array(dx, dy, dz);
+    rot = new Array(0, ry, 0);
+
+    addCubeShape(pos, dim, rot, getDefaultScaling(), "00ffff");
+
+    var pos = new Array(px, py, pz);
+    var dim = new Array(dx, dy, dz);
+    rot = new Array(0, ry, 0);
+
+    addCubeShape(pos, dim, rot, getDefaultScaling(), "00ffff");
 }
 
 function addDachFirst(){
-    var multiMaterial = getMultimaterial("ffff00");
 
-    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 980, 10, 15, 1, 1, 1 ), multiMaterial);
-    wall.position.set(0, 243, 595);
-    scene.add(wall);
+    var pos = new Array(0, 243, 595);
+    var dim = new Array(980, 10, 15);
+    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ff00ff");
 
-    // Seitenwände
-    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 385, 10, 15, 1, 1, 1 ), multiMaterial);
-    wall.position.set(-480, 243, 795);
-    wall.rotation.set(0, pi / 2, 0);
-    scene.add(wall);
+    var pos = new Array(0, 243, 995);
+    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ff00ff");
 
-    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 385, 10, 15, 1, 1, 1 ), multiMaterial);
-    wall.position.set(480, 243, 795);
-    wall.rotation.set(0, pi / 2, 0);
-    scene.add(wall);
+    var pos = new Array(-480, 243, 795);
+    var dim = new Array(385, 10, 15);
+    rot = new Array(0, pi / 2, 0);
+    addCubeShape(pos, dim, rot, getDefaultScaling(), "ff00ff");
 
-    // Dachfirst
-    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 980, 10, 15, 1, 1, 1 ), multiMaterial);
-    wall.position.set(0, 243, 990);
-    scene.add(wall);
+    var pos = new Array(480, 243, 795);
+    var dim = new Array(385, 10, 15);
+    rot = new Array(0, pi / 2, 0);
+    addCubeShape(pos, dim, rot, getDefaultScaling(), "ff00ff");
 }
 
 function addOuterWall(){
 
-    var wallHeight = 235;
-    var yPosition = 120;
+    var pos = new Array(310, 120, 595);
+    var dim = new Array(350, 235, 15);
+    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ffff00");
 
-    // frontwand
-    var multiMaterial = getMultimaterial("ff0000");
-    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
-    wall.position.set(310, yPosition, 595);
-    scene.add(wall);
+    var pos = new Array(-310, 120, 595);
+    var dim = new Array(350, 235, 15);
+    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ffff00");
 
-    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 350, wallHeight, 15, 1, 1, 1 ), multiMaterial);
-    wall.position.set(-310, yPosition, 595);
-    scene.add(wall);
+    var pos = new Array(0, 120, 990);
+    var dim = new Array(980, 235, 15);
+    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ffff00");
 
-    // Seitenwände
-    var multiMaterial = getMultimaterial("0000ff");
-    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 385, wallHeight, 15, 1, 1, 1 ), multiMaterial);
-    wall.position.set(-480, yPosition, 795);
-    wall.rotation.set(0, pi / 2, 0);
-    scene.add(wall);
+    var pos = new Array(-480, 120, 795);
+    var dim = new Array(385, 235, 15);
+    rot = new Array(0, pi / 2, 0);
+    addCubeShape(pos, dim, rot, getDefaultScaling(), "ffff00");
 
-    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 385, wallHeight, 15, 1, 1, 1 ), multiMaterial);
-    wall.position.set(480, yPosition, 795);
-    wall.rotation.set(0, pi / 2, 0);
-    scene.add(wall);
-
-    // Rueckwand
-    var multiMaterial = getMultimaterial("00ff00");
-    var wall = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( 980, wallHeight, 15, 1, 1, 1 ), multiMaterial);
-    wall.position.set(0, yPosition, 990);
-    scene.add(wall);
+    var pos = new Array(480, 120, 795);
+    var dim = new Array(385, 235, 15);
+    rot = new Array(0, pi / 2, 0);
+    addCubeShape(pos, dim, rot, getDefaultScaling(), "ffff00");
 }
 
 function addFence(){
+
 
     var xPositionsColumnsFrontFence = new Array(170, 380);
     var multiMaterial = getMultimaterial("ffaacc");
@@ -308,6 +280,7 @@ function addFence(){
     This function adds the columns to the scene which are holding the roof
 */
 function addRoofColumns(){
+
     var xPositionsColumns = new Array(480,270, 70);
 
     // Add the 20 columns
@@ -331,6 +304,7 @@ function addRoofColumns(){
 }
 
 function addFirstColumnRow(zPosition, xPosition){
+
     var columnSettings = {};
     columnSettings.columnHeight = 207;
     columnSettings.columnWidth = 10;
@@ -399,6 +373,14 @@ function addStairsFundament(){
         cube.position.set(0, positionY, positionZ);
         scene.add( cube );
     }
+}
+
+function getDefaultRotating(){
+    return new Array(0,0,0);
+}
+
+function getDefaultScaling(){
+    return new Array(1,1,1);
 }
 
 
