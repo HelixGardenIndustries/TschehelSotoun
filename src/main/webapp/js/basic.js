@@ -21,9 +21,9 @@ window.onload = function(){
     initArray.planeHeight = 2000;
 
     var cameraPos = {};
-    cameraPos.X = -14;
-    cameraPos.Y = 34;
-    cameraPos.Z = 500;
+    cameraPos.X = 45;
+    cameraPos.Y = 405;
+    cameraPos.Z = -489;
 
     initArray.cameraPos = cameraPos;
 
@@ -265,12 +265,12 @@ function addFence(){
 
     // The fences on the site
     for(var i = 0; i < zPositionsColumnsSideFence.length; i++){
-        fence = new THREE.Mesh(new THREE.CubeGeometry( fenceLength, 5, 2, 1, 1, 1 ), materials);
+        fence = new THREE.Mesh(new THREE.CubeGeometry( fenceLength, 10, 2, 1, 1, 1 ), materials);
         fence.position.set(-xPositionsColumnsSideFence[0], yPosFence, zPositionsColumnsSideFence[i]);
         fence.rotation.set(0, pi / 2, pi);
         scene.add(fence);
 
-        fence = new THREE.Mesh(new THREE.CubeGeometry( fenceLength, 5, 2, 1, 1, 1 ), materials);
+        fence = new THREE.Mesh(new THREE.CubeGeometry( fenceLength, 10, 2, 1, 1, 1 ), materials);
         fence.position.set(xPositionsColumnsSideFence[0], yPosFence, zPositionsColumnsSideFence[i]);
         fence.rotation.set(0, pi / 2, pi);
         scene.add(fence);
@@ -283,6 +283,7 @@ function addFence(){
 function addRoofColumns(){
 
     var xPositionsColumns = new Array(480,270, 70);
+    var j = 1;
 
     // Add the 20 columns
     for(var i = 0; i < xPositionsColumns.length; i++){
@@ -315,32 +316,33 @@ function addFirstColumnRow(zPosition, xPosition){
 }
 
 function addColumn(columnSettings){
-
     var radiusAtBottom = 35;
     var segmentsAroundRadius = 4;
     var segmentsAlongHeight = 4;
 
-
-    var materials = getMaterialForCube('img/pillarBottom.png', 1, 1);
+    var randomIndex = Math.floor(Math.random() * ((5-0)+1) + 1);
+    var pillarBottomMaterial = getMaterialForCube('img/pillarBottom.png', 1, 1);
+    var columnMaterial = getMaterialForCube('img/column00' + randomIndex % 5 +'.png', 1, 1);
+    var frustumTopMaterial = getMaterialForCube('img/frustumTop.png', 10, 2);
 
 
     // the column on the ground
     var multiMaterial = getMultimaterial("aaccee");
-    var shape = new THREE.Mesh(new THREE.CylinderGeometry( 10, 8, 10, 4, 4 ),materials );
+    var shape = new THREE.Mesh(new THREE.CylinderGeometry( 10, 8, 10, 4, 4 ), pillarBottomMaterial);
     shape.position.set(columnSettings.xPosition, 10, columnSettings.zPosition);
     shape.rotation.set(pi, pi / 4, 0);
     scene.add(shape);
 
     // the column on the frustum
     var multiMaterial = getMultimaterial("ccaaee");
-    var column = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( columnSettings.columnWidth, columnSettings.columnHeight, 10, 1, 1, 1 ), multiMaterial);
+    var column =  new THREE.Mesh(new THREE.CubeGeometry( columnSettings.columnWidth, columnSettings.columnHeight, 10, 1, 1, 1 ), columnMaterial);
     column.position.set(columnSettings.xPosition, columnSettings.columnHeight / 2 + 5,  columnSettings.zPosition);
     scene.add(column);
 
     // the frustum on the column
     // radiusAtTop, radiusAtBottom, height, segmentsAroundRadius, segmentsAlongHeight,
     var multiMaterial = getMultimaterial("eeaacc");
-    var shape = THREE.SceneUtils.createMultiMaterialObject(new THREE.CylinderGeometry( 8.5, radiusAtBottom, 50, segmentsAroundRadius, segmentsAlongHeight),multiMaterial );
+    var shape = new THREE.Mesh(new THREE.CylinderGeometry( 8.5, radiusAtBottom, 50, segmentsAroundRadius, segmentsAlongHeight),frustumTopMaterial );
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight, columnSettings.zPosition);
     shape.rotation.set(pi, pi / 4, 0);
     scene.add(shape);

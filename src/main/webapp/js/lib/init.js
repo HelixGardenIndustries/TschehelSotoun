@@ -49,7 +49,7 @@ function init(cfgArray)
 
 	// LIGHT
 	var light = new THREE.PointLight(0xffffff);
-	light.position.set(0,1000,500);
+	light.position.set(45,39,-363);
 	scene.add(light);
 	// FLOOR
 	var floorTexture = new THREE.ImageUtils.loadTexture( configurationArray.groundTexture  );
