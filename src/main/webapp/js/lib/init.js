@@ -49,8 +49,19 @@ function init(cfgArray)
 
 	// LIGHT
 	var light = new THREE.PointLight(0xffffff);
-	light.position.set(45,39,-363);
+	light.position.set(45,500,-63);
 	scene.add(light);
+
+	// LIGHT
+    	var light2 = new THREE.PointLight(0xffffff);
+    	light2.position.set(45,500,-363);
+    	//scene.add(light2);
+
+
+    		// LIGHT
+            	var light3 = new THREE.PointLight(0xaaaaaa);
+            	light3.position.set(245,100,-363);
+            	scene.add(light3);
 	// FLOOR
 	var floorTexture = new THREE.ImageUtils.loadTexture( configurationArray.groundTexture  );
 	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;

@@ -45,7 +45,11 @@ window.onload = function(){
 function addFundamentPalace(){
     var pos = new Array(0, 1,  initArray.planeHeight / 4);
     var dim = new Array(initArray.planeWidth / 2, initArray.fundamentHeight, initArray.planeHeight / 2);
-    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ffffcc");
+    //addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ffffcc");
+    var cubeMaterial= getMaterialForCube('img/groundTexture.png', 16, 16);
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), cubeMaterial);
+
+     //var materials = getMaterialForCube('img/fenceFrontAndBackSide.png', 24, 1);
 }
 function addRoof(){
     var pos = new Array(1, 250, 475);
@@ -127,6 +131,9 @@ function getTriangleFromCoordinates(){
     return ceilingTriangleLeftGeometry;
 }
 
+/**
+TODO: Diese Funktion entfernen, da nur noch texture funktionen hinzukommen
+**/
 function addCubeShape(position, dimension, rotation, scaling, materialColor){
     var mesh = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry( dimension[0], dimension[1], dimension[2], 1, 1, 1 ), getMultimaterial(materialColor));
     mesh.position.set(position[0], position[1], position[2]);
@@ -134,6 +141,16 @@ function addCubeShape(position, dimension, rotation, scaling, materialColor){
     mesh.scale.set( scaling[0], scaling[1], scaling[2]);
     scene.add(mesh);
  }
+
+ function addCubeShapeWithTexture(position, dimension, rotation, scaling, columnMaterial){
+
+    // the column on the frustum
+     var mesh =  new THREE.Mesh(new THREE.CubeGeometry( dimension[0], dimension[1], dimension[2], 1, 1, 1 ), columnMaterial);
+     mesh.position.set(position[0], position[1], position[2]);
+     mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
+     mesh.scale.set( scaling[0], scaling[1], scaling[2]);
+     scene.add(mesh);
+  }
 
 function addTriangle(geometry, pos, rot, scl, materialColor){
     var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, getMultimaterial(materialColor));
@@ -218,9 +235,14 @@ function addDachFirst(){
 
 function addOuterWall(){
 
+
+
+     var cubeMaterial= getMaterialForCube('img/front.png', 1, 1);
+    //addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), cubeMaterial);
+
     var pos = new Array(310, 120, 595);
     var dim = new Array(350, 235, 15);
-    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ffff00");
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), cubeMaterial);
 
     var pos = new Array(-310, 120, 595);
     var dim = new Array(350, 235, 15);
@@ -246,7 +268,7 @@ function addFence(){
     var xPositionsColumnsFrontFence = new Array(170, 380);
     var multiMaterial = getMultimaterial("ffaacc");
     var fenceLength = 190;
-    var materials = getMaterialForCube('img/fenceFrontAndBackSide.png', 24, 1);
+    var materials = getMaterialForCube('img/fenceFrontAndBackSide2.png', 24, 1);
     var yPosFence = 11;
 
     // The front fences
@@ -308,7 +330,7 @@ function addRoofColumns(){
 function addFirstColumnRow(zPosition, xPosition){
 
     var columnSettings = {};
-    columnSettings.columnHeight = 207;
+    columnSettings.columnHeight = 200;
     columnSettings.columnWidth = 10;
     columnSettings.zPosition = zPosition;
     columnSettings.xPosition = xPosition;
@@ -320,40 +342,42 @@ function addColumn(columnSettings){
     var segmentsAroundRadius = 4;
     var segmentsAlongHeight = 4;
 
-    var randomIndex = Math.floor(Math.random() * ((5-0)+1) + 1);
+    var randomIndex = Math.floor(Math.random() * ((10-0)+1) + 1);
+    // original fotos
     var pillarBottomMaterial = getMaterialForCube('img/pillarBottom.png', 1, 1);
-    var columnMaterial = getMaterialForCube('img/column00' + randomIndex % 5 +'.png', 1, 1);
-    var frustumTopMaterial = getMaterialForCube('img/frustumTop.png', 10, 2);
+    var columnMaterial = getMaterialForCube('img/column00' + randomIndex % 5 + '.png', 1, 1);
+    var frustumTopMaterial = getMaterialForCube('img/frustumTop00' + randomIndex % 5 + '.png', 10, 6);
+    var frustumCubeMaterial = getMaterialForCube('img/frustumCube00' + randomIndex % 5 + '.png', 1, 1);
+
+    // from drawing
+    var pillarBottomMaterial = getMaterialForCube('img/pillarBottom.png', 1, 1);
+    var columnMaterial = getMaterialForCube('img/column.png', 1, 1);
+    var frustumTopMaterial = getMaterialForCube('img/frustumTop.png', 10, 6);
+    var frustumCubeMaterial = getMaterialForCube('img/frustumCube.png', 4, 1);
 
 
     // the column on the ground
-    var multiMaterial = getMultimaterial("aaccee");
     var shape = new THREE.Mesh(new THREE.CylinderGeometry( 10, 8, 10, 4, 4 ), pillarBottomMaterial);
     shape.position.set(columnSettings.xPosition, 10, columnSettings.zPosition);
     shape.rotation.set(pi, pi / 4, 0);
     scene.add(shape);
 
     // the column on the frustum
-    var multiMaterial = getMultimaterial("ccaaee");
     var column =  new THREE.Mesh(new THREE.CubeGeometry( columnSettings.columnWidth, columnSettings.columnHeight, 10, 1, 1, 1 ), columnMaterial);
     column.position.set(columnSettings.xPosition, columnSettings.columnHeight / 2 + 5,  columnSettings.zPosition);
     scene.add(column);
 
     // the frustum on the column
     // radiusAtTop, radiusAtBottom, height, segmentsAroundRadius, segmentsAlongHeight,
-    var multiMaterial = getMultimaterial("eeaacc");
     var shape = new THREE.Mesh(new THREE.CylinderGeometry( 8.5, radiusAtBottom, 50, segmentsAroundRadius, segmentsAlongHeight),frustumTopMaterial );
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight, columnSettings.zPosition);
     shape.rotation.set(pi, pi / 4, 0);
     scene.add(shape);
 
     // the top frustum
-    var multiMaterial = getMultimaterial("cacaca");
-    var shape = THREE.SceneUtils.createMultiMaterialObject(new THREE.CylinderGeometry( 35, radiusAtBottom, 15, segmentsAroundRadius, segmentsAlongHeight), multiMaterial );
-    shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 30, columnSettings.zPosition);
+    var shape = new THREE.Mesh(new THREE.CubeGeometry( 49, 20, 50, 1, 1, 1 ), frustumCubeMaterial );
+    shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 35, columnSettings.zPosition);
     scene.add(shape);
-    shape.rotation.set(0, pi / 4, 0);
-
 }
 
 function addStairsFundament(){
