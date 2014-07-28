@@ -2,8 +2,6 @@ var initArray = {};
 
 window.onload = function(){
 
-    showGridLinesOnly = false;
-
     pi = Math.PI;
 
     // Show the gridline with filled color or not
@@ -30,26 +28,24 @@ window.onload = function(){
     init(initArray);
     animate();
 
-    addFundamentPalace();
-    addStairsFundament();
-    addRoofColumns();
-    addFence();
-    addOuterWall();
-    addDachFirst();
+//    addFundamentPalace();
+//    addStairsFundament();
+//    addRoofColumns();
+//    addFence();
+//    addOuterWall();
+//    addDachFirst();
     addInnerWall();
-    addDome();
-    addEntranceWall();
-    addRoof();
+//    addDome();
+//    addEntranceWall();
+//    addRoof();
 }
 
 function addFundamentPalace(){
     var pos = new Array(0, 1,  initArray.planeHeight / 4);
     var dim = new Array(initArray.planeWidth / 2, initArray.fundamentHeight, initArray.planeHeight / 2);
-    //addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ffffcc");
-    var cubeMaterial= getMaterialForCube('img/groundTexture.png', 16, 16);
+    var cubeMaterial= getMaterialForCube('img/groundTexture.png', 8, 8);
     addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), cubeMaterial);
 
-     //var materials = getMaterialForCube('img/fenceFrontAndBackSide.png', 24, 1);
 }
 function addRoof(){
     var pos = new Array(1, 250, 475);
@@ -189,11 +185,11 @@ function addInnerWall(){
 
     var pos = new Array(px, py, pz);
     var dim = new Array(dx, dy, dz);
-    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "00ffff");
+    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "00ffaf");
 
     var pos = new Array(-px, py, pz);
     var dim = new Array(dx, dy, dz);
-    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "00ffff");
+    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "00ffaf");
 
     px = 142;
     pz = 665;
@@ -234,19 +230,16 @@ function addDachFirst(){
 }
 
 function addOuterWall(){
-
-
-
-     var cubeMaterial= getMaterialForCube('img/front.png', 1, 1);
-    //addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), cubeMaterial);
+    var cubeMaterialFrontLinks = getMaterialForCube('img/front_links.png', 1, 1);
+    var cubeMaterialFrontRechts = getMaterialForCube('img/front_rechts.png', 1, 1);
 
     var pos = new Array(310, 120, 595);
     var dim = new Array(350, 235, 15);
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), cubeMaterial);
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), cubeMaterialFrontLinks);
 
     var pos = new Array(-310, 120, 595);
     var dim = new Array(350, 235, 15);
-    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ffff00");
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), cubeMaterialFrontRechts);
 
     var pos = new Array(0, 120, 990);
     var dim = new Array(980, 235, 15);
@@ -321,7 +314,7 @@ function addRoofColumns(){
         addFirstColumnRow(400, xPositionsColumns[i]);
         addFirstColumnRow(400,-xPositionsColumns[i]);
 
-        // 4. re
+        // 4. reihe
         addFirstColumnRow(600, xPositionsColumns[2]);
         addFirstColumnRow(600,-xPositionsColumns[2]);
     }
@@ -330,7 +323,7 @@ function addRoofColumns(){
 function addFirstColumnRow(zPosition, xPosition){
 
     var columnSettings = {};
-    columnSettings.columnHeight = 200;
+    columnSettings.columnHeight = 190;
     columnSettings.columnWidth = 10;
     columnSettings.zPosition = zPosition;
     columnSettings.xPosition = xPosition;
@@ -352,9 +345,14 @@ function addColumn(columnSettings){
     // from drawing
     var pillarBottomMaterial = getMaterialForCube('img/pillarBottom.png', 1, 1);
     var columnMaterial = getMaterialForCube('img/column.png', 1, 1);
-    var frustumTopMaterial = getMaterialForCube('img/frustumTop.png', 10, 6);
-    var frustumCubeMaterial = getMaterialForCube('img/frustumCube.png', 4, 1);
+    var frustumTopMaterial = getMaterialForCube('img/frustumTop.png', 1, 1);
+    var frustumCubeMaterial = getMaterialForCube('img/frustumCube.png', 1, 1);
+    var topColumnImages = new Array( "img/columnTopLevel1.png", "img/columnTopLevel2.png", "img/columnTopLevel3.png", "img/columnTopLevel4.png");
 
+    var cubeLevel1CubeMaterial = getMaterialForCube('img/columnTopLevel1.png', 1, 1);
+    var cubeLevel2CubeMaterial = getMaterialForCube('img/columnTopLevel2.png', 1, 1);
+    var cubeLevel3CubeMaterial = getMaterialForCube('img/columnTopLevel3.png', 1, 1);
+    var cubeLevel4CubeMaterial = getMaterialForCube('img/columnTopLevel4.png', 1, 1);
 
     // the column on the ground
     var shape = new THREE.Mesh(new THREE.CylinderGeometry( 10, 8, 10, 4, 4 ), pillarBottomMaterial);
@@ -367,16 +365,26 @@ function addColumn(columnSettings){
     column.position.set(columnSettings.xPosition, columnSettings.columnHeight / 2 + 5,  columnSettings.zPosition);
     scene.add(column);
 
-    // the frustum on the column
-    // radiusAtTop, radiusAtBottom, height, segmentsAroundRadius, segmentsAlongHeight,
-    var shape = new THREE.Mesh(new THREE.CylinderGeometry( 8.5, radiusAtBottom, 50, segmentsAroundRadius, segmentsAlongHeight),frustumTopMaterial );
-    shape.position.set(columnSettings.xPosition, columnSettings.columnHeight, columnSettings.zPosition);
-    shape.rotation.set(pi, pi / 4, 0);
+    // the frustum son the column
+    var shape = new THREE.Mesh(new THREE.CubeGeometry( 10, 10, 10, 1, 1, 1 ), cubeLevel1CubeMaterial );
+    shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 10, columnSettings.zPosition);
+    scene.add(shape);
+
+    var shape = new THREE.Mesh(new THREE.CubeGeometry( 12, 12, 12, 1, 1, 1 ), cubeLevel2CubeMaterial );
+    shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 21, columnSettings.zPosition);
+    scene.add(shape);
+
+    var shape = new THREE.Mesh(new THREE.CubeGeometry( 14, 14, 14, 1, 1, 1 ), cubeLevel3CubeMaterial );
+    shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 31, columnSettings.zPosition);
+    scene.add(shape);
+
+    var shape = new THREE.Mesh(new THREE.CubeGeometry( 16, 16, 16, 1, 1, 1 ), cubeLevel4CubeMaterial );
+    shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 41, columnSettings.zPosition);
     scene.add(shape);
 
     // the top frustum
-    var shape = new THREE.Mesh(new THREE.CubeGeometry( 49, 20, 50, 1, 1, 1 ), frustumCubeMaterial );
-    shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 35, columnSettings.zPosition);
+    var shape = new THREE.Mesh(new THREE.CubeGeometry( 18, 18, 18, 1, 1, 1 ), frustumCubeMaterial );
+    shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 41, columnSettings.zPosition);
     scene.add(shape);
 }
 
@@ -429,22 +437,22 @@ floorTexture.repeat.set( repeatX, repeatY);
 
  var materials = [
        new THREE.MeshLambertMaterial({
-           map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF
+           map: floorTexture, transparent: true, opacity: 1.0, wireframe: initArray.showGridLinesOnly,color: 0xFFFFFF
        }),
        new THREE.MeshLambertMaterial({
-           map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF
+           map: floorTexture, transparent: true, opacity: 1.0, wireframe: initArray.showGridLinesOnly, color: 0xFFFFFF
        }),
        new THREE.MeshLambertMaterial({
-           map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF
+           map: floorTexture, transparent: true, opacity: 1.0, wireframe: initArray.showGridLinesOnly,color: 0xFFFFFF
        }),
        new THREE.MeshLambertMaterial({
-           map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF
+           map: floorTexture, transparent: true, opacity: 1.0, wireframe: initArray.showGridLinesOnly, color: 0xFFFFFF
        }),
        new THREE.MeshLambertMaterial({
-           map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF
+           map: floorTexture, transparent: true, opacity: 1.0,wireframe: initArray.showGridLinesOnly, color: 0xFFFFFF
        }),
        new THREE.MeshLambertMaterial({
-           map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF
+           map: floorTexture, transparent: true, opacity: 1.0,wireframe: initArray.showGridLinesOnly, color: 0xFFFFFF
        })
     ];
 
