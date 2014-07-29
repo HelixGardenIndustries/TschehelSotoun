@@ -32,10 +32,10 @@ window.onload = function(){
 //    addStairsFundament();
 //    addRoofColumns();
 //    addFence();
-//    addOuterWall();
+    addOuterWall();
 //    addDachFirst();
     addInnerWall();
-//    addDome();
+    addDome();
 //    addEntranceWall();
 //    addRoof();
 }
@@ -43,10 +43,9 @@ window.onload = function(){
 function addFundamentPalace(){
     var pos = new Array(0, 1,  initArray.planeHeight / 4);
     var dim = new Array(initArray.planeWidth / 2, initArray.fundamentHeight, initArray.planeHeight / 2);
-    var cubeMaterial= getMaterialForCube('img/groundTexture.png', 8, 8);
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), cubeMaterial);
-
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/groundTexture.png', 8, 8));
 }
+
 function addRoof(){
     var pos = new Array(1, 250, 475);
     var dim = new Array(1080, 20, 1080);
@@ -185,28 +184,28 @@ function addInnerWall(){
 
     var pos = new Array(px, py, pz);
     var dim = new Array(dx, dy, dz);
-    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "00ffaf");
+    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ff0000");
 
     var pos = new Array(-px, py, pz);
     var dim = new Array(dx, dy, dz);
-    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "00ffaf");
+    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ff0000");
+
 
     px = 142;
     pz = 665;
-    dx = 120;
+    dx = 150;
     ry = pi /2;
 
     var pos = new Array(-px, py, pz);
     var dim = new Array(dx, dy, dz);
     rot = new Array(0, ry, 0);
-
-    addCubeShape(pos, dim, rot, getDefaultScaling(), "00ffff");
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/front_rechts_eingang.png', 1, 1));
 
     var pos = new Array(px, py, pz);
     var dim = new Array(dx, dy, dz);
     rot = new Array(0, ry, 0);
 
-    addCubeShape(pos, dim, rot, getDefaultScaling(), "00ffff");
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/front_links_eingang.png', 1, 1));
 }
 
 function addDachFirst(){
@@ -230,16 +229,14 @@ function addDachFirst(){
 }
 
 function addOuterWall(){
-    var cubeMaterialFrontLinks = getMaterialForCube('img/front_links.png', 1, 1);
-    var cubeMaterialFrontRechts = getMaterialForCube('img/front_rechts.png', 1, 1);
 
     var pos = new Array(310, 120, 595);
     var dim = new Array(350, 235, 15);
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), cubeMaterialFrontLinks);
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/front_links.png', 1, 1));
 
     var pos = new Array(-310, 120, 595);
     var dim = new Array(350, 235, 15);
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), cubeMaterialFrontRechts);
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/front_rechts.png', 1, 1));
 
     var pos = new Array(0, 120, 990);
     var dim = new Array(980, 235, 15);
