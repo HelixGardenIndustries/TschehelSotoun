@@ -28,16 +28,16 @@ window.onload = function(){
     init(initArray);
     animate();
 
-//    addFundamentPalace();
-//    addStairsFundament();
-//    addRoofColumns();
-//    addFence();
+    addFundamentPalace();
+    addStairsFundament();
+    addRoofColumns();
+    addFence();
     addOuterWall();
-//    addDachFirst();
+    addDachFirst();
     addInnerWall();
     addDome();
-//    addEntranceWall();
-//    addRoof();
+    addEntranceWall();
+    addRoof();
 }
 
 function addFundamentPalace(){
@@ -67,18 +67,18 @@ function addEntranceWall(){
     var pos = new Array(0, yInnerWall, zBackWall);
     var dim = new Array(wallWidth + 130, wallHeight, wallDepth);
     var rot = new Array(0, pi, 0);
-    addCubeShape(pos, dim, rot, getDefaultScaling(), innerWallColor);
+    //addCubeShape(pos, dim, rot, getDefaultScaling(), innerWallColor);
 
     // innere Seitenwände
     var pos = new Array(-xSideWall, yInnerWall, zSideWall);
     var dim = new Array(wallWidth, wallHeight, wallDepth);
     rot = new Array(0, pi / 2, 0);
-    addCubeShape(pos, dim, rot, getDefaultScaling(), innerWallColor);
+    //addCubeShape(pos, dim, rot, getDefaultScaling(), innerWallColor);
 
     var pos = new Array(xSideWall, yInnerWall, zSideWall);
     var dim = new Array(wallWidth, wallHeight, wallDepth);
     rot = new Array(0, pi / 2, 0);
-    addCubeShape(pos, dim, rot, getDefaultScaling(), innerWallColor);
+    //addCubeShape(pos, dim, rot, getDefaultScaling(), innerWallColor);
 
     addInnerWallTriangles();
 }
@@ -87,7 +87,7 @@ function addInnerWallTriangles(){
 
     var ceilingTriangleLeftGeometry = getTriangleFromCoordinates();
     var triangleMaterialColor = "ff0000";
-    var posX = 70, posY = 240, posZ = 650, sclX = 4, sclY = 4, sclZ = 1;
+    var posX = 170, posY = 240, posZ = 650, sclX = 1, sclY = 1, sclZ = 1;
 
     var pos = new Array(posX, posY, posZ);
     rot = new Array(0, pi, 0);
@@ -100,17 +100,17 @@ function addInnerWallTriangles(){
     addTriangle(ceilingTriangleLeftGeometry, pos, rot, scl, triangleMaterialColor);
 
     // the two triangles in the back
-    var posX = 20, posY = 100, posZ = 790, sclX = 3; sclY = 3; sclZ = 1;
+    var posX = 20, posY = 100, posZ = 790, sclX = 1; sclY = 1; sclZ = 1;
 
     pos = new Array(posX, posY, posZ);
     rot = new Array(-pi/2, -pi*2, pi);
     scl = new Array(sclX, sclY, sclZ);
-    addTriangle(ceilingTriangleLeftGeometry, pos, rot, scl, triangleMaterialColor);
+    //addTriangle(ceilingTriangleLeftGeometry, pos, rot, scl, triangleMaterialColor);
 
     pos = new Array(-posX, posY, posZ);
     rot = new Array(-pi/2, pi, -pi);
     scl = new Array(sclX, sclY, sclZ);
-    addTriangle(ceilingTriangleLeftGeometry, pos, rot, scl, triangleMaterialColor);
+    //addTriangle(ceilingTriangleLeftGeometry, pos, rot, scl, triangleMaterialColor);
 }
 
 function getTriangleFromCoordinates(){
@@ -157,39 +157,43 @@ function addTriangle(geometry, pos, rot, scl, materialColor){
 
 function addDome(){
 
-	var radius = 140;
-	var widthSegments = 32;
-	var heightSegments = 10;
+	var radius = 53;
+	var widthSegments = 64;
+	var heightSegments = 64;
 	var phiStart = 0;
 	var phiLength = pi;
 	var thetaStart = 0;
 	var thetaLength = pi / 2;
-	addSphereShape(0,100, 650, radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength, "afaefa");
+	addSphereShape(0,100, 750, radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength, "ff0000");
 }
 
 function addSphereShape(x,y,z, radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength, materialColor){
-    var mesh = THREE.SceneUtils.createMultiMaterialObject(new THREE.SphereGeometry( 140, 32, 10, 0, pi, 0, pi / 2 ),getMultimaterial(materialColor) );
-	mesh.position.set(0, 100, 650);
+    var mesh = THREE.SceneUtils.createMultiMaterialObject(new THREE.SphereGeometry( radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength ),getMultimaterial(materialColor) );
+	mesh.position.set(x, y, z);
+	mesh.scale.set(1,1.5,1);
 	scene.add(mesh);
 }
 
 function addInnerWall(){
 
-    var px = 310;
+    var px = 100;
     var py = 120;
     var pz = 732;
-    var dx = 350;
+    var dx = 100;
     var dy = 235;
     var dz = 15;
 
     var pos = new Array(px, py, pz);
     var dim = new Array(dx, dy, dz);
-    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ff0000");
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/front_links_eingang_hinten.png', 1, 1));
 
     var pos = new Array(-px, py, pz);
     var dim = new Array(dx, dy, dz);
-    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ff0000");
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/front_rechts_eingang_hinten.png', 1, 1));
 
+    var pos = new Array(0, 50, pz);
+    var dim = new Array(100, 100, 0);
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/front_hinten.png', 1, 1));
 
     px = 142;
     pz = 665;
@@ -230,11 +234,11 @@ function addDachFirst(){
 
 function addOuterWall(){
 
-    var pos = new Array(310, 120, 595);
+    var pos = new Array(315, 120, 595);
     var dim = new Array(350, 235, 15);
     addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/front_links.png', 1, 1));
 
-    var pos = new Array(-310, 120, 595);
+    var pos = new Array(-315, 120, 595);
     var dim = new Array(350, 235, 15);
     addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/front_rechts.png', 1, 1));
 

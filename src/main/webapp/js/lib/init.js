@@ -64,7 +64,7 @@ function init(cfgArray)
             	scene.add(light3);
 
             	    		// LIGHT
-                            	var light4 = new THREE.PointLight(0xff0000);
+                            	var light4 = new THREE.PointLight(0xaaaaaa);
                             	light4.position.set(-200,0,-500);
                             	scene.add(light4);
 	// FLOOR
