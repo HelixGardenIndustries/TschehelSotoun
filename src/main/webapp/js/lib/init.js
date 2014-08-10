@@ -30,7 +30,7 @@ function init(cfgArray)
 	camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
 	scene.add(camera);
 	camera.position.set(configurationArray.cameraPos.X, configurationArray.cameraPos.Y, configurationArray.cameraPos.Z);
-	camera.lookAt(scene.position);
+	//camera.lookAt(scene.position);
 	// RENDERER
 	if ( Detector.webgl )
 		renderer = new THREE.WebGLRenderer( {antialias:true} );
@@ -48,25 +48,9 @@ function init(cfgArray)
     showStats();
 
 	// LIGHT
-	var light = new THREE.PointLight(0xffffff);
+	var light = new THREE.AmbientLight(0xffffff);
 	light.position.set(45,500,-63);
 	scene.add(light);
-
-	// LIGHT
-    	var light2 = new THREE.PointLight(0xffffff);
-    	light2.position.set(45,500,-363);
-    	//scene.add(light2);
-
-
-    		// LIGHT
-            	var light3 = new THREE.PointLight(0xaaaaaa);
-            	light3.position.set(145,100,-363);
-            	scene.add(light3);
-
-            	    		// LIGHT
-                            	var light4 = new THREE.PointLight(0xaaaaaa);
-                            	light4.position.set(-200,0,-500);
-                            	scene.add(light4);
 	// FLOOR
 	var floorTexture = new THREE.ImageUtils.loadTexture( configurationArray.groundTexture  );
 	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
