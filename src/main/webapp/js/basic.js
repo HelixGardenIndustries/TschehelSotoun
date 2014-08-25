@@ -21,7 +21,7 @@ window.onload = function(){
     var cameraPos = {};
     cameraPos.X = 100;
     cameraPos.Y = 10;
-    cameraPos.Z = -500;
+    cameraPos.Z = -1200;
 
     initArray.cameraPos = cameraPos;
 
@@ -33,7 +33,6 @@ window.onload = function(){
     addRoofColumns();
     addFence();
     addOuterWall();
-    addDachFirst();
     addInnerWall();
     addRoof();
 }
@@ -45,14 +44,58 @@ function addFundamentPalace(){
 }
 
 function addRoof(){
-    var pos = new Array(1, 245, 475);
-    var dim = new Array(1000, 40, 950);
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten.png', 1, 1));
 
-    var pos = new Array(1, 285, 475);
-    var dim = new Array(1030, 10, 1000);
-    //addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/unterseite_dach.png', 1, 1));
 
+
+    // Layer 1
+    var pos = new Array(0, 282, -8);
+    var dim = new Array(1000, 40, 1);
+    var rot = new Array(pi/-8, 0, 0);
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+
+    var pos = new Array(0, 282, 1008);
+    var dim = new Array(1000, 40, 1);
+    var rot = new Array(pi/8, 0, 0);
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+
+    var pos = new Array(508, 282, 500);
+    var dim = new Array(1, 40, 1000);
+    var rot = new Array(0, 0, pi/-8);
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+
+    var pos = new Array(-508, 282, 500);
+    var dim = new Array(1, 40, 1000);
+    var rot = new Array(0, 0, pi/8);
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+
+    var mesh =  new THREE.Mesh(new THREE.CylinderGeometry( 20, 0, 40, 4, 4), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
+   	mesh.position.set(500, 280, 0);
+    mesh.rotation.set(0, pi/4, 0);
+   	scene.add( mesh );
+
+    var mesh =  new THREE.Mesh(new THREE.CylinderGeometry( 20, 0, 40, 4, 4), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
+    mesh.position.set(-500, 280, 0);
+    mesh.rotation.set(0, pi/4, 0);
+    scene.add( mesh );
+
+    var mesh =  new THREE.Mesh(new THREE.CylinderGeometry( 20, 0, 40, 4, 4), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
+    mesh.position.set(-500, 280, 1000);
+    mesh.rotation.set(0, pi/4, 0);
+    scene.add( mesh );
+
+    var mesh =  new THREE.Mesh(new THREE.CylinderGeometry( 20, 0, 40, 4, 4), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
+    mesh.position.set(500, 280, 1000);
+    mesh.rotation.set(0, pi/4, 0);
+    scene.add( mesh );
+
+    // Layer 0
+    var pos = new Array(1, 245, 500);
+    var dim = new Array(1000, 40, 1000);
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/umrandung_dach_layer_1.png', 16, 1));
+
+    var pos = new Array(1, 300, 500);
+    var dim = new Array(1030, 1, 1030);
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/umrandung_dach_layer_1.png', 16, 1));
 
 }
 
@@ -106,6 +149,16 @@ function addCubeShape(position, dimension, rotation, scaling, materialColor){
      mesh.scale.set( scaling[0], scaling[1], scaling[2]);
      scene.add(mesh);
   }
+
+  function addPyramideShapeWithTexture(position, rotation, scaling, radiusTop, radiusBottom, height, columnMaterial){
+
+      // the column on the frustum
+       var mesh =  new THREE.Mesh(new THREE.CylinderGeometry( radiusTop, radiusBottom, height, 4, 4), getMaterialForCube(columnMaterial, 1, 1));
+       mesh.position.set(position[0], position[1], position[2]);
+       mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
+       mesh.scale.set( scaling[0], scaling[1], scaling[2]);
+       scene.add(mesh);
+    }
 
 function addTriangle(geometry, pos, rot, scl, materialColor){
     var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, getMultimaterial(materialColor));
@@ -171,24 +224,45 @@ function addInnerWall(){
     addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/front_links_eingang.png', 1, 1));
 }
 
-function addDachFirst(){
+function addCustomShape(){
+var starPoints = [];
 
-    var pos = new Array(0, 243, 595);
-    var dim = new Array(980, 10, 15);
-    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ff00ff");
+    starPoints.push( new THREE.Vector2(0, 0));
+    starPoints.push( new THREE.Vector2(10, 49));
+    starPoints.push( new THREE.Vector2(15, 45));
+    starPoints.push( new THREE.Vector2(20, 36));
+    starPoints.push( new THREE.Vector2(25, 32));
+    starPoints.push( new THREE.Vector2(30, 28));
+    starPoints.push( new THREE.Vector2(35, 22));
+    starPoints.push( new THREE.Vector2(40, 18));
+    starPoints.push( new THREE.Vector2(45, 10));
+    starPoints.push( new THREE.Vector2(50, 50));
+    starPoints.push( new THREE.Vector2(0, 50));
 
-    var pos = new Array(0, 243, 995);
-    addCubeShape(pos, dim, getDefaultRotating(), getDefaultScaling(), "ff00ff");
+	var starShape = new THREE.Shape( starPoints );
 
-    var pos = new Array(-480, 243, 795);
-    var dim = new Array(385, 10, 15);
-    rot = new Array(0, pi / 2, 0);
-    addCubeShape(pos, dim, rot, getDefaultScaling(), "ff00ff");
+	var extrusionSettings = {
+		size: 30, height: 4, curveSegments: 20,
+		bevelThickness: 1, bevelSize: 2, bevelEnabled: false,
+		material: 0, extrudeMaterial: 1
+	};
 
-    var pos = new Array(480, 243, 795);
-    var dim = new Array(385, 10, 15);
-    rot = new Array(0, pi / 2, 0);
-    addCubeShape(pos, dim, rot, getDefaultScaling(), "ff00ff");
+	var starGeometry = new THREE.ExtrudeGeometry( starShape, extrusionSettings );
+
+	var materialFront = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+	var materialSide = new THREE.MeshBasicMaterial( { color: 0xff8800 } );
+	var materialArray = [ materialFront, materialSide ];
+	var starMaterial = new THREE.MeshFaceMaterial(materialArray);
+
+	var star = new THREE.Mesh( starGeometry, starMaterial );
+	star.position.set(0,50,0);
+	scene.add(star);
+
+	// add a wireframe to model
+	var wireframeTexture = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true, transparent: true } );
+	var star = new THREE.Mesh( starGeometry, wireframeTexture );
+	star.position.set(0,50,0);
+	scene.add(star);
 }
 
 function addOuterWall(){
