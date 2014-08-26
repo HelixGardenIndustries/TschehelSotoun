@@ -26,7 +26,6 @@ window.onload = function(){
     initArray.cameraPos = cameraPos;
 
     init(initArray);
-    animate();
 
     addFundamentPalace();
     addStairsFundament();
@@ -35,6 +34,7 @@ window.onload = function(){
     addOuterWall();
     addInnerWall();
     addRoof();
+    animate();
 }
 
 function addFundamentPalace(){
@@ -44,6 +44,7 @@ function addFundamentPalace(){
 }
 
 function addRoof(){
+    addRoofLayerThree();
     addRoofLayerTwo();
     addRoofLayerOne();
     addRoofLayerZero();
@@ -103,27 +104,57 @@ function addRoofLayerOne(){
 }
 
 function addRoofLayerTwo(){
-// Layer 1
+    var width = 979;
+    var rotx = pi/4;
+    var repeat = 64;
+    var repeatPyramide = 9;
+
     var pos = new Array(0, 315, 0);
-    var dim = new Array(1000, 40, 1);
-    var rot = new Array(pi/4, 0, 0);
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+    var dim = new Array(width, 40, 1);
+    var rot = new Array(rotx, 0, 0);
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/dach-schraeg-oben.png', repeat, 1));
 
-    var pos = new Array(0, 315, 1000);
-    var dim = new Array(1000, 40, 1);
-    var rot = new Array(pi/-4, 0, 0);
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+    var pos = new Array(0, 315, 1008);
+    var dim = new Array(width, 40, 1);
+    var rot = new Array(-rotx, 0, 0);
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/dach-schraeg-oben.png', repeat, 1));
 
-    var pos = new Array(508, 315, 500);
-    var dim = new Array(1, 40, 1000);
-    var rot = new Array(0, 0, pi/8);
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+    var pos = new Array(500, 315, 500);
+    var dim = new Array(1, 40, width);
+    var rot = new Array(0, 0, rotx);
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/dach-schraeg-oben.png', 64, 1));
 
-    var pos = new Array(-508, 315, 500);
-    var dim = new Array(1, 40, 1000);
-    var rot = new Array(0, 0, pi/-8);
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+    var pos = new Array(-500, 315, 508);
+    var dim = new Array(1, 40, width);
+    var rot = new Array(0, 0, -rotx);
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/dach-schraeg-oben.png', 64, 1));
 
+
+   	var pos = new Array(490, 316, 13);
+    var rot = new Array(0, pi/4, 0);
+    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(),  0,40, 30, getMaterialForCube('img/dach-schraeg-oben.png', repeatPyramide, 16));
+
+    var pos = new Array(-485, 316, 13);
+    var rot = new Array(0, pi/4, 0);
+    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(),  0,40, 30, getMaterialForCube('img/dach-schraeg-oben.png', repeatPyramide, 16));
+
+    var pos = new Array(-485, 316, 993);
+    var rot = new Array(0, pi/4, 0);
+    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(),  0,40, 30, getMaterialForCube('img/dach-schraeg-oben.png', repeatPyramide, 16));
+
+    var pos = new Array(487, 316, 990);
+    var rot = new Array(0, pi/4, 0);
+    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(),  0,40, 30, getMaterialForCube('img/dach-schraeg-oben.png', repeatPyramide, 16));
+}
+
+function addRoofLayerThree(){
+    var pos = new Array(1, 335, 500);
+    var dim = new Array(980, 10, 980);
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/dach-basis-pyramide.png', 16, 1));
+
+var pos = new Array(0, 393, 500);
+var rot = new Array(0, pi/4, 0);
+addPyramideShapeWithTexture(pos, rot, getDefaultScaling(),  0, 600, 100, getMaterialForCube('img/pyramid-top.png', 64, 64));
 }
 
 function addInnerWallTriangles(){
