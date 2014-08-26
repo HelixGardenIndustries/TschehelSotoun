@@ -44,9 +44,20 @@ function addFundamentPalace(){
 }
 
 function addRoof(){
+    addRoofLayerTwo();
+    addRoofLayerOne();
+    addRoofLayerZero();
 
+}
 
+function addRoofLayerZero(){
+    // Layer 0
+    var pos = new Array(1, 245, 500);
+    var dim = new Array(1000, 40, 1000);
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/umrandung_dach_layer_1.png', 16, 1));
+}
 
+function addRoofLayerOne(){
     // Layer 1
     var pos = new Array(0, 282, -8);
     var dim = new Array(1000, 40, 1);
@@ -69,33 +80,49 @@ function addRoof(){
     addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
 
     var mesh =  new THREE.Mesh(new THREE.CylinderGeometry( 20, 0, 40, 4, 4), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
-   	mesh.position.set(500, 280, 0);
-    mesh.rotation.set(0, pi/4, 0);
-   	scene.add( mesh );
+   	var pos = new Array(500, 280, 0);
+    var rot = new Array(0, pi/4, 0);
+    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), 20, 0, 40, getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
 
-    var mesh =  new THREE.Mesh(new THREE.CylinderGeometry( 20, 0, 40, 4, 4), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
-    mesh.position.set(-500, 280, 0);
-    mesh.rotation.set(0, pi/4, 0);
-    scene.add( mesh );
+    var pos = new Array(-500, 280, 0);
+    var rot = new Array(0, pi/4, 0);
+    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), 20, 0, 40, getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
 
-    var mesh =  new THREE.Mesh(new THREE.CylinderGeometry( 20, 0, 40, 4, 4), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
-    mesh.position.set(-500, 280, 1000);
-    mesh.rotation.set(0, pi/4, 0);
-    scene.add( mesh );
+    var pos = new Array(-500, 280, 1000);
+    var rot = new Array(0, pi/4, 0);
+    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), 20, 0, 40, getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
 
-    var mesh =  new THREE.Mesh(new THREE.CylinderGeometry( 20, 0, 40, 4, 4), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
-    mesh.position.set(500, 280, 1000);
-    mesh.rotation.set(0, pi/4, 0);
-    scene.add( mesh );
-
-    // Layer 0
-    var pos = new Array(1, 245, 500);
-    var dim = new Array(1000, 40, 1000);
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/umrandung_dach_layer_1.png', 16, 1));
+    var pos = new Array(500, 280, 1000);
+    var rot = new Array(0, pi/4, 0);
+    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), 20, 0, 40, getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 1, 1));
 
     var pos = new Array(1, 300, 500);
     var dim = new Array(1030, 1, 1030);
     addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/umrandung_dach_layer_1.png', 16, 1));
+
+}
+
+function addRoofLayerTwo(){
+// Layer 1
+    var pos = new Array(0, 315, 0);
+    var dim = new Array(1000, 40, 1);
+    var rot = new Array(pi/4, 0, 0);
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+
+    var pos = new Array(0, 315, 1000);
+    var dim = new Array(1000, 40, 1);
+    var rot = new Array(pi/-4, 0, 0);
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+
+    var pos = new Array(508, 315, 500);
+    var dim = new Array(1, 40, 1000);
+    var rot = new Array(0, 0, pi/8);
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+
+    var pos = new Array(-508, 315, 500);
+    var dim = new Array(1, 40, 1000);
+    var rot = new Array(0, 0, pi/-8);
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
 
 }
 
@@ -153,12 +180,23 @@ function addCubeShape(position, dimension, rotation, scaling, materialColor){
   function addPyramideShapeWithTexture(position, rotation, scaling, radiusTop, radiusBottom, height, columnMaterial){
 
       // the column on the frustum
-       var mesh =  new THREE.Mesh(new THREE.CylinderGeometry( radiusTop, radiusBottom, height, 4, 4), getMaterialForCube(columnMaterial, 1, 1));
+       var mesh =  new THREE.Mesh(new THREE.CylinderGeometry( radiusTop, radiusBottom, height, 4, 4), columnMaterial);
        mesh.position.set(position[0], position[1], position[2]);
        mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
        mesh.scale.set( scaling[0], scaling[1], scaling[2]);
        scene.add(mesh);
     }
+
+      function addPyramideShapeWithColor(position, rotation, scaling, radiusTop, radiusBottom, height, materialColor){
+
+          // the column on the frustum
+           var mesh =  new THREE.Mesh(new THREE.CylinderGeometry( radiusTop, radiusBottom, height, 4, 4), getMultimaterial(materialColor));
+           mesh.position.set(position[0], position[1], position[2]);
+           mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
+           mesh.scale.set( scaling[0], scaling[1], scaling[2]);
+           scene.add(mesh);
+        }
+
 
 function addTriangle(geometry, pos, rot, scl, materialColor){
     var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, getMultimaterial(materialColor));
