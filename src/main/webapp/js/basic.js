@@ -4,6 +4,7 @@ var baseMesh;
 var group = new THREE.Object3D;
 var mergedGeo = new THREE.Geometry();
 var doMerge = false;
+var material = [getMaterialForCube(UMRANDUNG_DACH_UNTEN_LAYER_1, 1, 1)];
 
 window.onload = function () {
     // Show the gridline with filled color or not
@@ -42,7 +43,7 @@ window.onload = function () {
 function addMesh(mesh, material) {
 
     if (doMerge) {
-        mergedGeo.merge(mesh.geometry, mesh.matrix, material);
+        THREE.GeometryUtils.merge(mergedGeo, mesh);
     } else {
         doMerge = true;
         group = new THREE.Mesh(mergedGeo, material);
@@ -56,7 +57,7 @@ function addFundamentPalace() {
     var pos, dim;
     pos = [0, 1, initArray.planeHeight / 4];
     dim = [initArray.planeWidth / 2, initArray.fundamentHeight, initArray.planeHeight / 2];
-    addCubeDefSclDefRot(pos, dim, 'img/groundTexture.png', 8, 8);
+    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/groundTexture.png', 8, 8));
 }
 
 function addRoof() {
@@ -201,7 +202,7 @@ function addPyramideShapeWithColor(position, rotation, scaling, radiusTop, radiu
     mesh.position.set(position[0], position[1], position[2]);
     mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
     mesh.scale.set(scaling[0], scaling[1], scaling[2]);
-    addMesh(mesh);
+    addMesh(mesh, materialColor);
 }
 
 function addTriangle(geometry, pos, rot, scl, materialColor) {
@@ -216,7 +217,7 @@ function addSphereShape(x, y, z, radius, widthSegments, heightSegments, phiStart
     var mesh = THREE.SceneUtils.createMultiMaterialObject(new THREE.SphereGeometry(radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength), getMultimaterial(materialColor));
     mesh.position.set(x, y, z);
     mesh.scale.set(1, 1.5, 1);
-    addMesh(mesh);
+    addMesh(mesh, materialColor);
 }
 
 function addInnerWall() {
@@ -338,7 +339,7 @@ function addFence() {
         //17:27 preischild e-paper einzelausgaben btutton fehlt sascha kühn
 
         fence = new THREE.Mesh(new THREE.BoxGeometry(fenceLength, 10, 2, 1, 1, 1), materials);
-        fence.position.set(xPositionsColumnsSideFence[0], yPosFence, zPositionsColumnsSideFence[i]);
+        fence.position.set(xPositionsColumnsSideFence[0],   yPosFence, zPositionsColumnsSideFence[i]);
         fence.rotation.set(0, pi / 2, pi);
         addMesh(fence);
     }
@@ -413,16 +414,16 @@ function addColumn(columnSettings) {
 
     shape = new THREE.Mesh(new THREE.BoxGeometry(14, 14, 14, 1, 1, 1), cubeLevel3CubeMaterial);
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 31, columnSettings.zPosition);
-    addMesh(shape, cubeLevel3CubeMaterial);
+    addMesh(shape, cubeLevel2CubeMaterial);
 
     shape = new THREE.Mesh(new THREE.BoxGeometry(16, 16, 16, 1, 1, 1), cubeLevel4CubeMaterial);
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 41, columnSettings.zPosition);
-    addMesh(shape, cubeLevel4CubeMaterial);
+    addMesh(shape);
 
     // the top frustum
     shape = new THREE.Mesh(new THREE.BoxGeometry(18, 18, 18, 1, 1, 1), frustumCubeMaterial);
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 41, columnSettings.zPosition);
-    addMesh(shape, frustumCubeMaterial);
+    addMesh(shape);
 }
 
 function addStairsFundament() {
