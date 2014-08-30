@@ -1,5 +1,9 @@
 var initArray = {};
 const pi = Math.PI;
+var baseMesh;
+var group = new THREE.Object3D;
+var mergedGeo = new THREE.Geometry();
+var doMerge = false;
 
 window.onload = function () {
     // Show the gridline with filled color or not
@@ -9,7 +13,6 @@ window.onload = function () {
     // Set the ground texture
     initArray.groundTexture = GROUND_TEXTURE;
     initArray.skyboxColor = SKY_BOX_COLOR;
-
     initArray.fundamentHeight = 10;
 
     // dimension of plane (grundfläche)
@@ -26,20 +29,34 @@ window.onload = function () {
     init(initArray);
 
     addFundamentPalace();
-    addStairsFundament();
     addRoofColumns();
     addFence();
     addOuterWall();
     addInnerWall();
     addRoof();
+    scene.add(group);
     animate();
-};
+
+}
+
+function addMesh(mesh, material) {
+
+    if (doMerge) {
+        mergedGeo.merge(mesh.geometry, mesh.matrix, material);
+    } else {
+        doMerge = true;
+        group = new THREE.Mesh(mergedGeo, material);
+        group.matrixAutoUpdate = false;
+        group.updateMatrix();
+        group.add(mesh);
+    }
+}
 
 function addFundamentPalace() {
     var pos, dim;
     pos = [0, 1, initArray.planeHeight / 4];
     dim = [initArray.planeWidth / 2, initArray.fundamentHeight, initArray.planeHeight / 2];
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/groundTexture.png', 8, 8));
+    addCubeDefSclDefRot(pos, dim, 'img/groundTexture.png', 8, 8);
 }
 
 function addRoof() {
@@ -153,28 +170,20 @@ function addRoofLayerThree() {
     var pos, dim, rot;
     pos = [1, 335, 500];
     dim = [980, 10, 980];
-    addPyramideDefSclDefRot(pos, dim, DACH_BASIS_PYRAMIDE, 16, 1);
+    addCubeDefSclDefRot(pos, dim, DACH_BASIS_PYRAMIDE, 16, 1);
 
     pos = [0, 393, 500];
     rot = [0, pi / 4, 0];
     addPyramideDefScl(pos, rot, 0, 600, 100, PYRAMIDE_TOP, 64, 64);
 }
 
-function addCubeShape(position, dimension, rotation, scaling, materialColor) {
-    var mesh = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry(dimension[0], dimension[1], dimension[2], 1, 1, 1), getMultimaterial(materialColor));
-    mesh.position.set(position[0], position[1], position[2]);
-    mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
-    mesh.scale.set(scaling[0], scaling[1], scaling[2]);
-    scene.add(mesh);
-}
-
 function addCubeShapeWithTexture(position, dimension, rotation, scaling, columnMaterial) {
     // the column on the frustum
-    var mesh = new THREE.Mesh(new THREE.CubeGeometry(dimension[0], dimension[1], dimension[2], 1, 1, 1), columnMaterial);
+    var mesh = new THREE.Mesh(new THREE.BoxGeometry(dimension[0], dimension[1], dimension[2], 1, 1, 1), columnMaterial);
     mesh.position.set(position[0], position[1], position[2]);
     mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
     mesh.scale.set(scaling[0], scaling[1], scaling[2]);
-    scene.add(mesh);
+    addMesh(mesh, columnMaterial);
 }
 
 function addPyramideShapeWithTexture(position, rotation, scaling, radiusTop, radiusBottom, height, columnMaterial) {
@@ -183,7 +192,7 @@ function addPyramideShapeWithTexture(position, rotation, scaling, radiusTop, rad
     mesh.position.set(position[0], position[1], position[2]);
     mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
     mesh.scale.set(scaling[0], scaling[1], scaling[2]);
-    scene.add(mesh);
+    addMesh(mesh, columnMaterial);
 }
 
 function addPyramideShapeWithColor(position, rotation, scaling, radiusTop, radiusBottom, height, materialColor) {
@@ -192,7 +201,7 @@ function addPyramideShapeWithColor(position, rotation, scaling, radiusTop, radiu
     mesh.position.set(position[0], position[1], position[2]);
     mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
     mesh.scale.set(scaling[0], scaling[1], scaling[2]);
-    scene.add(mesh);
+    addMesh(mesh);
 }
 
 function addTriangle(geometry, pos, rot, scl, materialColor) {
@@ -200,14 +209,14 @@ function addTriangle(geometry, pos, rot, scl, materialColor) {
     mesh.position.set(pos[0], pos[1], pos[2]);
     mesh.rotation.set(rot[0], rot[1], rot[2]);
     mesh.scale.set(scl[0], scl[1], scl[2]);
-    scene.add(mesh);
+    addMesh(mesh);
 }
 
 function addSphereShape(x, y, z, radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength, materialColor) {
     var mesh = THREE.SceneUtils.createMultiMaterialObject(new THREE.SphereGeometry(radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength), getMultimaterial(materialColor));
     mesh.position.set(x, y, z);
     mesh.scale.set(1, 1.5, 1);
-    scene.add(mesh);
+    addMesh(mesh);
 }
 
 function addInnerWall() {
@@ -269,30 +278,30 @@ function addOuterWall() {
     addCubeDefSclDefRep(pos, dim, rot, HINTEN);
 }
 
-function addPyramideDefSclDefRot(pos, radiusTop, radiusBottom, height, textureName, textureRepeatX, textureRepeatY){
+function addPyramideDefSclDefRot(pos, radiusTop, radiusBottom, height, textureName, textureRepeatX, textureRepeatY) {
     addPyramideShapeWithTexture(pos, getDefaultRotating(), getDefaultScaling(), radiusTop, radiusBottom, height, getMaterialForCube(textureName, textureRepeatX, textureRepeatY))
 }
-function addPyramideDefSclDefRep(pos, rot, radiusTop, radiusBottom, height, textureName){
-    addPyramideDefScl(pos, rot, getDefaultScaling(), radiusTop, radiusBottom, height, getMaterialForCube(textureName, 1, 1))
+function addPyramideDefSclDefRep(pos, rot, radiusTop, radiusBottom, height, textureName) {
+    addPyramideDefScl(pos, rot, radiusTop, radiusBottom, height, textureName, 1, 1);
 }
 
-function addPyramideDefScl(pos, rot, radiusTop, radiusBottom, height, textureName, textureRepeatX, textureRepeatY){
+function addPyramideDefScl(pos, rot, radiusTop, radiusBottom, height, textureName, textureRepeatX, textureRepeatY) {
     addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), radiusTop, radiusBottom, height, getMaterialForCube(textureName, textureRepeatX, textureRepeatY))
 }
 
-function addCubeDefSclDefRotDefRep(pos, dim, textureName){
+function addCubeDefSclDefRotDefRep(pos, dim, textureName) {
     addCubeDefScl(pos, dim, getDefaultRotating(), textureName, 1, 1);
 }
 
-function addCubeDefSclDefRot(pos, dim, textureName, textureRepeatX, textureRepeatY){
+function addCubeDefSclDefRot(pos, dim, textureName, textureRepeatX, textureRepeatY) {
     addCubeDefScl(pos, dim, getDefaultRotating(), textureName, textureRepeatX, textureRepeatY);
 }
 
-function addCubeDefScl(pos, dim, rot, textureName, textureRepeatX, textureRepeatY){
+function addCubeDefScl(pos, dim, rot, textureName, textureRepeatX, textureRepeatY) {
     addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube(textureName, textureRepeatX, textureRepeatY));
 }
 
-function addCubeDefSclDefRep(pos, dim, rot, textureName){
+function addCubeDefSclDefRep(pos, dim, rot, textureName) {
     addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube(textureName, 1, 1));
 }
 
@@ -308,13 +317,13 @@ function addFence() {
 
     // The front fences
     for (i = 0; i < xPositionsColumnsFrontFence.length; i++) {
-        fence = new THREE.Mesh(new THREE.CubeGeometry(210, 10, 5, 2, 1, 1), materials);
+        fence = new THREE.Mesh(new THREE.BoxGeometry(210, 10, 5, 2, 1, 1), materials);
         fence.position.set(xPositionsColumnsFrontFence[i], yPosFence, 10);
-        scene.add(fence);
+        addMesh(fence);
 
-        fence = new THREE.Mesh(new THREE.CubeGeometry(210, 10, 5, 1, 1, 1), materials);
+        fence = new THREE.Mesh(new THREE.BoxGeometry(210, 10, 5, 1, 1, 1), materials);
         fence.position.set(-xPositionsColumnsFrontFence[i], yPosFence, 10);
-        scene.add(fence);
+        addMesh(fence);
     }
 
     var xPositionsColumnsSideFence = [480, 170, 370];
@@ -322,15 +331,16 @@ function addFence() {
 
     // The fences on the site
     for (i = 0; i < zPositionsColumnsSideFence.length; i++) {
-        fence = new THREE.Mesh(new THREE.CubeGeometry(fenceLength, 10, 2, 1, 1, 1), materials);
+        fence = new THREE.Mesh(new THREE.BoxGeometry(fenceLength, 10, 2, 1, 1, 1), materials);
         fence.position.set(-xPositionsColumnsSideFence[0], yPosFence, zPositionsColumnsSideFence[i]);
         fence.rotation.set(0, pi / 2, pi);
-        scene.add(fence);
+        addMesh(fence);
+        //17:27 preischild e-paper einzelausgaben btutton fehlt sascha kühn
 
-        fence = new THREE.Mesh(new THREE.CubeGeometry(fenceLength, 10, 2, 1, 1, 1), materials);
+        fence = new THREE.Mesh(new THREE.BoxGeometry(fenceLength, 10, 2, 1, 1, 1), materials);
         fence.position.set(xPositionsColumnsSideFence[0], yPosFence, zPositionsColumnsSideFence[i]);
         fence.rotation.set(0, pi / 2, pi);
-        scene.add(fence);
+        addMesh(fence);
     }
 }
 
@@ -385,34 +395,34 @@ function addColumn(columnSettings) {
     shape = new THREE.Mesh(new THREE.CylinderGeometry(10, 8, 10, 4, 4), pillarBottomMaterial);
     shape.position.set(columnSettings.xPosition, 10, columnSettings.zPosition);
     shape.rotation.set(pi, pi / 4, 0);
-    scene.add(shape);
+    addMesh(shape, pillarBottomMaterial);
 
     // the column on the frustum
-    column = new THREE.Mesh(new THREE.CubeGeometry(columnSettings.columnWidth, columnSettings.columnHeight, 10, 1, 1, 1), columnMaterial);
-    column.position.set(columnSettings.xPosition, columnSettings.columnHeight / 2 + 5, columnSettings.zPosition);
-    scene.add(column);
+    shape = new THREE.Mesh(new THREE.BoxGeometry(columnSettings.columnWidth, columnSettings.columnHeight, 10, 1, 1, 1), columnMaterial);
+    shape.position.set(columnSettings.xPosition, columnSettings.columnHeight / 2 + 5, columnSettings.zPosition);
+    addMesh(shape, columnMaterial);
 
-    // the frustum son the column
-    shape = new THREE.Mesh(new THREE.CubeGeometry(10, 10, 10, 1, 1, 1), cubeLevel1CubeMaterial);
+    // the frustum on the column
+    shape = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10, 1, 1, 1), cubeLevel1CubeMaterial);
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 10, columnSettings.zPosition);
-    scene.add(shape);
+    addMesh(shape, cubeLevel1CubeMaterial);
 
-    shape = new THREE.Mesh(new THREE.CubeGeometry(12, 12, 12, 1, 1, 1), cubeLevel2CubeMaterial);
+    shape = new THREE.Mesh(new THREE.BoxGeometry(12, 12, 12, 1, 1, 1), cubeLevel2CubeMaterial);
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 21, columnSettings.zPosition);
-    scene.add(shape);
+    addMesh(shape, cubeLevel2CubeMaterial);
 
-    shape = new THREE.Mesh(new THREE.CubeGeometry(14, 14, 14, 1, 1, 1), cubeLevel3CubeMaterial);
+    shape = new THREE.Mesh(new THREE.BoxGeometry(14, 14, 14, 1, 1, 1), cubeLevel3CubeMaterial);
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 31, columnSettings.zPosition);
-    scene.add(shape);
+    addMesh(shape, cubeLevel3CubeMaterial);
 
-    shape = new THREE.Mesh(new THREE.CubeGeometry(16, 16, 16, 1, 1, 1), cubeLevel4CubeMaterial);
+    shape = new THREE.Mesh(new THREE.BoxGeometry(16, 16, 16, 1, 1, 1), cubeLevel4CubeMaterial);
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 41, columnSettings.zPosition);
-    scene.add(shape);
+    addMesh(shape, cubeLevel4CubeMaterial);
 
     // the top frustum
-    shape = new THREE.Mesh(new THREE.CubeGeometry(18, 18, 18, 1, 1, 1), frustumCubeMaterial);
+    shape = new THREE.Mesh(new THREE.BoxGeometry(18, 18, 18, 1, 1, 1), frustumCubeMaterial);
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 41, columnSettings.zPosition);
-    scene.add(shape);
+    addMesh(shape, frustumCubeMaterial);
 }
 
 function addStairsFundament() {
@@ -430,12 +440,12 @@ function addStairsFundament() {
         var cubeWidth = (initArray.planeWidth / 2) / stairWidthDivisor;
         var cubeHeight = 10 - (stairColors.length * i + 1);
         var darkMaterial = new THREE.MeshBasicMaterial({ color: parseInt(stairColors[i], 16) });
-        var cubeGeometry = new THREE.CubeGeometry(cubeWidth, cubeHeight, cubeDepth, widthSegments, heightSegments, depthSegments);
+        var cubeGeometry = new THREE.BoxGeometry(cubeWidth, cubeHeight, cubeDepth, widthSegments, heightSegments, depthSegments);
         cube = new THREE.Mesh(cubeGeometry, darkMaterial);
         positionY = -1.5 + (i * -1.5);
         positionZ = -5 - (i * 10);
         cube.position.set(0, positionY, positionZ);
-        scene.add(cube);
+        addMesh(mesh);
     }
 }
 

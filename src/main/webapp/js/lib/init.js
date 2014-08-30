@@ -62,7 +62,7 @@ function init(cfgArray)
 	floor.rotation.x = Math.PI / 2;
 	scene.add(floor);
 	// SKYBOX
-	var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
+	var skyBoxGeometry = new THREE.BoxGeometry( 10000, 10000, 10000 );
 	var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: parseInt(configurationArray.skyboxColor, 16), side: THREE.BackSide } );
 	var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
 	scene.add(skyBox);
