@@ -40,13 +40,15 @@ window.onload = function () {
 
 }
 
-function addMesh(mesh, material) {
+function addMesh(mesh) {
 
     if (doMerge) {
+        console.log("merged", mergedGeo);
+        console.log("mesh", mesh);
         THREE.GeometryUtils.merge(mergedGeo, mesh);
     } else {
         doMerge = true;
-        group = new THREE.Mesh(mergedGeo, material);
+        group = new THREE.Mesh(mergedGeo, mesh.mesh );
         group.matrixAutoUpdate = false;
         group.updateMatrix();
         group.add(mesh);
@@ -184,7 +186,7 @@ function addCubeShapeWithTexture(position, dimension, rotation, scaling, columnM
     mesh.position.set(position[0], position[1], position[2]);
     mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
     mesh.scale.set(scaling[0], scaling[1], scaling[2]);
-    addMesh(mesh, columnMaterial);
+    addMesh(mesh);
 }
 
 function addPyramideShapeWithTexture(position, rotation, scaling, radiusTop, radiusBottom, height, columnMaterial) {
@@ -193,7 +195,7 @@ function addPyramideShapeWithTexture(position, rotation, scaling, radiusTop, rad
     mesh.position.set(position[0], position[1], position[2]);
     mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
     mesh.scale.set(scaling[0], scaling[1], scaling[2]);
-    addMesh(mesh, columnMaterial);
+    addMesh(mesh);
 }
 
 function addPyramideShapeWithColor(position, rotation, scaling, radiusTop, radiusBottom, height, materialColor) {
@@ -202,7 +204,7 @@ function addPyramideShapeWithColor(position, rotation, scaling, radiusTop, radiu
     mesh.position.set(position[0], position[1], position[2]);
     mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
     mesh.scale.set(scaling[0], scaling[1], scaling[2]);
-    addMesh(mesh, materialColor);
+    addMesh(mesh);
 }
 
 function addTriangle(geometry, pos, rot, scl, materialColor) {
@@ -217,7 +219,7 @@ function addSphereShape(x, y, z, radius, widthSegments, heightSegments, phiStart
     var mesh = THREE.SceneUtils.createMultiMaterialObject(new THREE.SphereGeometry(radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength), getMultimaterial(materialColor));
     mesh.position.set(x, y, z);
     mesh.scale.set(1, 1.5, 1);
-    addMesh(mesh, materialColor);
+    addMesh(mesh);
 }
 
 function addInnerWall() {
@@ -308,7 +310,7 @@ function addCubeDefSclDefRep(pos, dim, rot, textureName) {
 
 
 function addFence() {
-    var fence;
+    var mesh;
     var xPositionsColumnsFrontFence = [170, 380];
 
     var fenceLength = 190;
@@ -318,13 +320,13 @@ function addFence() {
 
     // The front fences
     for (i = 0; i < xPositionsColumnsFrontFence.length; i++) {
-        fence = new THREE.Mesh(new THREE.BoxGeometry(210, 10, 5, 2, 1, 1), materials);
-        fence.position.set(xPositionsColumnsFrontFence[i], yPosFence, 10);
-        addMesh(fence);
+        mesh = new THREE.Mesh(new THREE.BoxGeometry(210, 10, 5, 2, 1, 1), materials);
+        mesh.position.set(xPositionsColumnsFrontFence[i], yPosFence, 10);
+        addMesh(mesh);
 
-        fence = new THREE.Mesh(new THREE.BoxGeometry(210, 10, 5, 1, 1, 1), materials);
-        fence.position.set(-xPositionsColumnsFrontFence[i], yPosFence, 10);
-        addMesh(fence);
+        mesh = new THREE.Mesh(new THREE.BoxGeometry(210, 10, 5, 1, 1, 1), materials);
+        mesh.position.set(-xPositionsColumnsFrontFence[i], yPosFence, 10);
+        addMesh(mesh);
     }
 
     var xPositionsColumnsSideFence = [480, 170, 370];
@@ -332,16 +334,16 @@ function addFence() {
 
     // The fences on the site
     for (i = 0; i < zPositionsColumnsSideFence.length; i++) {
-        fence = new THREE.Mesh(new THREE.BoxGeometry(fenceLength, 10, 2, 1, 1, 1), materials);
-        fence.position.set(-xPositionsColumnsSideFence[0], yPosFence, zPositionsColumnsSideFence[i]);
-        fence.rotation.set(0, pi / 2, pi);
-        addMesh(fence);
+        mesh = new THREE.Mesh(new THREE.BoxGeometry(fenceLength, 10, 2, 1, 1, 1), materials);
+        mesh.position.set(-xPositionsColumnsSideFence[0], yPosFence, zPositionsColumnsSideFence[i]);
+        mesh.rotation.set(0, pi / 2, pi);
+        addMesh(mesh);
         //17:27 preischild e-paper einzelausgaben btutton fehlt sascha kühn
 
-        fence = new THREE.Mesh(new THREE.BoxGeometry(fenceLength, 10, 2, 1, 1, 1), materials);
-        fence.position.set(xPositionsColumnsSideFence[0],   yPosFence, zPositionsColumnsSideFence[i]);
-        fence.rotation.set(0, pi / 2, pi);
-        addMesh(fence);
+        mesh = new THREE.Mesh(new THREE.BoxGeometry(fenceLength, 10, 2, 1, 1, 1), materials);
+        mesh.position.set(xPositionsColumnsSideFence[0],   yPosFence, zPositionsColumnsSideFence[i]);
+        mesh.rotation.set(0, pi / 2, pi);
+        addMesh(mesh);
     }
 }
 
@@ -396,25 +398,25 @@ function addColumn(columnSettings) {
     shape = new THREE.Mesh(new THREE.CylinderGeometry(10, 8, 10, 4, 4), pillarBottomMaterial);
     shape.position.set(columnSettings.xPosition, 10, columnSettings.zPosition);
     shape.rotation.set(pi, pi / 4, 0);
-    addMesh(shape, pillarBottomMaterial);
+    addMesh(shape);
 
     // the column on the frustum
     shape = new THREE.Mesh(new THREE.BoxGeometry(columnSettings.columnWidth, columnSettings.columnHeight, 10, 1, 1, 1), columnMaterial);
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight / 2 + 5, columnSettings.zPosition);
-    addMesh(shape, columnMaterial);
+    addMesh(shape);
 
     // the frustum on the column
     shape = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10, 1, 1, 1), cubeLevel1CubeMaterial);
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 10, columnSettings.zPosition);
-    addMesh(shape, cubeLevel1CubeMaterial);
+    addMesh(shape);
 
     shape = new THREE.Mesh(new THREE.BoxGeometry(12, 12, 12, 1, 1, 1), cubeLevel2CubeMaterial);
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 21, columnSettings.zPosition);
-    addMesh(shape, cubeLevel2CubeMaterial);
+    addMesh(shape);
 
     shape = new THREE.Mesh(new THREE.BoxGeometry(14, 14, 14, 1, 1, 1), cubeLevel3CubeMaterial);
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 31, columnSettings.zPosition);
-    addMesh(shape, cubeLevel2CubeMaterial);
+    addMesh(shape);
 
     shape = new THREE.Mesh(new THREE.BoxGeometry(16, 16, 16, 1, 1, 1), cubeLevel4CubeMaterial);
     shape.position.set(columnSettings.xPosition, columnSettings.columnHeight + 41, columnSettings.zPosition);
@@ -472,22 +474,22 @@ function getMaterialForCube(textureName, repeatX, repeatY) {
 
     var materials = [
         new THREE.MeshLambertMaterial({
-            map: floorTexture, transparent: true, opacity: 1.0, wireframe: initArray.showGridLinesOnly, color: 0xFFFFFF
+            map: floorTexture, transparent: true, opacity: 1.0,color: 0xFFFFFF
         }),
         new THREE.MeshLambertMaterial({
-            map: floorTexture, transparent: true, opacity: 1.0, wireframe: initArray.showGridLinesOnly, color: 0xFFFFFF
+            map: floorTexture, transparent: true, opacity: 1.0,color: 0xFFFFFF
         }),
         new THREE.MeshLambertMaterial({
-            map: floorTexture, transparent: true, opacity: 1.0, wireframe: initArray.showGridLinesOnly, color: 0xFFFFFF
+            map: floorTexture, transparent: true, opacity: 1.0,color: 0xFFFFFF
         }),
         new THREE.MeshLambertMaterial({
-            map: floorTexture, transparent: true, opacity: 1.0, wireframe: initArray.showGridLinesOnly, color: 0xFFFFFF
+            map: floorTexture, transparent: true, opacity: 1.0,color: 0xFFFFFF
         }),
         new THREE.MeshLambertMaterial({
-            map: floorTexture, transparent: true, opacity: 1.0, wireframe: initArray.showGridLinesOnly, color: 0xFFFFFF
+            map: floorTexture, transparent: true, opacity: 1.0,color: 0xFFFFFF
         }),
         new THREE.MeshLambertMaterial({
-            map: floorTexture, transparent: true, opacity: 1.0, wireframe: initArray.showGridLinesOnly, color: 0xFFFFFF
+            map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF
         })
     ];
 

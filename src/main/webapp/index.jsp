@@ -7,7 +7,7 @@
     <link rel=stylesheet href="/css/base.css"/>
 
     <!-- JS-->
-    <script src="js/lib/three.min.js"></script>
+    <script src="js/lib/three.js"></script>
     <script src="js/lib/detector.js"></script>
     <script src="js/lib/stats.js"></script>
     <script src="js/lib/OrbitControls.js"></script>
