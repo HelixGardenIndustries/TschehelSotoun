@@ -101,7 +101,6 @@ function update()
 {
 	if ( keyboard.pressed("z") )
 	{
-	    console.log("sdfsf")
 		// do something
 	}
 
