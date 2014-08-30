@@ -1,6 +1,5 @@
 var initArray = {};
 const pi = Math.PI;
-const UMRANDUNG_DACH_UNTEN_LAYER_1 = 'img/umrandung_dach_unten_layer_1.png';
 
 window.onload = function () {
     // Show the gridline with filled color or not
@@ -8,8 +7,8 @@ window.onload = function () {
     // Show stats window in the lower left
     initArray.showStats = true;
     // Set the ground texture
-    initArray.groundTexture = 'img/gras.png';
-    initArray.skyboxColor = 'aabbcc';
+    initArray.groundTexture = GROUND_TEXTURE;
+    initArray.skyboxColor = SKY_BOX_COLOR;
 
     initArray.fundamentHeight = 10;
 
@@ -48,15 +47,13 @@ function addRoof() {
     addRoofLayerTwo();
     addRoofLayerOne();
     addRoofLayerZero();
-
 }
 
 function addRoofLayerZero() {
     var pos, dim;
     pos = [1, 245, 500];
     dim = [1000, 40, 1000];
-    addCubeDefSclDefRot(pos, dim, 'img/umrandung_dach_layer_1.png', 16, 1);
-
+    addCubeDefSclDefRot(pos, dim, UMRADNUNG_DACH_LAYER_1, 16, 1);
 }
 
 function addRoofLayerOne() {
@@ -65,7 +62,6 @@ function addRoofLayerOne() {
     pos = [0, 282, -8];
     dim = [1000, 40, 1];
     rot = [pi / -8, 0, 0];
-
     addCubeDefScl(pos, dim, rot, UMRANDUNG_DACH_UNTEN_LAYER_1, 64, 1);
 
 
@@ -103,7 +99,7 @@ function addRoofLayerOne() {
 
     pos = [1, 300, 500];
     dim = [1030, 1, 1030];
-    addCubeDefSclDefRot(pos, dim, 'img/umrandung_dach_layer_1.png', 16, 1);
+    addCubeDefSclDefRot(pos, dim, UMRADNUNG_DACH_LAYER_1, 16, 1);
 
 }
 
@@ -118,85 +114,52 @@ function addRoofLayerTwo() {
     pos = [0, 315, 0];
     dim = [width, 40, 1];
     rot = [rotx, 0, 0];
-    addCubeDefScl(pos, dim, rot, 'img/dach-schraeg-oben.png', repeat, 1);
+    addCubeDefScl(pos, dim, rot, DACH_SCHRAEG_OBEN, repeat, 1);
 
     pos = [0, 315, 1008];
     dim = [width, 40, 1];
     rot = [-rotx, 0, 0];
-    addCubeDefScl(pos, dim, rot, 'img/dach-schraeg-oben.png', repeat, 1);
+    addCubeDefScl(pos, dim, rot, DACH_SCHRAEG_OBEN, repeat, 1);
 
     pos = [500, 315, 500];
     dim = [1, 40, width];
     rot = [0, 0, rotx];
-    addCubeDefScl(pos, dim, rot, 'img/dach-schraeg-oben.png', repeat, 1);
+    addCubeDefScl(pos, dim, rot, DACH_SCHRAEG_OBEN, repeat, 1);
 
     pos = [-500, 315, 508];
     dim = [1, 40, width];
     rot = [0, 0, -rotx];
-    addCubeDefScl(pos, dim, rot, 'img/dach-schraeg-oben.png', repeat, 1);
+    addCubeDefScl(pos, dim, rot, DACH_SCHRAEG_OBEN, repeat, 1);
 
 
     pos = [490, 316, 13];
     rot = [0, pi / 4, 0];
-    addPyramideDefScl(pos, rot, 0, 40, 30, 'img/dach-schraeg-oben.png', repeatPyramideX, repeatPyramideY);
+    addPyramideDefScl(pos, rot, 0, 40, 30, DACH_SCHRAEG_OBEN, repeatPyramideX, repeatPyramideY);
 
     pos = [-485, 316, 13];
     rot = [0, pi / 4, 0];
-    addPyramideDefScl(pos, rot, 0, 40, 30, 'img/dach-schraeg-oben.png', repeatPyramideX, repeatPyramideY);
+    addPyramideDefScl(pos, rot, 0, 40, 30, DACH_SCHRAEG_OBEN, repeatPyramideX, repeatPyramideY);
 
     pos = [-485, 316, 993];
     rot = [0, pi / 4, 0];
-    addPyramideDefScl(pos, rot, 0, 40, 30, 'img/dach-schraeg-oben.png', repeatPyramideX, repeatPyramideY);
+    addPyramideDefScl(pos, rot, 0, 40, 30, DACH_SCHRAEG_OBEN, repeatPyramideX, repeatPyramideY);
 
     pos = [487, 316, 990];
     rot = [0, pi / 4, 0];
-    addPyramideDefScl(pos, rot, 0, 40, 30, 'img/dach-schraeg-oben.png', repeatPyramideX, repeatPyramideY);
+    addPyramideDefScl(pos, rot, 0, 40, 30, DACH_SCHRAEG_OBEN, repeatPyramideX, repeatPyramideY);
 }
 
 function addRoofLayerThree() {
     var pos, dim, rot;
     pos = [1, 335, 500];
     dim = [980, 10, 980];
-    addPyramideDefSclDefRot(pos, dim, 'img/dach-basis-pyramide.png', 16, 1);
+    addPyramideDefSclDefRot(pos, dim, DACH_BASIS_PYRAMIDE, 16, 1);
 
     pos = [0, 393, 500];
     rot = [0, pi / 4, 0];
-    addPyramideDefScl(pos, rot, getDefaultScaling(), 0, 600, 100, getMaterialForCube('img/pyramid-top.png', 64, 64));
+    addPyramideDefScl(pos, rot, 0, 600, 100, PYRAMIDE_TOP, 64, 64);
 }
 
-function addInnerWallTriangles() {
-    var pos, rot, posX, posY, posZ, sclX, sclY, sclZ, scl;
-
-    var ceilingTriangleLeftGeometry = getTriangleFromCoordinates();
-    var triangleMaterialColor = "ff0000";
-    posX = 0, posY = 160, posZ = 750, sclX = 1, sclY = 1, sclZ = 1;
-
-    pos = [posX, posY, posZ];
-    rot = [0, pi, 0];
-    scl = [sclX, sclY, sclZ];
-    addTriangle(ceilingTriangleLeftGeometry, pos, rot, scl, triangleMaterialColor);
-
-    pos = [-posX, posY, posZ];
-    scl = [sclX, sclY, sclZ];
-    rot = [0, pi * 2, 0];
-    addTriangle(ceilingTriangleLeftGeometry, pos, rot, scl, triangleMaterialColor);
-}
-
-function getTriangleFromCoordinates() {
-    var a = 45;
-    var b = 50;
-    var c = 0;
-    var sideTriangleLeft = new THREE.Shape();
-    sideTriangleLeft.moveTo(0, 0);
-    sideTriangleLeft.quadraticCurveTo(a, c, b, -a);
-    sideTriangleLeft.quadraticCurveTo(b, -a, b, c);
-    sideTriangleLeft.quadraticCurveTo(b, c, c, c);
-    return new THREE.ShapeGeometry(sideTriangleLeft);
-}
-
-/**
- TODO: Diese Funktion entfernen, da nur noch texture funktionen hinzukommen
- **/
 function addCubeShape(position, dimension, rotation, scaling, materialColor) {
     var mesh = THREE.SceneUtils.createMultiMaterialObject(new THREE.CubeGeometry(dimension[0], dimension[1], dimension[2], 1, 1, 1), getMultimaterial(materialColor));
     mesh.position.set(position[0], position[1], position[2]);
@@ -206,7 +169,6 @@ function addCubeShape(position, dimension, rotation, scaling, materialColor) {
 }
 
 function addCubeShapeWithTexture(position, dimension, rotation, scaling, columnMaterial) {
-
     // the column on the frustum
     var mesh = new THREE.Mesh(new THREE.CubeGeometry(dimension[0], dimension[1], dimension[2], 1, 1, 1), columnMaterial);
     mesh.position.set(position[0], position[1], position[2]);
@@ -216,7 +178,6 @@ function addCubeShapeWithTexture(position, dimension, rotation, scaling, columnM
 }
 
 function addPyramideShapeWithTexture(position, rotation, scaling, radiusTop, radiusBottom, height, columnMaterial) {
-
     // the column on the frustum
     var mesh = new THREE.Mesh(new THREE.CylinderGeometry(radiusTop, radiusBottom, height, 4, 4), columnMaterial);
     mesh.position.set(position[0], position[1], position[2]);
@@ -226,7 +187,6 @@ function addPyramideShapeWithTexture(position, rotation, scaling, radiusTop, rad
 }
 
 function addPyramideShapeWithColor(position, rotation, scaling, radiusTop, radiusBottom, height, materialColor) {
-
     // the column on the frustum
     var mesh = new THREE.Mesh(new THREE.CylinderGeometry(radiusTop, radiusBottom, height, 4, 4), getMultimaterial(materialColor));
     mesh.position.set(position[0], position[1], position[2]);
@@ -235,26 +195,12 @@ function addPyramideShapeWithColor(position, rotation, scaling, radiusTop, radiu
     scene.add(mesh);
 }
 
-
 function addTriangle(geometry, pos, rot, scl, materialColor) {
     var mesh = THREE.SceneUtils.createMultiMaterialObject(geometry, getMultimaterial(materialColor));
     mesh.position.set(pos[0], pos[1], pos[2]);
     mesh.rotation.set(rot[0], rot[1], rot[2]);
     mesh.scale.set(scl[0], scl[1], scl[2]);
     scene.add(mesh);
-}
-
-function addDome() {
-
-    var radius = 53;
-    var widthSegments = 64;
-    var heightSegments = 64;
-    var phiStart = 0;
-    var phiLength = pi;
-    var thetaStart = 0;
-    var thetaLength = pi / 2;
-    addSphereShape(0, 100, 750, radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength, "ff0000");
-    addInnerWallTriangles();
 }
 
 function addSphereShape(x, y, z, radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength, materialColor) {
@@ -272,58 +218,55 @@ function addInnerWall() {
     var dx = 100;
     var dy = 235;
     var dz = 15;
-    dim = [dx, dy, dz];
 
+    dim = [dx, dy, dz];
     pos = [px, py, pz];
-    addCubeDefSclDefRotDefRep(pos, dim, 'img/front_links_eingang_hinten.png');
+    addCubeDefSclDefRotDefRep(pos, dim, FRONT_LINKS_EINGANG_HINTEN);
 
     pos = [-px, py, pz];
-    addCubeDefSclDefRotDefRep(pos, dim, 'img/front_rechts_eingang_hinten.png');
+    addCubeDefSclDefRotDefRep(pos, dim, FRONT_RECHTS_EINGANG_HINTEN);
 
     pos = [0, py, pz];
-    addCubeDefSclDefRotDefRep(pos, dim, 'img/front_hinten.png');
-
+    addCubeDefSclDefRotDefRep(pos, dim, FRONT_HINTEN);
     px = 142;
     pz = 665;
     dx = 150;
     ry = pi / 2;
-
     pos = [-px, py, pz];
     dim = [dx, dy, dz];
     rot = [0, ry, 0];
-    addCubeDefSclDefRep(pos, dim, rot, 'img/front_rechts_eingang.png');
+    addCubeDefSclDefRep(pos, dim, rot, FRONT_RECHTS_EINGANG);
 
     pos = [px, py, pz];
     dim = [dx, dy, dz];
     rot = [0, ry, 0];
-    addCubeDefSclDefRep(pos, dim, rot, 'img/front_links_eingang.png');
+    addCubeDefSclDefRep(pos, dim, rot, FRONT_LINKS_EINGANG);
 }
 
 function addOuterWall() {
 
-    console.log("sfsd");
     var pos, dim, rot;
     pos = [315, 120, 595];
     dim = [350, 235, 15];
-    addCubeDefSclDefRotDefRep(pos, dim, 'img/front_links.png');
-
+    addCubeDefSclDefRotDefRep(pos, dim, FRONT_LINKS);
     pos = [-315, 120, 595];
-    dim = [350, 235, 15];
-    addCubeDefSclDefRotDefRep(pos, dim, 'img/front_rechts.png');
 
+    dim = [350, 235, 15];
+    addCubeDefSclDefRotDefRep(pos, dim, FRONT_RECHTS);
     pos = [0, 120, 990];
+
     dim = [980, 235, 15];
-    addCubeDefSclDefRotDefRep(pos, dim, 'img/hinten.png');
+    addCubeDefSclDefRotDefRep(pos, dim, HINTEN);
 
     pos = [-480, 120, 795];
     dim = [385, 235, 15];
     rot = [0, pi / 2, 0];
-    addCubeDefSclDefRep(pos, dim, rot, 'img/hinten.png');
+    addCubeDefSclDefRep(pos, dim, rot, HINTEN);
 
     pos = [480, 120, 795];
     dim = [385, 235, 15];
     rot = [0, pi / 2, 0];
-    addCubeDefSclDefRep(pos, dim, rot, 'img/hinten.png');
+    addCubeDefSclDefRep(pos, dim, rot, HINTEN);
 }
 
 function addPyramideDefSclDefRot(pos, radiusTop, radiusBottom, height, textureName, textureRepeatX, textureRepeatY){
@@ -359,7 +302,7 @@ function addFence() {
     var xPositionsColumnsFrontFence = [170, 380];
 
     var fenceLength = 190;
-    var materials = getMaterialForCube('img/fenceFrontAndBackSide2.png', 24, 1);
+    var materials = getMaterialForCube(FENCE_FRONT_AND_BACK_SIDE, 24, 1);
     var yPosFence = 11;
     var i;
 
@@ -429,16 +372,14 @@ function addFirstColumnRow(zPosition, xPosition) {
 }
 
 function addColumn(columnSettings) {
-
-    // from drawing
-    var pillarBottomMaterial = getMaterialForCube('img/pillarBottom.png', 1, 1);
-    var columnMaterial = getMaterialForCube('img/column.png', 1, 1);
     var shape, column;
-    var frustumCubeMaterial = getMaterialForCube('img/frustumCube.png', 1, 1);
-    var cubeLevel1CubeMaterial = getMaterialForCube('img/columnTopLevel1.png', 1, 1);
-    var cubeLevel2CubeMaterial = getMaterialForCube('img/columnTopLevel2.png', 1, 1);
-    var cubeLevel3CubeMaterial = getMaterialForCube('img/columnTopLevel3.png', 1, 1);
-    var cubeLevel4CubeMaterial = getMaterialForCube('img/columnTopLevel4.png', 1, 1);
+    var pillarBottomMaterial = getMaterialForCube(PILLAR_BOTTOM, 1, 1);
+    var columnMaterial = getMaterialForCube(COLUMN, 1, 1);
+    var frustumCubeMaterial = getMaterialForCube(FRUSTUM_CUBE, 1, 1);
+    var cubeLevel1CubeMaterial = getMaterialForCube(COLUMN_TOP_LEVEL_1, 1, 1);
+    var cubeLevel2CubeMaterial = getMaterialForCube(COLUM_TOP_LEVEL_2, 1, 1);
+    var cubeLevel3CubeMaterial = getMaterialForCube(COLUMN_TOP_LEVEL_3, 1, 1);
+    var cubeLevel4CubeMaterial = getMaterialForCube(COLUMN_TOP_LEVEL_4, 1, 1);
 
     // the column on the ground
     shape = new THREE.Mesh(new THREE.CylinderGeometry(10, 8, 10, 4, 4), pillarBottomMaterial);
