@@ -1,5 +1,6 @@
 var initArray = {};
 const pi = Math.PI;
+const UMRANDUNG_DACH_UNTEN_LAYER_1 = 'img/umrandung_dach_unten_layer_1.png';
 
 window.onload = function () {
     // Show the gridline with filled color or not
@@ -58,58 +59,51 @@ function addRoofLayerZero() {
 
 }
 
-function addCubeDefSclDefRot(pos, dim, textureName, textureRepeatX, textureRepeatY){
-    addCubeDefScl(pos, dim, getDefaultRotating(), textureName, textureRepeatX, textureRepeatY);
-}
-
-function addCubeDefScl(pos, dim, rot, textureName, textureRepeatX, textureRepeatY){
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube(textureName, textureRepeatX, textureRepeatY));
-}
-
 function addRoofLayerOne() {
     var pos, dim, rot;
     // Layer 1
     pos = [0, 282, -8];
     dim = [1000, 40, 1];
     rot = [pi / -8, 0, 0];
-    addCubeDefScl(pos, dim, rot, 'img/umrandung_dach_unten_layer_1.png', 64, 1);
+
+    addCubeDefScl(pos, dim, rot, UMRANDUNG_DACH_UNTEN_LAYER_1, 64, 1);
 
 
     pos = [0, 282, 1008];
     dim = [1000, 40, 1];
     rot = [pi / 8, 0, 0];
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+    addCubeDefScl(pos, dim, rot, UMRANDUNG_DACH_UNTEN_LAYER_1, 64, 1);
 
     pos = [508, 282, 500];
     dim = [1, 40, 1000];
     rot = [0, 0, pi / -8];
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+    addCubeDefScl(pos, dim, rot, UMRANDUNG_DACH_UNTEN_LAYER_1, 64, 1);
 
     pos = [-508, 282, 500];
     dim = [1, 40, 1000];
     rot = [0, 0, pi / 8];
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 64, 1));
+    addCubeDefScl(pos, dim, rot, UMRANDUNG_DACH_UNTEN_LAYER_1, 64, 1);
 
 
     pos = [500, 280, 0];
     rot = [0, pi / 4, 0];
-    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), 20, 0, 40, getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
+    addPyramideDefScl(pos, rot, 20, 0, 40, UMRANDUNG_DACH_UNTEN_LAYER_1, 2, 1);
 
     pos = [-500, 280, 0];
     rot = [0, pi / 4, 0];
-    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), 20, 0, 40, getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
+    addPyramideDefScl(pos, rot, 20, 0, 40, UMRANDUNG_DACH_UNTEN_LAYER_1, 2, 1);
 
     pos = [-500, 280, 1000];
     rot = [0, pi / 4, 0];
-    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), 20, 0, 40, getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 2, 1));
+    addPyramideDefScl(pos, rot, 20, 0, 40, UMRANDUNG_DACH_UNTEN_LAYER_1, 2, 1);
 
     pos = [500, 280, 1000];
     rot = [0, pi / 4, 0];
-    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), 20, 0, 40, getMaterialForCube('img/umrandung_dach_unten_layer_1.png', 1, 1));
+    addPyramideDefSclDefRep(pos, rot, 20, 0, 40, UMRANDUNG_DACH_UNTEN_LAYER_1);
 
     pos = [1, 300, 500];
     dim = [1030, 1, 1030];
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/umrandung_dach_layer_1.png', 16, 1));
+    addCubeDefSclDefRot(pos, dim, 'img/umrandung_dach_layer_1.png', 16, 1);
 
 }
 
@@ -118,55 +112,56 @@ function addRoofLayerTwo() {
     var width = 979;
     rotx = pi / 4;
     var repeat = 64;
-    var repeatPyramide = 9;
+    var repeatPyramideX = 9;
+    var repeatPyramideY = 16;
 
     pos = [0, 315, 0];
     dim = [width, 40, 1];
     rot = [rotx, 0, 0];
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/dach-schraeg-oben.png', repeat, 1));
+    addCubeDefScl(pos, dim, rot, 'img/dach-schraeg-oben.png', repeat, 1);
 
     pos = [0, 315, 1008];
     dim = [width, 40, 1];
     rot = [-rotx, 0, 0];
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/dach-schraeg-oben.png', repeat, 1));
+    addCubeDefScl(pos, dim, rot, 'img/dach-schraeg-oben.png', repeat, 1);
 
     pos = [500, 315, 500];
     dim = [1, 40, width];
     rot = [0, 0, rotx];
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/dach-schraeg-oben.png', 64, 1));
+    addCubeDefScl(pos, dim, rot, 'img/dach-schraeg-oben.png', repeat, 1);
 
     pos = [-500, 315, 508];
     dim = [1, 40, width];
     rot = [0, 0, -rotx];
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/dach-schraeg-oben.png', 64, 1));
+    addCubeDefScl(pos, dim, rot, 'img/dach-schraeg-oben.png', repeat, 1);
 
 
     pos = [490, 316, 13];
     rot = [0, pi / 4, 0];
-    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), 0, 40, 30, getMaterialForCube('img/dach-schraeg-oben.png', repeatPyramide, 16));
+    addPyramideDefScl(pos, rot, 0, 40, 30, 'img/dach-schraeg-oben.png', repeatPyramideX, repeatPyramideY);
 
     pos = [-485, 316, 13];
     rot = [0, pi / 4, 0];
-    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), 0, 40, 30, getMaterialForCube('img/dach-schraeg-oben.png', repeatPyramide, 16));
+    addPyramideDefScl(pos, rot, 0, 40, 30, 'img/dach-schraeg-oben.png', repeatPyramideX, repeatPyramideY);
 
     pos = [-485, 316, 993];
     rot = [0, pi / 4, 0];
-    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), 0, 40, 30, getMaterialForCube('img/dach-schraeg-oben.png', repeatPyramide, 16));
+    addPyramideDefScl(pos, rot, 0, 40, 30, 'img/dach-schraeg-oben.png', repeatPyramideX, repeatPyramideY);
 
     pos = [487, 316, 990];
     rot = [0, pi / 4, 0];
-    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), 0, 40, 30, getMaterialForCube('img/dach-schraeg-oben.png', repeatPyramide, 16));
+    addPyramideDefScl(pos, rot, 0, 40, 30, 'img/dach-schraeg-oben.png', repeatPyramideX, repeatPyramideY);
 }
 
 function addRoofLayerThree() {
     var pos, dim, rot;
     pos = [1, 335, 500];
     dim = [980, 10, 980];
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/dach-basis-pyramide.png', 16, 1));
+    addPyramideDefSclDefRot(pos, dim, 'img/dach-basis-pyramide.png', 16, 1);
 
     pos = [0, 393, 500];
     rot = [0, pi / 4, 0];
-    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), 0, 600, 100, getMaterialForCube('img/pyramid-top.png', 64, 64));
+    addPyramideDefScl(pos, rot, getDefaultScaling(), 0, 600, 100, getMaterialForCube('img/pyramid-top.png', 64, 64));
 }
 
 function addInnerWallTriangles() {
@@ -280,13 +275,13 @@ function addInnerWall() {
     dim = [dx, dy, dz];
 
     pos = [px, py, pz];
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/front_links_eingang_hinten.png', 1, 1));
+    addCubeDefSclDefRotDefRep(pos, dim, 'img/front_links_eingang_hinten.png');
 
     pos = [-px, py, pz];
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/front_rechts_eingang_hinten.png', 1, 1));
+    addCubeDefSclDefRotDefRep(pos, dim, 'img/front_rechts_eingang_hinten.png');
 
     pos = [0, py, pz];
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/front_hinten.png', 1, 1));
+    addCubeDefSclDefRotDefRep(pos, dim, 'img/front_hinten.png');
 
     px = 142;
     pz = 665;
@@ -296,39 +291,68 @@ function addInnerWall() {
     pos = [-px, py, pz];
     dim = [dx, dy, dz];
     rot = [0, ry, 0];
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/front_rechts_eingang.png', 1, 1));
+    addCubeDefSclDefRep(pos, dim, rot, 'img/front_rechts_eingang.png');
 
     pos = [px, py, pz];
     dim = [dx, dy, dz];
     rot = [0, ry, 0];
-
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/front_links_eingang.png', 1, 1));
+    addCubeDefSclDefRep(pos, dim, rot, 'img/front_links_eingang.png');
 }
 
 function addOuterWall() {
+
+    console.log("sfsd");
     var pos, dim, rot;
     pos = [315, 120, 595];
     dim = [350, 235, 15];
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/front_links.png', 1, 1));
+    addCubeDefSclDefRotDefRep(pos, dim, 'img/front_links.png');
 
     pos = [-315, 120, 595];
     dim = [350, 235, 15];
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/front_rechts.png', 1, 1));
+    addCubeDefSclDefRotDefRep(pos, dim, 'img/front_rechts.png');
 
     pos = [0, 120, 990];
     dim = [980, 235, 15];
-    addCubeShapeWithTexture(pos, dim, getDefaultRotating(), getDefaultScaling(), getMaterialForCube('img/hinten.png', 1, 1));
+    addCubeDefSclDefRotDefRep(pos, dim, 'img/hinten.png');
 
     pos = [-480, 120, 795];
     dim = [385, 235, 15];
     rot = [0, pi / 2, 0];
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/hinten.png', 1, 1));
+    addCubeDefSclDefRep(pos, dim, rot, 'img/hinten.png');
 
     pos = [480, 120, 795];
     dim = [385, 235, 15];
     rot = [0, pi / 2, 0];
-    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube('img/hinten.png', 1, 1));
+    addCubeDefSclDefRep(pos, dim, rot, 'img/hinten.png');
 }
+
+function addPyramideDefSclDefRot(pos, radiusTop, radiusBottom, height, textureName, textureRepeatX, textureRepeatY){
+    addPyramideShapeWithTexture(pos, getDefaultRotating(), getDefaultScaling(), radiusTop, radiusBottom, height, getMaterialForCube(textureName, textureRepeatX, textureRepeatY))
+}
+function addPyramideDefSclDefRep(pos, rot, radiusTop, radiusBottom, height, textureName){
+    addPyramideDefScl(pos, rot, getDefaultScaling(), radiusTop, radiusBottom, height, getMaterialForCube(textureName, 1, 1))
+}
+
+function addPyramideDefScl(pos, rot, radiusTop, radiusBottom, height, textureName, textureRepeatX, textureRepeatY){
+    addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), radiusTop, radiusBottom, height, getMaterialForCube(textureName, textureRepeatX, textureRepeatY))
+}
+
+function addCubeDefSclDefRotDefRep(pos, dim, textureName){
+    addCubeDefScl(pos, dim, getDefaultRotating(), textureName, 1, 1);
+}
+
+function addCubeDefSclDefRot(pos, dim, textureName, textureRepeatX, textureRepeatY){
+    addCubeDefScl(pos, dim, getDefaultRotating(), textureName, textureRepeatX, textureRepeatY);
+}
+
+function addCubeDefScl(pos, dim, rot, textureName, textureRepeatX, textureRepeatY){
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube(textureName, textureRepeatX, textureRepeatY));
+}
+
+function addCubeDefSclDefRep(pos, dim, rot, textureName){
+    addCubeShapeWithTexture(pos, dim, rot, getDefaultScaling(), getMaterialForCube(textureName, 1, 1));
+}
+
 
 function addFence() {
     var fence;
