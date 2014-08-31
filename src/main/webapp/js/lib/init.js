@@ -73,7 +73,6 @@ function init(cfgArray)
 
 // STATS
 function showStats(){
-	console.log(configurationArray.showStats);
 	if(configurationArray.showStats){
 	    stats = new Stats();
     	stats.domElement.style.position = 'absolute';

@@ -3,9 +3,7 @@ const pi = Math.PI;
 var baseMesh;
 var group = new THREE.Object3D;
 var mergedGeo = new THREE.Geometry();
-var doMerge = false;
 var material = [getMaterialForCube(UMRANDUNG_DACH_UNTEN_LAYER_1, 1, 1)];
-
 window.onload = function () {
     // Show the gridline with filled color or not
     initArray.showGridLinesOnly = false;
@@ -35,24 +33,23 @@ window.onload = function () {
     addOuterWall();
     addInnerWall();
     addRoof();
-    scene.add(group);
+    drawMeshes();
     animate();
 
 }
 
 function addMesh(mesh) {
+    material.push(mesh.material);
+    mesh.matrixAutoUpdate && mesh.updateMatrix();
+    mergedGeo.merge( mesh.geometry, mesh.matrix);
+}
 
-    if (doMerge) {
-        console.log("merged", mergedGeo);
-        console.log("mesh", mesh);
-        THREE.GeometryUtils.merge(mergedGeo, mesh);
-    } else {
-        doMerge = true;
-        group = new THREE.Mesh(mergedGeo, mesh.mesh );
-        group.matrixAutoUpdate = false;
-        group.updateMatrix();
-        group.add(mesh);
-    }
+function drawMeshes(){
+    mergedGeo.computeFaceNormals();
+    group = new THREE.Mesh(mergedGeo, new THREE.MeshNormalMaterial());
+    group.matrixAutoUpdate = false;
+    group.updateMatrix();
+    scene.add( group );
 }
 
 function addFundamentPalace() {
