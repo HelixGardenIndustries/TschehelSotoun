@@ -16,6 +16,31 @@ var configurationArray;
 // custom global variables
 var mesh;
 
+window.onload = function () {
+    // Show the gridline with filled color or not
+    initArray.showGridLinesOnly = false;
+    // Show stats window in the lower left
+    initArray.showStats = true;
+    // Set the ground texture
+    initArray.groundTexture = GROUND_TEXTURE;
+    initArray.skyboxColor = SKY_BOX_COLOR;
+    initArray.fundamentHeight = 10;
+
+    // dimension of plane (grundfläche)
+    initArray.planeWidth = 2000;
+    initArray.planeHeight = 2000;
+
+    var cameraPos = {};
+    cameraPos.X = 100;
+    cameraPos.Y = 10;
+    cameraPos.Z = -1200;
+
+    initArray.cameraPos = cameraPos;
+
+    init(initArray);
+
+    addMeshes();
+}
 
 // FUNCTIONS
 function init(cfgArray)
@@ -87,14 +112,7 @@ function animate()
     requestAnimationFrame( animate );
 	render();
 	update();
-
-/*
-	console.log("x", camera.position.x);
-	console.log("y", camera.position.y);
-	console.log("z", camera.position.z);
-*/
-
-	}
+}
 
 function update()
 {

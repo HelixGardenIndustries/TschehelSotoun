@@ -16,7 +16,8 @@
     <script src="js/lib/THREEx.WindowResize.js"></script>
     <script src="js/lib/init.js"></script>
     <script src="js/constants.js"></script>
-    <script src="js/basic.js"></script>
+    <script src="js/utilities.js"></script>
+    <script src="js/tschehelSotoun.js"></script>
 </head>
 <body>
 <div id="canvas" style="z-index: 1; position: absolute; left:0px; top:0px"></div>
