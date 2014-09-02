@@ -6,6 +6,7 @@ function addMeshes() {
     addInnerWall();
     addRoof();
     addStairsFundament();
+    addPond();
     animate();
 }
 
@@ -29,11 +30,41 @@ function addRoof() {
 
 function addRoofLayerZero() {
     var meshes = [], pos, dim;
+    var a = UMRANDUNG_DACH_UNTEN_LAYER_1;
+    var b = BOTTOM_TEXTURE_COLUMN_ROOF;
 
     pos = [1, 245, 500];
     dim = [1000, 40, 1000];
     meshes.push(getCubeMeshDefSclDefRot(pos, dim));
-    addMeshesToSceneWithCustomTextureRepeating(meshes, UMRANDUNG_DACH_UNTEN_LAYER_1, 16, 1)
+
+    var repeatX = [16,16,16,5,16,16];
+    var repeatY = [1,1,1,6,1,1];
+    var textures = [a, a, a, b, a, a];
+    addMeshesToSceneWithCustomTextureRepeating(meshes, textures, repeatX, repeatY);
+
+
+}
+
+function addPond(){
+    var meshes = [], pos, dim, rot;
+    pos = [1, 20, -500];
+    dim = [1000, 500, 1];
+    rot = [pi/2, 0,0];
+
+
+   var cubeGeom = new THREE.BoxGeometry(dim[0], dim[1], dim[2]);
+   	mirrorCubeCamera = new THREE.CubeCamera( 0.1, 10000, 512 );
+   	// mirrorCubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
+   	scene.add( mirrorCubeCamera );
+   	var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } );
+   	mirrorCube = new THREE.Mesh( cubeGeom, mirrorCubeMaterial );
+   	mirrorCube.position.set(pos[0], pos[1], pos[2]);
+    mirrorCube.rotation.set(rot[0], rot[1], rot[2]);
+    mirrorCube.rotation.set(rot[0], rot[1], rot[2]);
+   	mirrorCubeCamera.position = mirrorCube.position;
+   	scene.add(mirrorCube);
+
+
 }
 
 function addRoofLayerOne() {

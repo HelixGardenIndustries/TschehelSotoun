@@ -30,36 +30,60 @@ function addMeshToMergeParent(mergeParent, mesh) {
 }
 
 function getMaterialForCubeWithDefaultRepeating(textureName) {
-    return getMaterialForCubeWithCustomReapeating(textureName, 1, 1);
+    return getMaterialForCubeWithCustomRepeating(textureName, 1, 1);
 }
 
-function getMaterialForCubeWithCustomReapeating(textureName, repeatX, repeatY) {
+function getMaterialForCubeWithCustomRepeating(textureName, repeatX, repeatY) {
+
+    var textureNames = [];
+    var repeatXs = [];
+    var repeatYs = [];
+    var materials = [];
+
+    if(isVariableOfTypeArray(textureName)){
+        console.log("A");
+        if(textureName.length != 6){
+            alert("Array must have length of 6!");
+            return;
+        }
+        textureNames = textureName;
+        repeatXs = repeatX;
+        repeatYs = repeatY;
+    }else{
+        for(var i = 0; i < 6; i++){
+            textureNames[i] = textureName;
+            repeatXs[i] = repeatX;
+            repeatYs[i] = repeatY;
+        }
+    }
+
+    for(var i = 0; i < textureNames.length; i++){
+        materials[i] = getMeshLambertMaterial(textureNames[i], repeatXs[i], repeatYs[i]);
+    }
+
+    if(materials.length > 0){
+        return new THREE.MeshFaceMaterial(materials);
+    }else{
+        alert("Materials has size 0");
+    }
+}
+
+function getMeshLambertMaterial(textureName, repeatX, repeatY){
     var floorTexture = THREE.ImageUtils.loadTexture(textureName);
     floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
     floorTexture.repeat.set(repeatX, repeatY);
+    return new THREE.MeshLambertMaterial({map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF});
+}
 
-    var materials = [
-        new THREE.MeshLambertMaterial({
-            map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF
-        }),
-        new THREE.MeshLambertMaterial({
-            map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF
-        }),
-        new THREE.MeshLambertMaterial({
-            map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF
-        }),
-        new THREE.MeshLambertMaterial({
-            map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF
-        }),
-        new THREE.MeshLambertMaterial({
-            map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF
-        }),
-        new THREE.MeshLambertMaterial({
-            map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF
-        })
-    ];
+function getPlaneMesh(pos, dim, rot){
+    var mesh = new THREE.Mesh(new THREE.PlaneGeometry(dim[0], dim[1]));
+    mesh.position.set(pos[0], pos[1], pos[2]);
+    mesh.rotation.set(rot[0], rot[1], rot[2]);
+    return mesh;
+}
 
-    return new THREE.MeshFaceMaterial(materials);
+function isVariableOfTypeArray(x){
+    return Object.prototype.toString.call( x ) === '[object Array]';
 }
 
 function getMergeParent() {
@@ -116,9 +140,8 @@ function addMeshesToSceneWithDefaultTextureRepeating(meshes, textureName) {
 function addMeshesToSceneWithCustomTextureRepeating(meshes, textureName, repeatX, repeatY) {
 
     var mergedGeo = getMergeParent();
-    var material = getMaterialForCubeWithCustomReapeating(textureName, repeatX, repeatY);
+    var material = getMaterialForCubeWithCustomRepeating(textureName, repeatX, repeatY);
     for (var i = 0; i < meshes.length; i++) {
-
         mergedGeo = addMeshToMergeParent(mergedGeo, meshes[i]);
     }
     addMergedGeoToScene(mergedGeo, material);

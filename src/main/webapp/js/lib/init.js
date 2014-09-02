@@ -7,7 +7,7 @@
 // MAIN
 
 // standard global variables
-var container, scene, camera, renderer, controls, stats;
+var container, scene, camera, mirrorCube, mirrorCubeCamera, renderer, controls, stats, cube;
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
 var configurationArray;
@@ -32,7 +32,7 @@ window.onload = function () {
 
     var cameraPos = {};
     cameraPos.X = 100;
-    cameraPos.Y = 10;
+    cameraPos.Y = 200;
     cameraPos.Z = -1200;
 
     initArray.cameraPos = cameraPos;
@@ -131,4 +131,7 @@ function update()
 function render()
 {
 	renderer.render( scene, camera );
+	mirrorCube.visible = false;
+	mirrorCubeCamera.updateCubeMap( renderer, scene );
+	mirrorCube.visible = true;
 }
