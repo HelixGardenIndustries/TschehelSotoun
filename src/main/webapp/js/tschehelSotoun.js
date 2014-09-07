@@ -6,15 +6,15 @@ function addMeshes() {
     addInnerWall();
     addRoof();
     addStairsFundament();
-    addPond();
+    addPondWithReflection();
     animate();
 }
 
 function addFundamentPalace() {
     var meshes = [], pos, dim;
 
-    pos = [0, 1, initArray.planeHeight / 4];
-    dim = [initArray.planeWidth / 2, initArray.fundamentHeight, initArray.planeHeight / 2];
+    pos = [0, 1, 500];
+    dim = [1000, 10, 1000];
     meshes.push(getCubeMeshDefSclDefRot(pos, dim));
     addMeshesToSceneWithCustomTextureRepeating(meshes, FLOOR_TEXTURE, 8, 8)
 }
@@ -45,26 +45,56 @@ function addRoofLayerZero() {
 
 }
 
-function addPond(){
-    var meshes = [], pos, dim, rot;
-    pos = [1, 20, -500];
-    dim = [1000, 500, 1];
+function addPondWithReflection(){
+    var meshes = [], pos, dim, rot, reflectionCameraSize = 0;
+    pos = [1, 20, -850];
+    dim = [800, 1200];
     rot = [pi/2, 0,0];
 
 
-   var cubeGeom = new THREE.BoxGeometry(dim[0], dim[1], dim[2]);
-   	mirrorCubeCamera = new THREE.CubeCamera( 0.1, 10000, 512 );
-   	// mirrorCubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
-   	scene.add( mirrorCubeCamera );
-   	var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorCubeCamera.renderTarget } );
-   	mirrorCube = new THREE.Mesh( cubeGeom, mirrorCubeMaterial );
-   	mirrorCube.position.set(pos[0], pos[1], pos[2]);
-    mirrorCube.rotation.set(rot[0], rot[1], rot[2]);
-    mirrorCube.rotation.set(rot[0], rot[1], rot[2]);
-   	mirrorCubeCamera.position = mirrorCube.position;
-   	scene.add(mirrorCube);
+// create an array with six textures for a cool cube
+	// create an array with six textures for a cool cube
+    	var materialArray = [];
+    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
+    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
+    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
+    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
+    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
+    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
+    	var movingCubeMat = new THREE.MeshFaceMaterial(materialArray);
+    	var movingCubeGeom = new THREE.BoxGeometry( reflectionCameraSize, reflectionCameraSize, reflectionCameraSize, 1, 1, 1, materialArray );
+    	movingCube = new THREE.Mesh( movingCubeGeom, movingCubeMat );
+    	movingCube.position.set(0, 100, -300);
+    	movingCube.rotation.set(pi,0,0);
+    	scene.add( movingCube );
 
+    // intermediate scene.
+    // this solves the problem of the mirrored texture by mirroring it again.
+    // consists of a camera looking at a plane with the mirrored texture on it.
+    screenScene = new THREE.Scene();
 
+    screenCamera = new THREE.OrthographicCamera(
+    window.innerWidth  / -2, window.innerWidth  /  2, window.innerHeight /  2, window.innerHeight / -2, -10000, 10000 );
+    screenCamera.position.z = 1;
+    screenScene.add( screenCamera );
+
+    var screenGeometry = new THREE.PlaneGeometry( window.innerWidth, window.innerHeight );
+    firstRenderTarget = new THREE.WebGLRenderTarget( 512, 512, { format: THREE.RGBFormat } );
+    var screenMaterial = new THREE.MeshBasicMaterial( { map: firstRenderTarget } );
+
+    var quad = new THREE.Mesh( screenGeometry, screenMaterial );
+    // quad.rotation.x = Math.PI / 2;
+    screenScene.add( quad );
+
+    // final version of camera texture, used in scene.
+    var planeGeometry = new THREE.PlaneGeometry( dim[0], dim[1]);
+    finalRenderTarget = new THREE.WebGLRenderTarget( 512, 512, { format: THREE.RGBFormat } );
+    var planeMaterial = new THREE.MeshBasicMaterial( { map: finalRenderTarget, side: THREE.BackSide } );
+    var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+    var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+    plane.position.set(pos[0], 1, pos[2]);
+    plane.rotation.set(rot[0], rot[1], pi);
+    scene.add(plane);
 }
 
 function addRoofLayerOne() {
@@ -265,10 +295,10 @@ function addFence() {
     var xPositionsColumnsSideFence = [480, 170, 370];
     var zPositionsColumnsSideFence = [100, 300, 500];
 
-    // The fences on the site
+    // The fences on the side
     for (i = 0; i < zPositionsColumnsSideFence.length; i++) {
 
-        dim = [fenceLength, 2, 1];
+        dim = [fenceLength, 10, 1];
         pos = [-xPositionsColumnsSideFence[0], yPosFence, zPositionsColumnsSideFence[i]];
         rot = [0, pi / 2, pi];
         meshes.push(getCubeMeshDefScl(pos, dim, rot));
@@ -292,7 +322,7 @@ function addRoofColumns() {
     var meshContainer = [];
     var materials = [];
     var xPositionsColumns = [480, 270, 70, -480, -270, -70];
-    var heightColumnParts = [10, 180, 400, 600];
+    var heightColumnParts = [10, 200, 400, 600];
     var materialName = [PILLAR_BOTTOM, COLUMN, COLUMN_TOP_LEVEL_1, COLUMN_TOP_LEVEL_2, COLUMN_TOP_LEVEL_3, COLUMN_TOP_LEVEL_4, FRUSTUM_CUBE];
 
     // Initialize the arrays with defaultValues

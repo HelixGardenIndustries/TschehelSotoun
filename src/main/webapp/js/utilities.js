@@ -41,7 +41,6 @@ function getMaterialForCubeWithCustomRepeating(textureName, repeatX, repeatY) {
     var materials = [];
 
     if(isVariableOfTypeArray(textureName)){
-        console.log("A");
         if(textureName.length != 6){
             alert("Array must have length of 6!");
             return;

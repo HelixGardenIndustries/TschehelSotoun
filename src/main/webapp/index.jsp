@@ -11,7 +11,7 @@
     <script src="js/lib/detector.js"></script>
     <script src="js/lib/stats.js"></script>
     <script src="js/lib/OrbitControls.js"></script>
-    <script src="js/lib/KeyboardState.js"></script>
+    <script src="js/lib/THREEx.KeyboardState.js"></script>
     <script src="js/lib/THREEx.Fullscreen.js"></script>
     <script src="js/lib/THREEx.WindowResize.js"></script>
     <script src="js/lib/init.js"></script>
