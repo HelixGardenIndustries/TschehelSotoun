@@ -21,4 +21,6 @@ const HINTEN = 'img/hinten.png';
 const FRONT_RECHTS = 'img/front_rechts.png';
 const SKY_BOX_COLOR = 'aabbcc';
 const FLOOR_TEXTURE = 'img/groundTexture.png';
+const POND_TEXTURE = 'img/marble.png';
+const POND_GROUND_TEXTURE = 'img/marble_ground.png';
 const BOTTOM_TEXTURE_COLUMN_ROOF = 'img/bottomTextureColumnRoof.png';

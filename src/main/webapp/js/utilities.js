@@ -68,6 +68,10 @@ function getMaterialForCubeWithCustomRepeating(textureName, repeatX, repeatY) {
 }
 
 function getMeshLambertMaterial(textureName, repeatX, repeatY){
+    return new getMeshLambertMaterialWithOpacity(textureName, repeatX, repeatY, 1.0)
+}
+
+function getMeshLambertMaterialWithOpacity(textureName, repeatX, repeatY, opacity){
     var floorTexture = THREE.ImageUtils.loadTexture(textureName);
     floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
     floorTexture.repeat.set(repeatX, repeatY);

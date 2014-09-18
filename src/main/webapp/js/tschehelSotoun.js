@@ -6,7 +6,7 @@ function addMeshes() {
     addInnerWall();
     addRoof();
     addStairsFundament();
-    addPondWithReflection();
+    addPond();
     animate();
 }
 
@@ -45,12 +45,52 @@ function addRoofLayerZero() {
 
 }
 
-function addPondWithReflection(){
-    var meshes = [], pos, dim, rot, reflectionCameraSize = 0;
-    pos = [1, 20, -850];
-    dim = [800, 1200];
-    rot = [pi/2, 0,0];
+function addPond(){
+    var dim = [800, 1000, 10];
+    addPondStructure();
+    addPondReflection(dim);
+}
 
+function addPondStructure(dim){
+    var dim = [800, 10,10];
+    var sideLength = -850;
+    var pondYPosition = 1
+
+    var meshes = [];
+
+    pos = [10, pondYPosition, -350];
+    meshes.push(getCubeMeshDefSclDefRot(pos, dim));
+
+    pos = [10, pondYPosition, -dim[0]-550];
+    meshes.push(getCubeMeshDefSclDefRot(pos, dim));
+
+    dim = [1000, 10,10];
+    rot = [0, pi / 2, pi];
+    pos = [410, pondYPosition, sideLength];
+    meshes.push(getCubeMeshDefScl(pos, dim, rot));
+
+    // the pond wall in the back
+    pos = [-390, pondYPosition, sideLength];
+    meshes.push(getCubeMeshDefScl(pos, dim, rot));
+
+    addMeshesToSceneWithCustomTextureRepeating(meshes, POND_TEXTURE, 2, 1);
+
+    // the pond ground
+    var planeGeometry = new THREE.BoxGeometry( 800, 1, 1000, 1 );
+    var planeMaterial = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture( POND_GROUND_TEXTURE ), color: 0xffffff, opacity: 1.0 } );
+    var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+    plane.position.set(10, pondYPosition-5, pos[2]);
+    //plane.rotation.set(rot[0], rot[1], pi);
+    scene.add(plane);
+
+
+}
+
+function addPondReflection(dim){
+    console.log(dim);
+    var meshes = [], pos, rot, reflectionCameraSize = 0;
+    pos = [1, 20, -850];
+    rot = [pi/2, 0,0];
 
 // create an array with six textures for a cool cube
 	// create an array with six textures for a cool cube
@@ -80,7 +120,7 @@ function addPondWithReflection(){
 
     var screenGeometry = new THREE.PlaneGeometry( window.innerWidth, window.innerHeight );
     firstRenderTarget = new THREE.WebGLRenderTarget( 512, 512, { format: THREE.RGBFormat } );
-    var screenMaterial = new THREE.MeshBasicMaterial( { map: firstRenderTarget } );
+    var screenMaterial = new THREE.MeshBasicMaterial( { map: firstRenderTarget, opacity: 0.5 } );
 
     var quad = new THREE.Mesh( screenGeometry, screenMaterial );
     // quad.rotation.x = Math.PI / 2;
@@ -89,12 +129,13 @@ function addPondWithReflection(){
     // final version of camera texture, used in scene.
     var planeGeometry = new THREE.PlaneGeometry( dim[0], dim[1]);
     finalRenderTarget = new THREE.WebGLRenderTarget( 512, 512, { format: THREE.RGBFormat } );
-    var planeMaterial = new THREE.MeshBasicMaterial( { map: finalRenderTarget, side: THREE.BackSide } );
-    var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+    var planeMaterial = new THREE.MeshLambertMaterial( { map: finalRenderTarget, opacity: 0.2, side: THREE.BackSide, transparent: true } );
     var plane = new THREE.Mesh( planeGeometry, planeMaterial );
     plane.position.set(pos[0], 1, pos[2]);
     plane.rotation.set(rot[0], rot[1], pi);
     scene.add(plane);
+
+
 }
 
 function addRoofLayerOne() {
