@@ -20,6 +20,7 @@
     <script src="js/tschehelSotoun.js"></script>
 </head>
 <body>
+<jsp:include page="shader.jsp"/>
 <div id="canvas" style="z-index: 1; position: absolute; left:0px; top:0px"></div>
 </body>
 </html>

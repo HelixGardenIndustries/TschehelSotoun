@@ -24,3 +24,6 @@ const FLOOR_TEXTURE = 'img/groundTexture.png';
 const POND_TEXTURE = 'img/marble.png';
 const POND_GROUND_TEXTURE = 'img/marble_ground.png';
 const BOTTOM_TEXTURE_COLUMN_ROOF = 'img/bottomTextureColumnRoof.png';
+const CLOUD_TEXTURE = 'img/cloud.png';
+const WATER_TEXTURE = 'img/water.jpg';
+const LAVA_TEXTURE = 'img/lava.jpg';

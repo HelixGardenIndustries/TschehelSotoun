@@ -37,34 +37,34 @@ function addRoofLayerZero() {
     dim = [1000, 40, 1000];
     meshes.push(getCubeMeshDefSclDefRot(pos, dim));
 
-    var repeatX = [16,16,16,5,16,16];
-    var repeatY = [1,1,1,6,1,1];
+    var repeatX = [16, 16, 16, 5, 16, 16];
+    var repeatY = [1, 1, 1, 6, 1, 1];
     var textures = [a, a, a, b, a, a];
     addMeshesToSceneWithCustomTextureRepeating(meshes, textures, repeatX, repeatY);
 
 
 }
 
-function addPond(){
+function addPond() {
     var dim = [800, 1000, 10];
     addPondStructure();
     addPondReflection(dim);
 }
 
-function addPondStructure(dim){
-    var dim = [800, 10,10];
+function addPondStructure() {
+    var pos, rot, dim = [800, 10, 10];
     var sideLength = -850;
-    var pondYPosition = 1
+    var pondYPosition = 1;
 
     var meshes = [];
 
     pos = [10, pondYPosition, -350];
     meshes.push(getCubeMeshDefSclDefRot(pos, dim));
 
-    pos = [10, pondYPosition, -dim[0]-550];
+    pos = [10, pondYPosition, -dim[0] - 550];
     meshes.push(getCubeMeshDefSclDefRot(pos, dim));
 
-    dim = [1000, 10,10];
+    dim = [1000, 10, 10];
     rot = [0, pi / 2, pi];
     pos = [410, pondYPosition, sideLength];
     meshes.push(getCubeMeshDefScl(pos, dim, rot));
@@ -76,66 +76,77 @@ function addPondStructure(dim){
     addMeshesToSceneWithCustomTextureRepeating(meshes, POND_TEXTURE, 2, 1);
 
     // the pond ground
-    var planeGeometry = new THREE.BoxGeometry( 800, 1, 1000, 1 );
-    var planeMaterial = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture( POND_GROUND_TEXTURE ), color: 0xffffff, opacity: 1.0 } );
-    var plane = new THREE.Mesh( planeGeometry, planeMaterial );
-    plane.position.set(10, pondYPosition-5, pos[2]);
-    //plane.rotation.set(rot[0], rot[1], pi);
+    var planeGeometry = new THREE.BoxGeometry(800, 1, 1000, 1);
+    var planeMaterial = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(POND_GROUND_TEXTURE), color: 0xffffff, opacity: 1.0 });
+    var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    plane.position.set(10, pondYPosition - 5, pos[2]);
     scene.add(plane);
-
-
 }
 
-function addPondReflection(dim){
-    console.log(dim);
-    var meshes = [], pos, rot, reflectionCameraSize = 0;
-    pos = [1, 20, -850];
-    rot = [pi/2, 0,0];
-
-// create an array with six textures for a cool cube
-	// create an array with six textures for a cool cube
-    	var materialArray = [];
-    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
-    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
-    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
-    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
-    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
-    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
-    	var movingCubeMat = new THREE.MeshFaceMaterial(materialArray);
-    	var movingCubeGeom = new THREE.BoxGeometry( reflectionCameraSize, reflectionCameraSize, reflectionCameraSize, 1, 1, 1, materialArray );
-    	movingCube = new THREE.Mesh( movingCubeGeom, movingCubeMat );
-    	movingCube.position.set(0, 100, -300);
-    	movingCube.rotation.set(pi,0,0);
-    	scene.add( movingCube );
-
+function addMovingCube(reflectionCameraSize) {
+    // create an array with six textures for a cool cube
+    var materialArray = [];
+    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
+    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
+    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
+    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
+    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
+    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
+    var movingCubeMat = new THREE.MeshFaceMaterial(materialArray);
+    var movingCubeGeom = new THREE.BoxGeometry(reflectionCameraSize, reflectionCameraSize, reflectionCameraSize, 1, 1, 1, materialArray);
+    movingCube = new THREE.Mesh(movingCubeGeom, movingCubeMat);
+    movingCube.position.set(0, 100, -300);
+    movingCube.rotation.set(pi, 0, 0);
+    scene.add(movingCube);
+}
+function addIntermediaScene() {
     // intermediate scene.
     // this solves the problem of the mirrored texture by mirroring it again.
     // consists of a camera looking at a plane with the mirrored texture on it.
     screenScene = new THREE.Scene();
-
-    screenCamera = new THREE.OrthographicCamera(
-    window.innerWidth  / -2, window.innerWidth  /  2, window.innerHeight /  2, window.innerHeight / -2, -10000, 10000 );
+    screenCamera = new THREE.OrthographicCamera(window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, -10000, 10000);
     screenCamera.position.z = 1;
-    screenScene.add( screenCamera );
+    screenScene.add(screenCamera);
 
-    var screenGeometry = new THREE.PlaneGeometry( window.innerWidth, window.innerHeight );
-    firstRenderTarget = new THREE.WebGLRenderTarget( 512, 512, { format: THREE.RGBFormat } );
-    var screenMaterial = new THREE.MeshBasicMaterial( { map: firstRenderTarget, opacity: 0.5 } );
+    var screenGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
+    firstRenderTarget = new THREE.WebGLRenderTarget(512, 512, { format: THREE.RGBFormat });
+    var screenMaterial = new THREE.MeshBasicMaterial({ map: firstRenderTarget, transparent: true,  opacity: 1.0});
 
-    var quad = new THREE.Mesh( screenGeometry, screenMaterial );
+    var quad = new THREE.Mesh(screenGeometry, screenMaterial);
     // quad.rotation.x = Math.PI / 2;
-    screenScene.add( quad );
+    screenScene.add(quad);
+}
 
-    // final version of camera texture, used in scene.
-    var planeGeometry = new THREE.PlaneGeometry( dim[0], dim[1]);
-    finalRenderTarget = new THREE.WebGLRenderTarget( 512, 512, { format: THREE.RGBFormat } );
-    var planeMaterial = new THREE.MeshLambertMaterial( { map: finalRenderTarget, opacity: 0.2, side: THREE.BackSide, transparent: true } );
-    var plane = new THREE.Mesh( planeGeometry, planeMaterial );
-    plane.position.set(pos[0], 1, pos[2]);
-    plane.rotation.set(rot[0], rot[1], pi);
-    scene.add(plane);
+function addPondReflection(dim) {
+    var pos, rot, reflectionCameraSize = 0;
+    pos = [1, 20, -850];
+    rot = [pi / 2, 0, pi];
 
+    addMovingCube(reflectionCameraSize);
+    addIntermediaScene();
+    textureFromCamera = new THREE.WebGLRenderTarget(512, 512, { format: THREE.RGBFormat });
 
+    var waterTexture = new THREE.ImageUtils.loadTexture( WATER_TEXTURE );
+    waterTexture.wrapS = waterTexture.wrapT = THREE.RepeatWrapping;
+
+    // use "this." to create global object
+    this.waterUniforms = {
+        baseTexture: 	{ type: "t", value: textureFromCamera },
+        baseSpeed: 		{ type: "f", value: 0.1 },
+        noiseTexture: 	{ type: "t", value: waterTexture },
+        noiseScale:		{ type: "f", value: 0.2 },
+        alpha: 			{ type: "f", value: 0.2 },
+        time: 			{ type: "f", value: 1.0 }
+    };
+
+    // create custom material from the shader code above
+    //   that is within specially labeled script tags
+    var waterMaterial = new THREE.ShaderMaterial({uniforms: waterUniforms, vertexShader: document.getElementById('vertexShader').textContent, fragmentShader: document.getElementById('fragmentShader').textContent, side: THREE.BackSide, transparent: true});
+    // apply the material to a surface
+    var waterSurface = new THREE.Mesh( new THREE.PlaneGeometry( dim[0], dim[1] ), waterMaterial );
+    waterSurface.position.set(pos[0], 1, pos[2]);
+    waterSurface.rotation.set(rot[0], rot[1], rot[2]);
+    scene.add( waterSurface );
 }
 
 function addRoofLayerOne() {
