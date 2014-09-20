@@ -20,6 +20,10 @@
     <script src="js/tschehelSotoun.js"></script>
 </head>
 <body>
+<!-- http://www.lughertexture.com/vegetation-plants-textures/oak-tree-medium-texture-tree-png-with-alpha#joomimg -->
+<!-- http://stemkoski.github.io/Three.js/Shader-Animate.html-->
+<!-- http://stemkoski.github.io/Three.js/Camera-Texture.html-->
+<!-- http://www.goodtextures.com/ -->
 <jsp:include page="shader.jsp"/>
 <div id="canvas" style="z-index: 1; position: absolute; left:0px; top:0px"></div>
 </body>

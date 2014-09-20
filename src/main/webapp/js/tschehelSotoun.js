@@ -1,4 +1,5 @@
 function addMeshes() {
+    addTree();
     addFundamentPalace();
     addRoofColumns();
     addFence();
@@ -10,13 +11,59 @@ function addMeshes() {
     animate();
 }
 
+function addTree() {
+
+    var pos, treeMeshes, treeArray, dim, leftSideTreeXPositioningLimits, rightSideTreeXPositioningLimits, zPositionLimits, yPosition, i;
+    treeMeshes = [[],[],[],[],[],[],[],[]];
+    treeArray = [TREE001, TREE002, TREE003, TREE004, TREE005, TREE006, TREE007, TREE008];
+    dim = [200,200];
+    leftSideTreeXPositioningLimits = [750, 2000-dim[0]/2];
+    rightSideTreeXPositioningLimits = [-750, -1750-dim[0]/2];
+    zPositionLimits = [2000-dim[0]/2, -1700-dim[0]/2];
+    yPosition = dim[1]-109;
+
+    var leftSide = true;
+    for(i = 0; i < 200; i++){
+        var randomIndex = Math.floor(Math.random() * 8) + 1;
+        var randomXPosition = 0;
+        var randomZPosition =  getRandomIntFromInterval(zPositionLimits[0], zPositionLimits[1]);
+        // 0: left, 1: right
+        if(leftSide){
+            randomXPosition =  getRandomIntFromInterval(leftSideTreeXPositioningLimits[0], leftSideTreeXPositioningLimits[1]);
+        }else{
+            randomXPosition =  getRandomIntFromInterval(rightSideTreeXPositioningLimits[0], rightSideTreeXPositioningLimits[1]);
+        }
+
+        pos = [randomXPosition, yPosition, randomZPosition];
+
+        treeMeshes[randomIndex-1] = getTree(treeMeshes[randomIndex-1], dim, pos);
+        leftSide = !leftSide;
+    }
+    for(i = 0; i < treeMeshes.length; i++){
+        addMeshesToSceneWithDefaultTextureRepeating(treeMeshes[i], treeArray[i], 1, 1);
+    }
+}
+
+function getRandomIntFromInterval(min,max)
+{
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+function getTree(meshes, dim, pos){
+    var rot = [0,-pi/2,0];
+    meshes.push(getCubeMeshDefSclDefRep(pos, dim, rot));
+    rot = [0,0,0];
+    meshes.push(getCubeMeshDefSclDefRep(pos, dim, rot));
+    return meshes;
+}
+
 function addFundamentPalace() {
     var meshes = [], pos, dim;
 
     pos = [0, 1, 500];
     dim = [1000, 10, 1000];
     meshes.push(getCubeMeshDefSclDefRot(pos, dim));
-    addMeshesToSceneWithCustomTextureRepeating(meshes, FLOOR_TEXTURE, 8, 8)
+    addMeshesToSceneWithCustomTextureRepeating(meshes, FLOOR_TEXTURE, 8, 8);
 }
 
 function addRoof() {
@@ -41,8 +88,6 @@ function addRoofLayerZero() {
     var repeatY = [1, 1, 1, 6, 1, 1];
     var textures = [a, a, a, b, a, a];
     addMeshesToSceneWithCustomTextureRepeating(meshes, textures, repeatX, repeatY);
-
-
 }
 
 function addPond() {
@@ -135,7 +180,7 @@ function addPondReflection(dim) {
         baseSpeed: 		{ type: "f", value: 0.1 },
         noiseTexture: 	{ type: "t", value: waterTexture },
         noiseScale:		{ type: "f", value: 0.2 },
-        alpha: 			{ type: "f", value: 0.2 },
+        alpha: 			{ type: "f", value: 0.3 },
         time: 			{ type: "f", value: 1.0 }
     };
 
