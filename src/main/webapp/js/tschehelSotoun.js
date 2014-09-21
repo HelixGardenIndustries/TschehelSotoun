@@ -22,22 +22,20 @@ function addTree() {
     zPositionLimits = [2000-dim[0]/2, -1700-dim[0]/2];
     yPosition = dim[1]-109;
 
-    var leftSide = true;
     for(i = 0; i < 200; i++){
-        var randomIndex = Math.floor(Math.random() * 8) + 1;
+        var randomSide = getRandomIntFromInterval(0,1);
+        var randomIndex = getRandomIntFromInterval(0, treeArray.length-1);
         var randomXPosition = 0;
         var randomZPosition =  getRandomIntFromInterval(zPositionLimits[0], zPositionLimits[1]);
-        // 0: left, 1: right
-        if(leftSide){
+
+        if(randomSide == 0){
             randomXPosition =  getRandomIntFromInterval(leftSideTreeXPositioningLimits[0], leftSideTreeXPositioningLimits[1]);
         }else{
             randomXPosition =  getRandomIntFromInterval(rightSideTreeXPositioningLimits[0], rightSideTreeXPositioningLimits[1]);
         }
 
         pos = [randomXPosition, yPosition, randomZPosition];
-
-        treeMeshes[randomIndex-1] = getTree(treeMeshes[randomIndex-1], dim, pos);
-        leftSide = !leftSide;
+        treeMeshes[randomIndex-1] = getTree(treeMeshes[randomIndex], dim, pos);
     }
     for(i = 0; i < treeMeshes.length; i++){
         addMeshesToSceneWithDefaultTextureRepeating(treeMeshes[i], treeArray[i], 1, 1);
