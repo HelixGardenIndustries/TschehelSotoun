@@ -1,5 +1,5 @@
 function addMeshes() {
-    //addTree();
+    ///addTree();
     addFundamentPalace();
     addRoofColumns();
     addFence();
