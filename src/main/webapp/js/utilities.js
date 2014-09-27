@@ -63,26 +63,75 @@ function getMaterialForCubeWithCustomRepeating(textureName, repeatX, repeatY) {
     if(materials.length > 0){
         return new THREE.MeshFaceMaterial(materials);
     }else{
-        alert("Materials has size 0");
+        alert("Materials has size 0!");
+    }
+}
+function getMaterialForCubeWithCustomRepeating2(textureName, repeatX, repeatY) {
+
+    var textureNames = [];
+    var repeatXs = [];
+    var repeatYs = [];
+    var materials = [];
+
+    if(isVariableOfTypeArray(textureName)){
+        if(textureName.length != 6){
+            alert("Array must have length of 6!");
+            return;
+        }
+        textureNames = textureName;
+        repeatXs = repeatX;
+        repeatYs = repeatY;
+    }else{
+        for(var i = 0; i < 6; i++){
+            textureNames[i] = textureName;
+            repeatXs[i] = repeatX;
+            repeatYs[i] = repeatY;
+        }
+    }
+
+    for(var i = 0; i < textureNames.length; i++){
+        materials[i] = getMeshLambertMaterial2(textureNames[i], repeatXs[i], repeatYs[i]);
+    }
+
+    if(materials.length > 0){
+        return new THREE.MeshFaceMaterial(materials);
+    }else{
+        alert("Materials has size 0!");
     }
 }
 
 function getMeshLambertMaterial(textureName, repeatX, repeatY){
-    return new getMeshLambertMaterialWithOpacity(textureName, repeatX, repeatY, 1.0)
+    return getMeshLambertMaterialWithOpacity(textureName, repeatX, repeatY, 1.0)
+}
+
+function getMeshLambertMaterial2(textureName, repeatX, repeatY){
+    return getMeshLambertMaterialWithOpacity2(textureName, repeatX, repeatY, 1.0)
 }
 
 function getMeshLambertMaterialWithOpacity(textureName, repeatX, repeatY, opacity){
-    var floorTexture = THREE.ImageUtils.loadTexture(textureName);
-    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-    floorTexture.repeat.set(repeatX, repeatY);
-    return new THREE.MeshLambertMaterial({map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF});
+    var texture = THREE.ImageUtils.loadTexture(textureName);
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(repeatX, repeatY);
+    return new THREE.MeshLambertMaterial({map: texture, transparent: true, opacity: opacity, color: 0xFFFFFF});
 }
 
-function getPlaneMesh(pos, dim, rot){
+
+function getMeshLambertMaterialWithOpacity2(textureName, repeatX, repeatY, opacity){
+    var texture = THREE.ImageUtils.loadTexture(textureName);
+    texture.repeat.set(repeatX, repeatY);
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    return new THREE.MeshLambertMaterial({map: texture, transparent: true, opacity: opacity, color: 0xFFFFFF});
+}
+
+function getPlaneMeshWithDefaultScaling(pos, dim, rot){
     var mesh = new THREE.Mesh(new THREE.PlaneGeometry(dim[0], dim[1]));
     mesh.position.set(pos[0], pos[1], pos[2]);
     mesh.rotation.set(rot[0], rot[1], rot[2]);
     return mesh;
+}
+
+function getPlaneMeshWithDefaultRotation(pos, dim){
+    return getPlaneMeshWithDefaultScaling(pos, dim, getDefaultRotating());
 }
 
 function isVariableOfTypeArray(x){
@@ -140,10 +189,23 @@ function addMeshesToSceneWithDefaultTextureRepeating(meshes, textureName) {
     addMeshesToSceneWithCustomTextureRepeating(meshes, textureName, 1, 1);
 }
 
+function addMeshesToSceneWithDefaultTextureRepeating2(meshes, textureName) {
+    addMeshesToSceneWithCustomTextureRepeating2(meshes, textureName, 1, 1);
+}
+
 function addMeshesToSceneWithCustomTextureRepeating(meshes, textureName, repeatX, repeatY) {
 
     var mergedGeo = getMergeParent();
     var material = getMaterialForCubeWithCustomRepeating(textureName, repeatX, repeatY);
+    for (var i = 0; i < meshes.length; i++) {
+        mergedGeo = addMeshToMergeParent(mergedGeo, meshes[i]);
+    }
+    addMergedGeoToScene(mergedGeo, material);
+}
+function addMeshesToSceneWithCustomTextureRepeating2(meshes, textureName, repeatX, repeatY) {
+
+    var mergedGeo = getMergeParent();
+    var material = getMaterialForCubeWithCustomRepeating2(textureName, repeatX, repeatY);
     for (var i = 0; i < meshes.length; i++) {
         mergedGeo = addMeshToMergeParent(mergedGeo, meshes[i]);
     }

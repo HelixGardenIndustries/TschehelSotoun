@@ -13,6 +13,10 @@ var clock = new THREE.Clock();
 var configurationArray;
 var waterUniforms;
 var showAndMoveCameraCube = false;
+var treeContainer;
+var tree;
+var tweenScale,tweenRot, tweenScaleBack,tweenRotBack, sphereTween;
+var treeRotGoal = Math.random()*360;
 
 
 // custom global variables
@@ -67,6 +71,7 @@ function init(cfgArray) {
     scene.add(textureCamera);
 
     renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    renderer.sortObjects = false
     container = document.getElementById('canvas');
     container.appendChild(renderer.domElement);
     // EVENTS

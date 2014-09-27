@@ -14,8 +14,10 @@
     <script src="js/lib/THREEx.KeyboardState.js"></script>
     <script src="js/lib/THREEx.Fullscreen.js"></script>
     <script src="js/lib/THREEx.WindowResize.js"></script>
-    <script src="js/lib/init.js"></script>
     <script src="js/constants.js"></script>
+    <script src="js/lib/tween.js"></script>
+    <script src="js/lib/tree.js"></script>
+    <script src="js/init.js"></script>
     <script src="js/utilities.js"></script>
     <script src="js/tschehelSotoun.js"></script>
 </head>

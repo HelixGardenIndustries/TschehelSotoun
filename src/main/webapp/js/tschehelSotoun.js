@@ -1,5 +1,5 @@
 function addMeshes() {
-    addTree();
+    //addTree();
     addFundamentPalace();
     addRoofColumns();
     addFence();
@@ -8,6 +8,7 @@ function addMeshes() {
     addRoof();
     addStairsFundament();
     addPond();
+    addPavement();
     animate();
 }
 
@@ -16,13 +17,14 @@ function addTree() {
     var pos, treeMeshes, treeArray, dim, leftSideTreeXPositioningLimits, rightSideTreeXPositioningLimits, zPositionLimits, yPosition, i;
     treeMeshes = [[],[],[],[],[],[],[],[]];
     treeArray = [TREE001, TREE002, TREE003, TREE004, TREE005, TREE006, TREE007, TREE008];
-    dim = [200,200];
+    dim = [250,250];
     leftSideTreeXPositioningLimits = [750, 2000-dim[0]/2];
     rightSideTreeXPositioningLimits = [-750, -1750-dim[0]/2];
     zPositionLimits = [2000-dim[0]/2, -1700-dim[0]/2];
     yPosition = dim[1]-109;
 
-    for(i = 0; i < 200; i++){
+
+    for(i = 0; i < 250; i++){
         var randomSide = getRandomIntFromInterval(0,1);
         var randomIndex = getRandomIntFromInterval(0, treeArray.length-1);
         var randomXPosition = 0;
@@ -35,22 +37,23 @@ function addTree() {
         }
 
         pos = [randomXPosition, yPosition, randomZPosition];
-        treeMeshes[randomIndex-1] = getTree(treeMeshes[randomIndex], dim, pos);
+        treeMeshes[randomIndex] = getTree(treeMeshes[randomIndex], dim, pos);
     }
+
     for(i = 0; i < treeMeshes.length; i++){
         addMeshesToSceneWithDefaultTextureRepeating(treeMeshes[i], treeArray[i], 1, 1);
     }
 }
 
-function getRandomIntFromInterval(min,max)
-{
+function getRandomIntFromInterval(min,max){
     return Math.floor(Math.random()*(max-min+1)+min);
 }
 
 function getTree(meshes, dim, pos){
-    var rot = [0,-pi/2,0];
+
+    var rot = [0,0,0];
     meshes.push(getCubeMeshDefSclDefRep(pos, dim, rot));
-    rot = [0,0,0];
+    rot = [0,-pi/2,0];
     meshes.push(getCubeMeshDefSclDefRep(pos, dim, rot));
     return meshes;
 }
@@ -90,47 +93,57 @@ function addRoofLayerZero() {
 
 function addPond() {
     var dim = [800, 1000, 10];
-    addPondStructure();
+    var pondDimensions = [800, 2000];
+    addPondStructure(pondDimensions);
     addPondReflection(dim);
 }
 
-function addPondStructure() {
-    var pos, rot, dim = [800, 10, 10];
+function addPavement(){
+    var meshes = [];
+    var dim = [2550, 1200];
+    var pos = [10, -3, -200];
+    var rot = [-pi/2, 0, -pi/2];
+    meshes.push(getPlaneMeshWithDefaultScaling(pos, dim, rot));
+    addMeshesToSceneWithCustomTextureRepeating(meshes, PAVEMENT, 8, 8);
+}
+
+function addPondStructure(pondDimensions) {
+    var pos, rot, dim = [810, 10, 10];
     var sideLength = -850;
     var pondYPosition = 1;
 
     var meshes = [];
 
+    // pond wall front
     pos = [10, pondYPosition, -350];
     meshes.push(getCubeMeshDefSclDefRot(pos, dim));
 
-    pos = [10, pondYPosition, -dim[0] - 550];
+    // pond wall back
+    pos = [10, pondYPosition, -dim[0] - 540];
     meshes.push(getCubeMeshDefSclDefRot(pos, dim));
 
+    // left pond wall
     dim = [1000, 10, 10];
     rot = [0, pi / 2, pi];
     pos = [410, pondYPosition, sideLength];
     meshes.push(getCubeMeshDefScl(pos, dim, rot));
 
-    // the pond wall in the back
+    // right pond wall
     pos = [-390, pondYPosition, sideLength];
     meshes.push(getCubeMeshDefScl(pos, dim, rot));
 
-    addMeshesToSceneWithCustomTextureRepeating(meshes, POND_TEXTURE, 2, 1);
+    addMeshesToSceneWithCustomTextureRepeating(meshes, POND_TEXTURE_SIDE, 12, 1);
 
     // the pond ground
     var planeGeometry = new THREE.BoxGeometry(800, 1, 1000, 1);
-    var planeMaterial = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(POND_GROUND_TEXTURE), color: 0xffffff, opacity: 1.0 });
+    var planeMaterial = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(POND_TEXTURE), color: 0xffffff, opacity: 1.0 });
     var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.position.set(10, pondYPosition - 5, pos[2]);
+    plane.position.set(10, pondYPosition - 2, pos[2]);
     scene.add(plane);
 }
 
 function addMovingCube(reflectionCameraSize) {
-    // create an array with six textures for a cool cube
-    var materialArray = [];
-    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
-    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
+    // create an array with six textures for a cool cubepng') }));
     materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
     materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
     materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
@@ -142,7 +155,11 @@ function addMovingCube(reflectionCameraSize) {
     movingCube.rotation.set(pi, 0, 0);
     scene.add(movingCube);
 }
-function addIntermediaScene() {
+    var materialArray = [];
+    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
+    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
+
+    function addIntermediaScene() {
     // intermediate scene.
     // this solves the problem of the mirrored texture by mirroring it again.
     // consists of a camera looking at a plane with the mirrored texture on it.
