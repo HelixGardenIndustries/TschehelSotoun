@@ -12,6 +12,12 @@ var configurationArray;
 var waterUniforms;
 var showAndMoveCameraCube = false;
 var mesh;
+var pointLights = [];
+var lightBulbs = [];
+var add = true;
+var animateLight = false;
+var lightPositionsZ;
+var lightColors;
 
 window.onload = function () {
     // Show the gridline with filled color or not
@@ -165,24 +171,30 @@ function update() {
     if (configurationArray.showStats) {
         stats.update();
     }
+
+    //movePointLights();
+}
+function renderMainScene() {
+    renderer.render(scene, camera);
 }
 
-function render() {
+function addReflectionTexture() {
     // textureCamera is located at the position of movingCube
-    //   (and therefore is contained within it)
+    // (and therefore is contained within it)
     // Thus, we temporarily hide movingCube
-    //    so that it does not obscure the view from the camera.
+    //  so that it does not obscure the view from the camera.
     movingCube.visible = false;
     // put the result of textureCamera into the first texture.
     renderer.render(scene, textureCamera, firstRenderTarget, true);
     movingCube.visible = true;
-
     // slight problem: texture is mirrored.
-    //    solve problem by rendering (and hence mirroring) the texture again
-
+    // solve problem by rendering (and hence mirroring) the texture again
     // render another scene containing just a quad with the texture
-    //    and put the result into the final texture
+    // and put the result into the final texture
     renderer.render(screenScene, screenCamera, textureFromCamera, true);
+}
 
-    renderer.render(scene, camera);
+function render() {
+    addReflectionTexture();
+    renderMainScene();
 }
