@@ -1,5 +1,4 @@
 function addMeshes() {
-    ///addTree();
     addFundamentPalace();
     addRoofColumns();
     addFence();
@@ -9,7 +8,39 @@ function addMeshes() {
     addStairsFundament();
     addPond();
     addPavement();
+    addAmbientlight();
+    addGround();
+    addPointLights();
     animate();
+}
+
+function addPointLights(){
+    var sphere = new THREE.SphereGeometry( 100, 256, 256);
+    var light1 = new THREE.PointLight( 0xff0040, 2, 50 );
+    light1.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xff0040 } ) ) );
+    scene.add( light1 );
+}
+
+function addGround(){
+
+    // FLOOR
+    var floorTexture = new THREE.ImageUtils.loadTexture(configurationArray.groundTexture);
+    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+    floorTexture.repeat.set(10, 10);
+    var floorMaterial = new THREE.MeshLambertMaterial({ map: floorTexture, side: THREE.BackSide });
+    var floorGeometry = new THREE.PlaneGeometry(configurationArray.planeWidth, configurationArray.planeHeight, 10, 10);
+    var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.position.y = -6;
+    floor.rotation.x = Math.PI / 2;
+    scene.add(floor);
+}
+
+function addAmbientlight(){
+    // LIGHT
+    var light = new THREE.AmbientLight(0xffffff);
+    //var light = new THREE.AmbientLight(0x000000);
+    light.position.set(45, 500, -63);
+    scene.add(light);
 }
 
 function addTree() {

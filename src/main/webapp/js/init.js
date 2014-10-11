@@ -4,22 +4,13 @@
  Date: July 2013 (three.js v59dev)
  */
 
-// MAIN
-
 // standard global variables
-var container, scene, camera, mirrorCube, mirrorCubeCamera, renderer, controls, stats, cube, textureCamera, initialTranslate = true;
+var container, scene, camera, renderer, controls, stats, textureCamera;
 var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
 var configurationArray;
 var waterUniforms;
 var showAndMoveCameraCube = false;
-var treeContainer;
-var tree;
-var tweenScale,tweenRot, tweenScaleBack,tweenRotBack, sphereTween;
-var treeRotGoal = Math.random()*360;
-
-
-// custom global variables
 var mesh;
 
 window.onload = function () {
@@ -42,9 +33,7 @@ window.onload = function () {
     cameraPos.Z = -1200;
 
     initArray.cameraPos = cameraPos;
-
     init(initArray);
-
     addMeshes();
 }
 
@@ -81,20 +70,6 @@ function init(cfgArray) {
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     showStats();
 
-    // LIGHT
-    var light = new THREE.AmbientLight(0xffffff);
-    light.position.set(45, 500, -63);
-    scene.add(light);
-    // FLOOR
-    var floorTexture = new THREE.ImageUtils.loadTexture(configurationArray.groundTexture);
-    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-    floorTexture.repeat.set(10, 10);
-    var floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture, side: THREE.DoubleSide });
-    var floorGeometry = new THREE.PlaneGeometry(configurationArray.planeWidth, configurationArray.planeHeight, 10, 10);
-    var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    floor.position.y = -5;
-    floor.rotation.x = Math.PI / 2;
-    scene.add(floor);
     // SKYBOX
     var skyBoxGeometry = new THREE.BoxGeometry(10000, 10000, 10000);
     var skyBoxMaterial = new THREE.MeshBasicMaterial({ color: parseInt(configurationArray.skyboxColor, 16), side: THREE.BackSide });

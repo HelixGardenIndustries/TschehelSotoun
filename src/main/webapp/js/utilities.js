@@ -40,7 +40,7 @@ function getMaterialForCubeWithCustomRepeating(textureName, repeatX, repeatY) {
     var repeatYs = [];
     var materials = [];
 
-    if(isVariableOfTypeArray(textureName)){
+    if(isArray(textureName)){
         if(textureName.length != 6){
             alert("Array must have length of 6!");
             return;
@@ -73,7 +73,7 @@ function getMaterialForCubeWithCustomRepeating2(textureName, repeatX, repeatY) {
     var repeatYs = [];
     var materials = [];
 
-    if(isVariableOfTypeArray(textureName)){
+    if(isArray(textureName)){
         if(textureName.length != 6){
             alert("Array must have length of 6!");
             return;
@@ -104,22 +104,10 @@ function getMeshLambertMaterial(textureName, repeatX, repeatY){
     return getMeshLambertMaterialWithOpacity(textureName, repeatX, repeatY, 1.0)
 }
 
-function getMeshLambertMaterial2(textureName, repeatX, repeatY){
-    return getMeshLambertMaterialWithOpacity2(textureName, repeatX, repeatY, 1.0)
-}
-
 function getMeshLambertMaterialWithOpacity(textureName, repeatX, repeatY, opacity){
     var texture = THREE.ImageUtils.loadTexture(textureName);
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set(repeatX, repeatY);
-    return new THREE.MeshLambertMaterial({map: texture, transparent: true, opacity: opacity, color: 0xFFFFFF});
-}
-
-
-function getMeshLambertMaterialWithOpacity2(textureName, repeatX, repeatY, opacity){
-    var texture = THREE.ImageUtils.loadTexture(textureName);
-    texture.repeat.set(repeatX, repeatY);
-    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
     return new THREE.MeshLambertMaterial({map: texture, transparent: true, opacity: opacity, color: 0xFFFFFF});
 }
 
@@ -134,7 +122,7 @@ function getPlaneMeshWithDefaultRotation(pos, dim){
     return getPlaneMeshWithDefaultScaling(pos, dim, getDefaultRotating());
 }
 
-function isVariableOfTypeArray(x){
+function isArray(x){
     return Object.prototype.toString.call( x ) === '[object Array]';
 }
 
