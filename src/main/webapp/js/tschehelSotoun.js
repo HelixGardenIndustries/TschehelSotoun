@@ -10,107 +10,85 @@ function addMeshes() {
     addStairsFundament();
     addPavement();
     addAmbientlight();
-    addPointLights();
+    addSpotLight();
     addArrowKeyHandler();
     animate();
 }
 
+function addSpotLight(){
+    ////////////
+    // CUSTOM //
+    ////////////
+
+    // must enable shadows on the renderer
+    renderer.shadowMapEnabled = true;
+
+    // "shadow cameras" show the light source and direction
+
+    // spotlight #1 -- yellow, dark shadow
+    light = new THREE.SpotLight(0xffff00);
+    light.lookAt(1000, 200, 0);
+    light.position.set(0,150,-1060);
+    light.shadowCameraVisible = true;
+    light.shadowDarkness = 0.95;
+    light.intensity = 1000;
+    light.distance = 2150;
+    // must enable shadow casting ability for the light
+    light.castShadow = true;
+    scene.add(light);
+
+    // create "light-ball" meshes
+    var sphereGeometry = new THREE.SphereGeometry( 10, 16, 8 );
+    var darkMaterial = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+    var wireframeMaterial = new THREE.MeshBasicMaterial(
+        { color: 0xffff00, wireframe: true, transparent: true } );
+
+    var shape = THREE.SceneUtils.createMultiMaterialObject(
+        sphereGeometry, [ darkMaterial, wireframeMaterial ] );
+    shape.position.set(0, 50,0);
+    shape.position = light.position;
+    scene.add( shape );
+
+ }
 
 function getLight(lightColor) {
     var light = new THREE.PointLight(lightColor, 55, 450);
     return light;
 }
-function addPointLights() {
-
-    var posX = 800;
-    var posY = 300;
-
-    lightPositionsZ = [200, -300, -800, -1300, 200, -300, -800, -1300];
-    lightColors = [0xff0000, 0x00ff00, 0xf0f0f0, 0x0000ff, 0x0000ff, 0xff0000, 0x00ff00, 0xf0f0f0];
-
-    for(var i = 0; i < lightPositionsZ.length; i++){
-        var light = getLight(lightColors[i]);
-        var light2 = getLight(lightColors[i]);
-        light.position.set(posX, posY, lightPositionsZ[i]);
-        scene.add(light);
-    }
-}
 
 function addArrowKeyHandler() {
     var moveOffset = 10;
-    var instensityOffset = 1;
+    var instensityOffset = 10;
     var distanceOffset = 50;
-    var pl = pointLights[0];
-    var lb = lightBulbs[0];
     document.onkeydown = function (e) {
         switch (e.keyCode) {
             case 37:
-                pl.position.x = pl.position.x + moveOffset;
-                lb.position.x = lb.position.x + moveOffset;
-                console.log('left', lb.position.x);
+                light.position.x = light.position.x + moveOffset;
                 break;
             case 38:
-                pl.position.z = pl.position.z - moveOffset;
-                lb.position.z = lb.position.z - moveOffset;
-                console.log('up', lb.position.z);
+                light.position.z = light.position.z - moveOffset;
                 break;
             case 39:
-                pl.position.x = pl.position.x - moveOffset;
-                lb.position.x = lb.position.x - moveOffset;
-                console.log('right', lb.position.x);
+                light.position.x = light.position.x - moveOffset;
                 break;
             case 40:
-                pl.position.z = pl.position.z + moveOffset;
-                lb.position.z = lb.position.z + moveOffset;
-                console.log('down', lb.position.z);
+                light.position.z = light.position.z + moveOffset;
                 break;
             case 49:
-                console.log("decrease intensity");
-                pl.intensity = pl.intensity - instensityOffset;
+                light.intensity = light.intensity - instensityOffset;
                 break;
             case 50:
-                console.log("increase intensity");
-                pl.intensity = pl.intensity + instensityOffset;
+                light.intensity = light.intensity + instensityOffset;
                 break;
             case 51:
-                console.log("decrease distance");
-                for(var i = 0; i < pointLights.length; i++){
-                    pointLights[i].distance = pointLights[i].distance - distanceOffset;
-                }
+                light.distance = light.distance - distanceOffset;
                 break;
             case 52:
-                console.log("increase distance");
-                pl.distance = pl.distance + distanceOffset;
-                for(var i = 0; i < pointLights.length; i++){
-                    pointLights[i].distance = pointLights[i].distance + distanceOffset;
-                }
+                light.distance = light.distance + distanceOffset;
                 break;
         }
+        console.log("X: " + light.position.x, "Y: " + light.position.y, "Z: " + light.position.z, "I: " + light.intensity, "D: " + light.distance);
     };
-}
-
-function movePointLights() {
-    if (animateLight) {
-        var x = pointLights[0].position.x;
-        var offset = 10;
-
-        if (x == 1400) {
-            add = false;
-        }
-
-        if (x == -1400) {
-            add = true;
-        }
-        console.log(lightBulbs[0]);
-        console.log(pointLights[0]);
-        if (add) {
-            pointLights[0].position.x = pointLights[0].position.x + offset;
-            lightBulbs[0].position.x = lightBulbs[0].position.x + offset;
-        } else {
-            pointLights[0].position.x = pointLights[0].position.x - offset;
-            lightBulbs[0].position.x = lightBulbs[0].position.x - offset;
-        }
-    }
 }
 
 function addGround() {
@@ -124,9 +102,8 @@ function addGround() {
 }
 
 function addAmbientlight() {
-    // LIGHT
     var light = new THREE.AmbientLight(0xffffff);
-        light.position.set(45, 500, -63);
+    light.position.set(45, 500, -63);
     scene.add(light);
 }
 

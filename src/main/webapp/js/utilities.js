@@ -75,7 +75,16 @@ function getMeshPhongMaterialWithColor(textureName, repeatX, repeatY, color) {
     var texture = THREE.ImageUtils.loadTexture(textureName);
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set(repeatX, repeatY);
-    return new THREE.MeshPhongMaterial({map: texture, transparent: false, opacity: 1.0, color: color});
+    return getMeshPhongMaterial(texture, color);
+}
+
+function getMeshMaterial() {
+    return getMeshPhongMaterial("", 0xffffff);
+}
+
+function getMeshPhongMaterial(texture, color){
+    return new THREE.MeshPhongMaterial({map: texture, color: color});
+    //return new THREE.MeshPhongMaterial({map: texture, color: color, transparent: false, side: THREE.FrontSide});
 }
 
 function getPlaneMeshWithDefaultScaling(pos, dim, rot) {
@@ -93,7 +102,7 @@ function getMergeParent() {
     return new THREE.Geometry();
 }
 
-function getCubeMesh(position, dimension, rotation, scaling) {
+function    getCubeMesh(position, dimension, rotation, scaling) {
     // the column on the frustum
     var geometry = new THREE.BoxGeometry(dimension[0], dimension[1], dimension[2], 1, 1, 1);
     var mesh = new THREE.Mesh(geometry, getMeshMaterial());
@@ -123,9 +132,7 @@ function addPyramideShape(position, rotation, scaling, radiusTop, radiusBottom, 
     return mesh;
 }
 
-function getMeshMaterial() {
-    return new THREE.MeshPhongMaterial({color: 0xffffff, transparent: false, side: THREE.FrontSide});
-}
+
 
 function getPyramideMeshDefSclDefRep(pos, rot, radiusTop, radiusBottom, height) {
     return getPyramideMeshDefScl(pos, rot, radiusTop, radiusBottom, height);

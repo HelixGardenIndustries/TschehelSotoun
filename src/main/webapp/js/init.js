@@ -12,12 +12,9 @@ var configurationArray;
 var waterUniforms;
 var showAndMoveCameraCube = false;
 var mesh;
-var pointLights = [];
-var lightBulbs = [];
 var add = true;
 var animateLight = false;
-var lightPositionsZ;
-var lightColors;
+var light;
 
 window.onload = function () {
     // Show the gridline with filled color or not
