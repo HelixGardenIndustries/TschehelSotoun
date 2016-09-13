@@ -40,106 +40,84 @@ function getMaterialForCubeWithCustomRepeating(textureName, repeatX, repeatY) {
     var repeatYs = [];
     var materials = [];
 
-    if (isArray(textureName)) {
-        if (textureName.length != 6) {
+    if(isVariableOfTypeArray(textureName)){
+        if(textureName.length != 6){
             alert("Array must have length of 6!");
             return;
         }
         textureNames = textureName;
         repeatXs = repeatX;
         repeatYs = repeatY;
-    } else {
-        for (var i = 0; i < 6; i++) {
+    }else{
+        for(var i = 0; i < 6; i++){
             textureNames[i] = textureName;
             repeatXs[i] = repeatX;
             repeatYs[i] = repeatY;
         }
     }
 
-    for (var i = 0; i < textureNames.length; i++) {
-        materials[i] = getMeshPhongMaterialWithDefaultColor(textureNames[i], repeatXs[i], repeatYs[i]);
+    for(var i = 0; i < textureNames.length; i++){
+        materials[i] = getMeshLambertMaterial(textureNames[i], repeatXs[i], repeatYs[i]);
     }
 
-    if (materials.length > 0) {
+    if(materials.length > 0){
         return new THREE.MeshFaceMaterial(materials);
-    } else {
-        alert("Materials has size 0!");
+    }else{
+        alert("Materials has size 0");
     }
 }
 
-function getMeshPhongMaterialWithDefaultColor(textureName, repeatX, repeatY) {
-    return getMeshPhongMaterialWithColor(textureName, repeatX, repeatY, "ffffff");
+function getMeshLambertMaterial(textureName, repeatX, repeatY){
+    return new getMeshLambertMaterialWithOpacity(textureName, repeatX, repeatY, 1.0)
 }
 
-function getMeshPhongMaterialWithColor(textureName, repeatX, repeatY, color) {
-    var texture = THREE.ImageUtils.loadTexture(textureName);
-    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(repeatX, repeatY);
-    return getMeshPhongMaterial(texture, color);
+function getMeshLambertMaterialWithOpacity(textureName, repeatX, repeatY, opacity){
+    var floorTexture = THREE.ImageUtils.loadTexture(textureName);
+    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+    floorTexture.repeat.set(repeatX, repeatY);
+    return new THREE.MeshLambertMaterial({map: floorTexture, transparent: true, opacity: 1.0, color: 0xFFFFFF});
 }
 
-function getMeshMaterial() {
-    return getMeshPhongMaterial("", 0xffffff);
-}
-
-function getMeshPhongMaterial(texture, color){
-    return new THREE.MeshPhongMaterial({map: texture, color: color});
-    //return new THREE.MeshPhongMaterial({map: texture, color: color, transparent: false, side: THREE.FrontSide});
-}
-
-function getPlaneMeshWithDefaultScaling(pos, dim, rot) {
+function getPlaneMesh(pos, dim, rot){
     var mesh = new THREE.Mesh(new THREE.PlaneGeometry(dim[0], dim[1]));
     mesh.position.set(pos[0], pos[1], pos[2]);
     mesh.rotation.set(rot[0], rot[1], rot[2]);
     return mesh;
 }
 
-function isArray(x) {
-    return Object.prototype.toString.call(x) === '[object Array]';
+function isVariableOfTypeArray(x){
+    return Object.prototype.toString.call( x ) === '[object Array]';
 }
 
 function getMergeParent() {
     return new THREE.Geometry();
 }
 
-function    getCubeMesh(position, dimension, rotation, scaling) {
+
+function getCubeMeshWithTexture(position, dimension, rotation, scaling) {
     // the column on the frustum
-    var geometry = new THREE.BoxGeometry(dimension[0], dimension[1], dimension[2], 1, 1, 1);
-    var mesh = new THREE.Mesh(geometry, getMeshMaterial());
+    var mesh = new THREE.Mesh(new THREE.BoxGeometry(dimension[0], dimension[1], dimension[2], 1, 1, 1), new THREE.MeshNormalMaterial());
     mesh.position.set(position[0], position[1], position[2]);
     mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
     mesh.scale.set(scaling[0], scaling[1], scaling[2]);
     return mesh;
 }
 
-function getSphereMesh(radius, position, rotation, scaling, color) {
+function addPyramideShapeWithTexture(position, rotation, scaling, radiusTop, radiusBottom, height) {
     // the column on the frustum
-    var geometry = new THREE.SphereGeometry(radius, 10, 10, 10, 10, 10);
-    var mesh = new THREE.Mesh(geometry, getMeshPhongMaterialWithColor(GROUND_TEXTURE, 1, 1, color));
+    var mesh = new THREE.Mesh(new THREE.CylinderGeometry(radiusTop, radiusBottom, height, 4, 4), new THREE.MeshNormalMaterial());
     mesh.position.set(position[0], position[1], position[2]);
     mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
     mesh.scale.set(scaling[0], scaling[1], scaling[2]);
     return mesh;
 }
-
-
-function addPyramideShape(position, rotation, scaling, radiusTop, radiusBottom, height) {
-    var cylinderGeometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, 4, 4);
-    var mesh = new THREE.Mesh(cylinderGeometry, getMeshMaterial());
-    mesh.position.set(position[0], position[1], position[2]);
-    mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
-    mesh.scale.set(scaling[0], scaling[1], scaling[2]);
-    return mesh;
-}
-
-
 
 function getPyramideMeshDefSclDefRep(pos, rot, radiusTop, radiusBottom, height) {
     return getPyramideMeshDefScl(pos, rot, radiusTop, radiusBottom, height);
 }
 
 function getPyramideMeshDefScl(pos, rot, radiusTop, radiusBottom, height) {
-    return addPyramideShape(pos, rot, getDefaultScaling(), radiusTop, radiusBottom, height)
+    return addPyramideShapeWithTexture(pos, rot, getDefaultScaling(), radiusTop, radiusBottom, height)
 }
 
 function getCubeMeshDefSclDefRotDefRep(pos, dim) {
@@ -150,20 +128,12 @@ function getCubeMeshDefSclDefRot(pos, dim) {
     return getCubeMeshDefScl(pos, dim, getDefaultRotating());
 }
 
-function getSphereMeshDefSclDefRot(radius, pos, dim, color) {
-    return getSphereMeshDefScl(radius, pos, dim, getDefaultRotating());
-}
-
 function getCubeMeshDefScl(pos, dim, rot) {
-    return getCubeMesh(pos, dim, rot, getDefaultScaling());
-}
-
-function getSphereMeshDefScl(radius, pos, rot, color) {
-    return getSphereMesh(pos, radius, rot, getDefaultScaling(), color);
+    return getCubeMeshWithTexture(pos, dim, rot, getDefaultScaling());
 }
 
 function getCubeMeshDefSclDefRep(pos, dim, rot) {
-    return getCubeMesh(pos, dim, rot, getDefaultScaling());
+    return getCubeMeshWithTexture(pos, dim, rot, getDefaultScaling());
 }
 
 function addMeshesToSceneWithDefaultTextureRepeating(meshes, textureName) {

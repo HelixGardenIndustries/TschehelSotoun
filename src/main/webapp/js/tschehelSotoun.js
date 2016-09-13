@@ -1,173 +1,22 @@
 function addMeshes() {
-    addGround();
     addFundamentPalace();
-    addPond();
     addRoofColumns();
     addFence();
     addOuterWall();
     addInnerWall();
     addRoof();
     addStairsFundament();
-    addPavement();
-    addAmbientlight();
-    addSpotLight();
-    addArrowKeyHandler();
+    addPond();
     animate();
-}
-
-function addSpotLight(){
-    ////////////
-    // CUSTOM //
-    ////////////
-
-    // must enable shadows on the renderer
-    renderer.shadowMapEnabled = true;
-
-    // "shadow cameras" show the light source and direction
-
-    // spotlight #1 -- yellow, dark shadow
-    light = new THREE.SpotLight(0xffff00);
-    light.lookAt(1000, 200, 0);
-    light.position.set(0,150,-1060);
-    light.shadowCameraVisible = true;
-    light.shadowDarkness = 0.95;
-    light.intensity = 1000;
-    light.distance = 2150;
-    // must enable shadow casting ability for the light
-    light.castShadow = true;
-    scene.add(light);
-
-    // create "light-ball" meshes
-    var sphereGeometry = new THREE.SphereGeometry( 10, 16, 8 );
-    var darkMaterial = new THREE.MeshBasicMaterial( { color: 0x000000 } );
-    var wireframeMaterial = new THREE.MeshBasicMaterial(
-        { color: 0xffff00, wireframe: true, transparent: true } );
-
-    var shape = THREE.SceneUtils.createMultiMaterialObject(
-        sphereGeometry, [ darkMaterial, wireframeMaterial ] );
-    shape.position.set(0, 50,0);
-    shape.position = light.position;
-    scene.add( shape );
-
- }
-
-function getLight(lightColor) {
-    var light = new THREE.PointLight(lightColor, 55, 450);
-    return light;
-}
-
-function addArrowKeyHandler() {
-    var moveOffset = 10;
-    var instensityOffset = 10;
-    var distanceOffset = 50;
-    document.onkeydown = function (e) {
-        switch (e.keyCode) {
-            case 37:
-                light.position.x = light.position.x + moveOffset;
-                break;
-            case 38:
-                light.position.z = light.position.z - moveOffset;
-                break;
-            case 39:
-                light.position.x = light.position.x - moveOffset;
-                break;
-            case 40:
-                light.position.z = light.position.z + moveOffset;
-                break;
-            case 49:
-                light.intensity = light.intensity - instensityOffset;
-                break;
-            case 50:
-                light.intensity = light.intensity + instensityOffset;
-                break;
-            case 51:
-                light.distance = light.distance - distanceOffset;
-                break;
-            case 52:
-                light.distance = light.distance + distanceOffset;
-                break;
-        }
-        console.log("X: " + light.position.x, "Y: " + light.position.y, "Z: " + light.position.z, "I: " + light.intensity, "D: " + light.distance);
-    };
-}
-
-function addGround() {
-    var meshes = [];
-    var pos = [0, -6, 0];
-    var dim = [10000, 10000];
-    var rot = [pi / 2, 0, 0];
-
-    meshes.push(getCubeMeshDefScl(pos, dim, rot));
-    addMeshesToSceneWithCustomTextureRepeating(meshes, GROUND_TEXTURE, 8, 8);
-}
-
-function addAmbientlight() {
-    var light = new THREE.AmbientLight(0xffffff);
-    light.position.set(45, 500, -63);
-    scene.add(light);
-}
-
-function addTree() {
-
-    var pos, treeMeshes, treeArray, dim, leftSideTreeXPositioningLimits, rightSideTreeXPositioningLimits, zPositionLimits, yPosition, i;
-    treeMeshes = [
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        []
-    ];
-    treeArray = [TREE001, TREE002, TREE003, TREE004, TREE005, TREE006, TREE007, TREE008];
-    dim = [250, 250];
-    leftSideTreeXPositioningLimits = [750, 2000 - dim[0] / 2];
-    rightSideTreeXPositioningLimits = [-750, -1750 - dim[0] / 2];
-    zPositionLimits = [2000 - dim[0] / 2, -1700 - dim[0] / 2];
-    yPosition = dim[1] - 109;
-
-
-    for (i = 0; i < 250; i++) {
-        var randomSide = getRandomIntFromInterval(0, 1);
-        var randomIndex = getRandomIntFromInterval(0, treeArray.length - 1);
-        var randomXPosition = 0;
-        var randomZPosition = getRandomIntFromInterval(zPositionLimits[0], zPositionLimits[1]);
-
-        if (randomSide == 0) {
-            randomXPosition = getRandomIntFromInterval(leftSideTreeXPositioningLimits[0], leftSideTreeXPositioningLimits[1]);
-        } else {
-            randomXPosition = getRandomIntFromInterval(rightSideTreeXPositioningLimits[0], rightSideTreeXPositioningLimits[1]);
-        }
-
-        pos = [randomXPosition, yPosition, randomZPosition];
-        treeMeshes[randomIndex] = getTree(treeMeshes[randomIndex], dim, pos);
-    }
-
-    for (i = 0; i < treeMeshes.length; i++) {
-        addMeshesToSceneWithDefaultTextureRepeating(treeMeshes[i], treeArray[i], 1, 1);
-    }
-}
-
-function getRandomIntFromInterval(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function getTree(meshes, dim, pos) {
-
-    var rot = [0, 0, 0];
-    meshes.push(getCubeMeshDefSclDefRep(pos, dim, rot));
-    rot = [0, -pi / 2, 0];
-    meshes.push(getCubeMeshDefSclDefRep(pos, dim, rot));
-    return meshes;
 }
 
 function addFundamentPalace() {
     var meshes = [], pos, dim;
+
     pos = [0, 1, 500];
     dim = [1000, 10, 1000];
     meshes.push(getCubeMeshDefSclDefRot(pos, dim));
-    addMeshesToSceneWithCustomTextureRepeating(meshes, FLOOR_TEXTURE, 8, 8);
+    addMeshesToSceneWithCustomTextureRepeating(meshes, FLOOR_TEXTURE, 8, 8)
 }
 
 function addRoof() {
@@ -188,128 +37,105 @@ function addRoofLayerZero() {
     dim = [1000, 40, 1000];
     meshes.push(getCubeMeshDefSclDefRot(pos, dim));
 
-    var repeatX = [16, 16, 16, 5, 16, 16];
-    var repeatY = [1, 1, 1, 6, 1, 1];
+    var repeatX = [16,16,16,5,16,16];
+    var repeatY = [1,1,1,6,1,1];
     var textures = [a, a, a, b, a, a];
     addMeshesToSceneWithCustomTextureRepeating(meshes, textures, repeatX, repeatY);
+
+
 }
 
-function addPond() {
+function addPond(){
     var dim = [800, 1000, 10];
-    var pondDimensions = [800, 2000];
-    addPondStructure(pondDimensions);
+    addPondStructure();
     addPondReflection(dim);
 }
 
-function addPavement() {
-    var meshes = [];
-    var dim = [2550, 1200];
-    var pos = [10, -3, -200];
-    var rot = [-pi / 2, 0, -pi / 2];
-    meshes.push(getPlaneMeshWithDefaultScaling(pos, dim, rot));
-    addMeshesToSceneWithCustomTextureRepeating(meshes, PAVEMENT, 8, 8);
-}
-
-function addPondStructure(pondDimensions) {
-    var pos, rot, dim = [810, 10, 10];
+function addPondStructure(dim){
+    var dim = [800, 10,10];
     var sideLength = -850;
-    var pondYPosition = 1;
+    var pondYPosition = 1
 
     var meshes = [];
 
-    // pond wall front
     pos = [10, pondYPosition, -350];
     meshes.push(getCubeMeshDefSclDefRot(pos, dim));
 
-    // pond wall back
-    pos = [10, pondYPosition, -dim[0] - 540];
+    pos = [10, pondYPosition, -dim[0]-550];
     meshes.push(getCubeMeshDefSclDefRot(pos, dim));
 
-    // left pond wall
-    dim = [1000, 10, 10];
+    dim = [1000, 10,10];
     rot = [0, pi / 2, pi];
     pos = [410, pondYPosition, sideLength];
     meshes.push(getCubeMeshDefScl(pos, dim, rot));
 
-    // right pond wall
+    // the pond wall in the back
     pos = [-390, pondYPosition, sideLength];
     meshes.push(getCubeMeshDefScl(pos, dim, rot));
 
-    addMeshesToSceneWithCustomTextureRepeating(meshes, POND_TEXTURE_SIDE, 12, 1);
+    addMeshesToSceneWithCustomTextureRepeating(meshes, POND_TEXTURE, 2, 1);
 
     // the pond ground
-    var planeGeometry = new THREE.BoxGeometry(800, 1, 1000, 1);
-    var planeMaterial = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(POND_TEXTURE), color: 0xffffff, opacity: 1.0 });
-    var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.position.set(10, pondYPosition - 2, pos[2]);
+    var planeGeometry = new THREE.BoxGeometry( 800, 1, 1000, 1 );
+    var planeMaterial = new THREE.MeshBasicMaterial( {map: THREE.ImageUtils.loadTexture( POND_GROUND_TEXTURE ), color: 0xffffff, opacity: 1.0 } );
+    var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+    plane.position.set(10, pondYPosition-5, pos[2]);
+    //plane.rotation.set(rot[0], rot[1], pi);
     scene.add(plane);
+
+
 }
 
-function addMovingCube(reflectionCameraSize) {
-    // create an array with six textures for a cool cubepng') }));
-    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
-    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
-    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
-    materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
-    var movingCubeMat = new THREE.MeshFaceMaterial(materialArray);
-    var movingCubeGeom = new THREE.BoxGeometry(reflectionCameraSize, reflectionCameraSize, reflectionCameraSize, 1, 1, 1, materialArray);
-    movingCube = new THREE.Mesh(movingCubeGeom, movingCubeMat);
-    movingCube.position.set(0, 100, -300);
-    movingCube.rotation.set(pi, 0, 0);
-    scene.add(movingCube);
-}
-var materialArray = [];
-materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
-materialArray.push(new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture('img/hinten.png') }));
+function addPondReflection(dim){
+    console.log(dim);
+    var meshes = [], pos, rot, reflectionCameraSize = 0;
+    pos = [1, 20, -850];
+    rot = [pi/2, 0,0];
 
-function addIntermediaScene() {
+// create an array with six textures for a cool cube
+	// create an array with six textures for a cool cube
+    	var materialArray = [];
+    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
+    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
+    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
+    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
+    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
+    	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'img/hinten.png' ) }));
+    	var movingCubeMat = new THREE.MeshFaceMaterial(materialArray);
+    	var movingCubeGeom = new THREE.BoxGeometry( reflectionCameraSize, reflectionCameraSize, reflectionCameraSize, 1, 1, 1, materialArray );
+    	movingCube = new THREE.Mesh( movingCubeGeom, movingCubeMat );
+    	movingCube.position.set(0, 100, -300);
+    	movingCube.rotation.set(pi,0,0);
+    	scene.add( movingCube );
+
     // intermediate scene.
     // this solves the problem of the mirrored texture by mirroring it again.
     // consists of a camera looking at a plane with the mirrored texture on it.
     screenScene = new THREE.Scene();
-    screenCamera = new THREE.OrthographicCamera(window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, -10000, 10000);
+
+    screenCamera = new THREE.OrthographicCamera(
+    window.innerWidth  / -2, window.innerWidth  /  2, window.innerHeight /  2, window.innerHeight / -2, -10000, 10000 );
     screenCamera.position.z = 1;
-    screenScene.add(screenCamera);
+    screenScene.add( screenCamera );
 
-    var screenGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
-    firstRenderTarget = new THREE.WebGLRenderTarget(512, 512, { format: THREE.RGBFormat });
-    var screenMaterial = new THREE.MeshBasicMaterial({ map: firstRenderTarget, transparent: true, opacity: 1.0});
+    var screenGeometry = new THREE.PlaneGeometry( window.innerWidth, window.innerHeight );
+    firstRenderTarget = new THREE.WebGLRenderTarget( 512, 512, { format: THREE.RGBFormat } );
+    var screenMaterial = new THREE.MeshBasicMaterial( { map: firstRenderTarget, opacity: 0.5 } );
 
-    var quad = new THREE.Mesh(screenGeometry, screenMaterial);
+    var quad = new THREE.Mesh( screenGeometry, screenMaterial );
     // quad.rotation.x = Math.PI / 2;
-    screenScene.add(quad);
-}
+    screenScene.add( quad );
 
-function addPondReflection(dim) {
-    var pos, rot, reflectionCameraSize = 0;
-    pos = [1, 20, -850];
-    rot = [pi / 2, 0, pi];
+    // final version of camera texture, used in scene.
+    var planeGeometry = new THREE.PlaneGeometry( dim[0], dim[1]);
+    finalRenderTarget = new THREE.WebGLRenderTarget( 512, 512, { format: THREE.RGBFormat } );
+    var planeMaterial = new THREE.MeshLambertMaterial( { map: finalRenderTarget, opacity: 0.2, side: THREE.BackSide, transparent: true } );
+    var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+    plane.position.set(pos[0], 1, pos[2]);
+    plane.rotation.set(rot[0], rot[1], pi);
+    scene.add(plane);
 
-    addMovingCube(reflectionCameraSize);
-    addIntermediaScene();
-    textureFromCamera = new THREE.WebGLRenderTarget(512, 512, { format: THREE.RGBFormat });
 
-    var waterTexture = new THREE.ImageUtils.loadTexture(WATER_TEXTURE);
-    waterTexture.wrapS = waterTexture.wrapT = THREE.RepeatWrapping;
-
-    // use "this." to create global object
-    this.waterUniforms = {
-        baseTexture: { type: "t", value: textureFromCamera },
-        baseSpeed: { type: "f", value: 0.1 },
-        noiseTexture: { type: "t", value: waterTexture },
-        noiseScale: { type: "f", value: 0.2 },
-        alpha: { type: "f", value: 0.3 },
-        time: { type: "f", value: 1.0 }
-    };
-
-    // create custom material from the shader code above
-    //   that is within specially labeled script tags
-    var waterMaterial = new THREE.ShaderMaterial({uniforms: waterUniforms, vertexShader: document.getElementById('vertexShader').textContent, fragmentShader: document.getElementById('fragmentShader').textContent, side: THREE.BackSide, transparent: true});
-    // apply the material to a surface
-    var waterSurface = new THREE.Mesh(new THREE.PlaneGeometry(dim[0], dim[1]), waterMaterial);
-    waterSurface.position.set(pos[0], 1, pos[2]);
-    waterSurface.rotation.set(rot[0], rot[1], rot[2]);
-    scene.add(waterSurface);
 }
 
 function addRoofLayerOne() {
