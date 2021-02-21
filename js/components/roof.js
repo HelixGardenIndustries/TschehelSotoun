@@ -1,135 +1,60 @@
 function addRoof() {
-    addRoofLayerThree();
-    addRoofLayerTwo();
-    addRoofCornersLevelTwo();
-    addRoofLayerOne();
-    addRoofCornersLevelOne();
-    addRoofLayerZero();
+
+  const geometry = new THREE.SphereGeometry( 50, 8, 3,10, Math.PI, 0, Math.PI/2 );
+const material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide});
+const sphere = new THREE.Mesh( geometry, material );
+sphere.position.set(200, 50, 0);
+//scene.add( sphere );
+
+
+
+addSphereMesh({
+  id: "dome",
+  dimension: { radius: 1000, widthSegments: 8, heightSegments: 3, phiStart: 4, phiLength: Math.PI, thetaStart: 0, thetaLength: Math.PI/2},
+  position: { x: 0, y: 275, z: 495 },
+  rotation: { rx: 0, ry: pi / 4, rz: 0 },
+  texture: { name: ROOF_SECTION_TWO, repeatX: 1, repeatY: 1 }
+});
+
+
+
+
+  addRoofSectionTop();
+  addRoofSectionMiddle();
+  addRoofSectionBottom(); 
+
 }
 
-function addRoofLayerOne() {
-    var meshes = [], pos, dim, rot;
-
-    // Layer 1
-    pos = [0, 282, -8];
-    dim = [1000, 40, 1];
-    rot = [pi / -8, 0, 0];
-    meshes.push(getCubeMeshDefScl(pos, dim, rot));
-
-    pos = [0, 282, 1008];
-    dim = [1000, 40, 1];
-    rot = [pi / 8, 0, 0];
-    meshes.push(getCubeMeshDefScl(pos, dim, rot));
-
-    pos = [508, 282, 500];
-    dim = [1, 40, 1000];
-    rot = [0, 0, pi / -8];
-    meshes.push(getCubeMeshDefScl(pos, dim, rot));
-
-    pos = [-508, 282, 500];
-    dim = [1, 40, 1000];
-    rot = [0, 0, pi / 8];
-    meshes.push(getCubeMeshDefScl(pos, dim, rot));
-
-    pos = [1, 300, 500];
-    dim = [1030, 1, 1030];
-    meshes.push(getCubeMeshDefSclDefRot(pos, dim));
-
-    addMeshesToSceneWithCustomTextureRepeating(meshes, UMRANDUNG_DACH_UNTEN_LAYER_1, 64, 1)
+function addRoofSectionTop() {
+  addCylinderGeometryToScene({
+    id: "roofSectionOnPillars",
+    dimension: { radiusTop: 770, radiusBottom: 740, height: 20, radialSegments: 4, heightSegments: 4 },
+    position: { x: 0, y: 295, z: 495 },
+    rotation: { rx: 0, ry: pi / 4, rz: 0 },
+    texture: { name: ROOF_SECTION_THREE, repeatX: 128, repeatY: 1, isTransparent: true }
+  });
 }
 
-function addRoofCornersLevelOne() {
-    var meshes = [], pos, rot;
-    pos = [500, 280, 0];
-    rot = [0, pi / 4, 0];
-    meshes.push(getPyramideMeshDefScl(pos, rot, 20, 0, 40));
-
-    pos = [-500, 280, 0];
-    rot = [0, pi / 4, 0];
-    meshes.push(getPyramideMeshDefScl(pos, rot, 20, 0, 40));
-
-    pos = [-500, 280, 1000];
-    rot = [0, pi / 4, 0];
-    meshes.push(getPyramideMeshDefScl(pos, rot, 20, 0, 40));
-
-    pos = [500, 280, 1000];
-    rot = [0, pi / 4, 0];
-    meshes.push(getPyramideMeshDefSclDefRep(pos, rot, 20, 0, 40));
-
-    addMeshesToSceneWithCustomTextureRepeating(meshes, UMRANDUNG_DACH_UNTEN_LAYER_1, 2, 1)
+function addRoofSectionMiddle() {
+  addCylinderGeometryToScene({
+    id: "roofSectionOnPillars",
+    dimension: { radiusTop: 740, radiusBottom: 710, height: 20, radialSegments: 4, heightSegments: 4 },
+    position: { x: 0, y: 275, z: 495 },
+    rotation: { rx: 0, ry: pi / 4, rz: 0 },
+    texture: { name: ROOF_SECTION_TWO, repeatX: 128, repeatY: 1 }
+  });
 }
 
-function addRoofLayerTwo() {
-    var meshes = [], pos, rot, dim, rotx = pi / 4, width = 979;
-    pos = [0, 315, 0];
-    dim = [width, 40, 1];
-    rot = [rotx, 0, 0];
-    meshes.push(getCubeMeshDefScl(pos, dim, rot));
-
-    pos = [0, 315, 1008];
-    dim = [width, 40, 1];
-    rot = [-rotx, 0, 0];
-    meshes.push(getCubeMeshDefScl(pos, dim, rot));
-
-    pos = [500, 315, 500];
-    dim = [1, 40, width];
-    rot = [0, 0, rotx];
-    meshes.push(getCubeMeshDefScl(pos, dim, rot));
-
-    pos = [-500, 315, 508];
-    dim = [1, 40, width];
-    rot = [0, 0, -rotx];
-    meshes.push(getCubeMeshDefScl(pos, dim, rot));
-
-    addMeshesToSceneWithCustomTextureRepeating(meshes, DACH_SCHRAEG_OBEN, 64, 1)
-}
-
-function addRoofCornersLevelTwo() {
-    var meshes = [], pos, rot;
-    pos = [490, 316, 13];
-    rot = [0, pi / 4, 0];
-    meshes.push(getPyramideMeshDefScl(pos, rot, 0, 40, 30));
-
-    pos = [-485, 316, 13];
-    rot = [0, pi / 4, 0];
-    meshes.push(getPyramideMeshDefScl(pos, rot, 0, 40, 30));
-
-    pos = [-485, 316, 993];
-    rot = [0, pi / 4, 0];
-    meshes.push(getPyramideMeshDefScl(pos, rot, 0, 40, 30));
-
-    pos = [487, 316, 990];
-    rot = [0, pi / 4, 0];
-    meshes.push(getPyramideMeshDefScl(pos, rot, 0, 40, 30));
-
-    addMeshesToSceneWithCustomTextureRepeating(meshes, DACH_SCHRAEG_OBEN, 9, 16);
-}
-
-function addRoofLayerZero() {
-    var meshes = [], pos, dim;
-    var a = UMRANDUNG_DACH_UNTEN_LAYER_1;
-    var b = BOTTOM_TEXTURE_COLUMN_ROOF;
-
-    pos = [1, 245, 500];
-    dim = [1000, 40, 1000];
-    meshes.push(getCubeMeshDefSclDefRot(pos, dim));
-
-    var repeatX = [16, 16, 16, 5, 16, 16];
-    var repeatY = [1, 1, 1, 6, 1, 1];
-    var textures = [a, a, a, b, a, a];
-    addMeshesToSceneWithCustomTextureRepeating(meshes, textures, repeatX, repeatY);
-}
-
-function addRoofLayerThree() {
-    var meshes = [], pos, rot, dim;
-    pos = [1, 335, 500];
-    dim = [980, 10, 980];
-    meshes.push(getCubeMeshDefSclDefRot(pos, dim));
-    addMeshesToSceneWithCustomTextureRepeating(meshes, DACH_BASIS_PYRAMIDE, 16, 1);
-
-    meshes = [];
-    pos = [0, 393, 500];
-    rot = [0, pi / 4, 0];
-    meshes.push(getPyramideMeshDefScl(pos, rot, 0, 600, 100));
-    addMeshesToSceneWithCustomTextureRepeating(meshes, PYRAMIDE_TOP, 64, 64);
+function addRoofSectionBottom() {
+  addBoxGeometryToScene({
+    id: "roofSectionOnPillars",
+    dimension: { width: 1000, height: 30, depth: 1000 },
+    position: { x: 0, y: 250, z: 495 },
+    //texture: { name: ROOF_SECTION_ONE, repeatX: 32, repeatY: 1 }
+    texture: {
+      name: [ROOF_SECTION_ONE, ROOF_SECTION_ONE, null, ROOF_BOTTOM2, ROOF_SECTION_ONE, ROOF_SECTION_ONE],
+      repeatX: [32, 32, 32, 4, 32, 32],
+      repeatY: [1, 1, 1, 6, 1, 1]
+    }
+  });
 }

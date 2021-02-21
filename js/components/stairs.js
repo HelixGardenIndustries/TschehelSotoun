@@ -1,4 +1,4 @@
-function addStairsFundament() {
+function addStairs() {
 
     var stairColors = ["00000ff", "ff0000", "00ff00"];
 

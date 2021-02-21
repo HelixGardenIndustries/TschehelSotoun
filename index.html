@@ -1,39 +1,45 @@
 <html xmlns:jsp="http://java.sun.com/JSP/Page">
+
 <head>
   <title>Tschehel Sotoun (Three.js)</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <link rel=stylesheet href="css/base.css"/>
-    <script src="js/lib/three.js"></script>
-    <script src="js/lib/detector.js"></script>
-    <script src="js/lib/stats.js"></script>
-    <script src="js/lib/OrbitControls.js"></script>
-    <script src="js/lib/THREEx.KeyboardState.js"></script>
-    <script src="js/lib/THREEx.Fullscreen.js"></script>
-    <script src="js/lib/THREEx.WindowResize.js"></script>
-    <script src="js/constants.js"></script>
-    <script src="js/lib/tween.js"></script>
-    <script src="js/init.js"></script>
-    <script src="js/utilities/utilities.js"></script>
-	<script src="js/components/ambientLight.js"></script>
-	<script src="js/components/arrowKeyHandler.js"></script>
-	<script src="js/components/fundament.js"></script>
-	<script src="js/components/ground.js"></script>
-	<script src="js/components/pavement.js"></script>
-	<script src="js/components/pond.js"></script>
-	<script src="js/components/roof.js"></script>
-	<script src="js/components/roofPillars.js"></script>
-	<script src="js/components/spotlight.js"></script>
-	<script src="js/components/stairs.js"></script>
-	<script src="js/components/wall.js"></script>
-    <script src="js/tschehelSotoun.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel=stylesheet href="css/base.css" />
+  <script src="js/lib/three.js"></script>
+  <script src="js/lib/detector.js"></script>
+  <script src="js/lib/stats.js"></script>
+  <script src="js/lib/OrbitControls.js"></script>
+  <script src="js/lib/THREEx.KeyboardState.js"></script>
+  <script src="js/lib/THREEx.Fullscreen.js"></script>
+  <script src="js/lib/THREEx.WindowResize.js"></script>
+  <script src="js/constants.js"></script>
+  <script src="js/lib/tween.js"></script>
+  <script src="js/init.js"></script>
+  <script src="js/utilities/utilities.js"></script>
+  <script src="js/components/ambientLight.js"></script>
+  <script src="js/components/arrowKeyHandler.js"></script>
+  <script src="js/components/fundament.js"></script>
+  <script src="js/components/ground.js"></script>
+  <script src="js/components/pavement.js"></script>
+  <script src="js/components/pond.js"></script>
+  <script src="js/components/roof.js"></script>
+  <script src="js/components/roofPillars.js"></script>
+  <script src="js/components/spotlight.js"></script>
+  <script src="js/components/stairs.js"></script>
+  <script src="js/components/walls.js"></script>
+  <script src="js/tschehelSotoun.js"></script>
 </head>
+
 <body>
-<!-- http://www.lughertexture.com/vegetation-plants-textures/oak-tree-medium-texture-tree-png-with-alpha#joomimg -->
-<!-- http://stemkoski.github.io/Three.js/Shader-Animate.html-->
-<!-- http://stemkoski.github.io/Three.js/Camera-Texture.html-->
-<!-- http://www.goodtextures.com/ -->
-<jsp:include page="shader.jsp"/>
-<div id="canvas" style="z-index: 1; position: absolute; left:0px; top:0px"></div>
+  <!-- http://www.lughertexture.com/vegetation-plants-textures/oak-tree-medium-texture-tree-png-with-alpha#joomimg -->
+  <!-- http://stemkoski.github.io/Three.js/Shader-Animate.html-->
+  <!-- http://stemkoski.github.io/Three.js/Camera-Texture.html-->
+  <!-- http://www.goodtextures.com/ -->
+  <jsp:include page="shader.jsp" />
+  <div id="canvas" style="z-index: 1; position: absolute; left:0px; top:0px"></div>
+  <!-- <script type="module">
+import { Water } from './js/lib/water.js';
+  </script> -->
 </body>
+
 </html>

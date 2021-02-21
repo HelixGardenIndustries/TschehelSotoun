@@ -4,7 +4,6 @@
 
 var initArray = {};
 const pi = Math.PI;
-var group = new THREE.Object3D;
 
 function getDefaultRotating() {
     return [0, 0, 0];
@@ -14,24 +13,12 @@ function getDefaultScaling() {
     return [1, 1, 1];
 }
 
-function addMergedGeoToScene(meshContainer, material) {
-
-    meshContainer.computeFaceNormals();
-    group = new THREE.Mesh(meshContainer, material);
-    group.matrixAutoUpdate = false;
-    group.updateMatrix();
-    scene.add(group);
-}
-
 function addMeshToMergeParent(mergeParent, mesh) {
     mesh.matrixAutoUpdate && mesh.updateMatrix();
     mergeParent.merge(mesh.geometry, mesh.matrix);
     return mergeParent;
 }
 
-function getMaterialForCubeWithDefaultRepeating(textureName) {
-    return getMaterialForCubeWithCustomRepeating(textureName, 1, 1);
-}
 
 function getMaterialForCubeWithCustomRepeating(textureName, repeatX, repeatY) {
 
@@ -82,16 +69,8 @@ function getMeshMaterial() {
     return getMeshPhongMaterial("", "white");
 }
 
-function getMeshPhongMaterial(texture, color){
-    return new THREE.MeshPhongMaterial({map: texture, color: color});
-    //return new THREE.MeshPhongMaterial({map: texture, color: color, transparent: false, side: THREE.FrontSide});
-}
-
-function getPlaneMeshWithDefaultScaling(pos, dim, rot) {
-    var mesh = new THREE.Mesh(new THREE.PlaneGeometry(dim[0], dim[1]));
-    mesh.position.set(pos[0], pos[1], pos[2]);
-    mesh.rotation.set(rot[0], rot[1], rot[2]);
-    return mesh;
+function getMeshPhongMaterial(texture, color) {
+    return new THREE.MeshPhongMaterial({ map: texture, color: color });
 }
 
 function isArray(x) {
@@ -99,31 +78,36 @@ function isArray(x) {
 }
 
 function getMergeParent() {
-    return new THREE.Geometry();
+    return new THREE.BoxGeometry();
 }
 
-function    getCubeMesh(position, dimension, rotation, scaling) {
-    // the column on the frustum
-    var geometry = new THREE.BoxGeometry(dimension[0], dimension[1], dimension[2], 1, 1, 1);
-    var mesh = new THREE.Mesh(geometry, getMeshMaterial());
-    mesh.position.set(position[0], position[1], position[2]);
-    mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
-    mesh.scale.set(scaling[0], scaling[1], scaling[2]);
-    return mesh;
+function getCubeMesh(p) {
+    const texture = getTexture(p.texture);
+    const boxGeometry = new THREE.BoxGeometry(p.dimension.width, p.dimension.height, p.dimension.depth, 1, 1);
+    var boxMesh = new THREE.Mesh(boxGeometry, texture);
+    boxMesh.position.set(p.position.x, p.position.y, p.position.z);
+
+    if ("rotation" in p) {
+        boxMesh.rotation.set(p.rotation.rx, p.rotation.ry, p.rotation.rz);
+    }
+
+    return boxMesh;
+
+
 }
 
 function getSphereMesh(radius, position, rotation, scaling, color) {
     // the column on the frustum
-    var geometry = new THREE.SphereGeometry(radius, 10, 10, 10, 10, 10);
-    var mesh = new THREE.Mesh(geometry, getMeshPhongMaterialWithColor(GROUND_TEXTURE, 1, 1, color));
-    mesh.position.set(position[0], position[1], position[2]);
-    mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
-    mesh.scale.set(scaling[0], scaling[1], scaling[2]);
-    return mesh;
+    var sphereGeometry = new THREE.SphereGeometry(radius, 10, 10, 10, 10, 10);
+    var sphereMesh = new THREE.Mesh(sphereGeometry, getMeshPhongMaterialWithColor(GROUND_TEXTURE, 1, 1, color));
+    sphereMesh.position.set(position[0], position[1], position[2]);
+    sphereMesh.rotation.set(rotation[0], rotation[1], rotation[2]);
+    sphereMesh.scale.set(scaling[0], scaling[1], scaling[2]);
+    return sphereMesh;
 }
 
 
-function addPyramideShape(position, rotation, scaling, radiusTop, radiusBottom, height) {
+function addPyramideShape(p) {
     var cylinderGeometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, 4, 4);
     var mesh = new THREE.Mesh(cylinderGeometry, getMeshMaterial());
     mesh.position.set(position[0], position[1], position[2]);
@@ -170,26 +154,98 @@ function addMeshesToSceneWithDefaultTextureRepeating(meshes, textureName) {
     addMeshesToSceneWithCustomTextureRepeating(meshes, textureName, 1, 1);
 }
 
-function addMeshesToSceneWithCustomTextureRepeating(meshes, textureName, repeatX, repeatY) {
-
-    var mergedGeo = getMergeParent();
-    var material = getMaterialForCubeWithCustomRepeating(textureName, repeatX, repeatY);
-    for (var i = 0; i < meshes.length; i++) {
-        mergedGeo = addMeshToMergeParent(mergedGeo, meshes[i]);
-    }
-    addMergedGeoToScene(mergedGeo, material);
-}
-
-function getCylinderMeshDefSclDefRepDefRot(pos, dim, rot) {
-    return getCylinderMeshDefScl(pos, dim, rot, getDefaultScaling());
-}
-
-function getCylinderMeshDefScl(pos, dim, rot, scl) {
-    var mesh = new THREE.Mesh(new THREE.CylinderGeometry(dim[0], dim[1], dim[2], 4, 4));
-    mesh.position.set(pos[0], pos[1], pos[2]);
-    mesh.rotation.set(rot[0], rot[1], rot[2]);
-    mesh.scale.set(scl[0], scl[1], scl[2]);
+function getCylinderMesh(p) {
+    const texture = getTexture(p.texture);
+    var mesh = new THREE.Mesh(new THREE.CylinderGeometry(p.dimension.width, p.dimension.height, p.dimension.height, 4, 4), texture);
+    mesh.position.set(p.position.x, p.position.y, p.position.z);
+    mesh.rotation.set(p.rotation.rx, p.rotation.ry, p.rotation.rz);
     return mesh;
 }
 
+//////////////////////////// NEU ////////////////////////////
 
+function addPlaneGeometryToScene(p) {
+    var planeGeometry = new THREE.PlaneGeometry(p.dimension.width, p.dimension.height);
+    var planeMaterials = getTexture(p.texture);
+
+    for (const planeMaterial of planeMaterials) {
+        addMeshToScene(p, planeGeometry, planeMaterial);
+    }
+}
+
+function addBoxGeometryToScene(p) {
+    var boxGeometry = new THREE.BoxGeometry(p.dimension.width, p.dimension.height, p.dimension.depth, 1);
+    var boxMaterial = getTexture(p.texture);
+    addMeshToScene(p, boxGeometry, boxMaterial);
+}
+
+function addCylinderGeometryToScene(p) {
+    var cylinderGeometry = new THREE.CylinderGeometry(p.dimension.radiusTop, p.dimension.radiusBottom, p.dimension.height, p.dimension.radialSegments, p.dimension.heightSegments);
+    var cylinderMaterial = getTexture(p.texture);
+    addMeshToScene(p, cylinderGeometry, cylinderMaterial);
+}
+
+function addBoxGeometryToScene(p) {
+    var boxGeometry = new THREE.BoxGeometry(p.dimension.width, p.dimension.height, p.dimension.depth, 1);
+    var boxMaterial = getTexture(p.texture);
+    addMeshToScene(p, boxGeometry, boxMaterial);
+}
+
+function addSphereMesh(p) {
+    var sphereGeometry = new THREE.SphereGeometry(p.radius, p.widthSegments, p.heightSegments, p.phiStart, p.phiLength, p.thetaStart, p.thetaLength);
+    var sphereMaterial = getTexture(p.texture);
+    addMeshToScene(p, sphereGeometry, sphereMaterial);
+}
+
+function addMeshToScene(p, geometry, material) {
+    var mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(p.position.x, p.position.y, p.position.z);
+
+    if ("rotation" in p) {
+        mesh.rotation.set(p.rotation.rx, p.rotation.ry, p.rotation.rz);
+    }
+
+    scene.add(mesh);
+}
+
+function getTexture(p) {
+
+    color = typeof p.color === 'undefined' ? 0xffffff : p.color;
+    repeatX = "repeatX" in p ? p.repeatX : 1;
+    repeatY = "repeatY" in p ? p.repeatY : 1;
+    isTransparent = "isTransparent" in p ? p.isTransparent : false;
+
+    if (typeof p.name === 'string') {
+
+        const texture = new THREE.TextureLoader().load(p.name);
+        texture.repeat.set(repeatX, repeatY);
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+
+        return new THREE.MeshBasicMaterial({
+            map: texture,
+            color: color,
+            opacity: 1.0,
+            transparent: false
+        });
+    } else {
+        var result = p.name.map(function (textureName, index) {
+            const texture = new THREE.TextureLoader().load(textureName);
+
+            rx = typeof repeatX[index] !== 'undefined' ? repeatX[index] : 1; 
+            ry = typeof repeatY[index] !== 'undefined' ? repeatY[index] : 1; 
+            texture.repeat.set(rx, ry);
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+
+            return new THREE.MeshBasicMaterial({
+                map: texture,
+                color: color,
+                side: THREE.DoubleSide,
+                opacity: 1.0
+            });
+        });
+
+        return result;
+    }
+}

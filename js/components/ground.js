@@ -1,9 +1,9 @@
 function addGround() {
-    var meshes = [];
-    var pos = [0, -6, 0];
-    var dim = [10000, 10000];
-    var rot = [pi / 2, 0, 0];
-
-    meshes.push(getCubeMeshDefScl(pos, dim, rot));
-    addMeshesToSceneWithCustomTextureRepeating(meshes, GROUND_TEXTURE, 8, 8);
+    addBoxGeometryToScene({
+        id: "ground",
+        dimension: { width: 10000, height: 10000, depth: 1 },
+        position: { x: 0, y: -6, z: 0 },
+        rotation: { rx: pi / 2, ry: 0, rz: 0 },
+        texture: { name: GROUND_TEXTURE }
+    })
 }
