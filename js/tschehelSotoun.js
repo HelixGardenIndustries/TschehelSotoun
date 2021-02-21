@@ -1,15 +1,15 @@
 function addMeshes() {
     addPond();
-    // addFundamentPalace();
-    /* addGround();
+    addFundamentPalace();
+    addGround();
     addPavement();
     addRoofPillars();
     addOuterWall();
     addInnerWall();
     addRoof();
-    addStairs();
+    //addStairs();
     addPavement();
     addAmbientlight();
-    addArrowKeyHandler(); */
+    addArrowKeyHandler();
     animate();
 }
